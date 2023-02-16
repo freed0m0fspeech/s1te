@@ -60,5 +60,5 @@ WORKDIR /s1te
 COPY requirements.txt /s1te/
 RUN pip install -r requirements.txt
 COPY . /s1te/
-CMD ["gunicorn", "--bind", ":8000", "--workers", "1", "s1te.wsgi:application"]
+CMD ["gunicorn", "--bind", ":8000", "--workers", "1", "personal_site.wsgi:application"]
 #CMD python3 main.py
