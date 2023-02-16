@@ -19,9 +19,9 @@ class DataBases:
         # MONGODATABASE_PASSWORD = configParser['mongodb']['MONGODATABASE_PASSWORD']
         # MONGODATABASE_HOST = f"{configParser['mongodb']['MONGODATABASE_HOST']}?retryWrites=true&w=majority"
 
-        MONGODATABASE_USER = os.getenv('', '')
-        MONGODATABASE_PASSWORD = os.getenv('', '')
-        MONGODATABASE_HOST = os.getenv('', '')
+        MONGODATABASE_USER = os.getenv('MONGODATABASE_USER', '')
+        MONGODATABASE_PASSWORD = os.getenv('MONGODATABASE_PASSWORD', '')
+        MONGODATABASE_HOST = os.getenv('MONGODATABASE_HOST', '')
 
         # 'host': "mongodb+srv://%s:%s@%s" % (quote_plus(configParser['mongodb']['MONGODATABASE_USER']),
         # quote_plus(configParser['mongodb']['MONGODATABASE_PASSWORD']),
