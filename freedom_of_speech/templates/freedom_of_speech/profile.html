@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--=============== FAVICON ===============-->
+    <link rel="shortcut icon" href="{{telegram_photo_url}}" type="image/x-icon">
+
+    <!--=============== REMIXICONS ===============-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+
+    <!--=============== UNICONS ===============-->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.0/css/line.css">
+
+    <!--=============== BOOTSTRAP ===============-->
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">-->
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'freedom_of_speech/assets/css/styles.css' %}">
+
+    <title>{{username}}</title>
+</head>
+<body>
+{% csrf_token %}
+<!--==================== HEADER ====================-->
+<header class="header" id="header">
+    <nav class="nav container">
+        <a href="/freedom_of_speech" class="nav__logo">
+            Freedom of speech
+        </a>
+
+        {% if authorized %}
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list grid">
+                    <li class="nav__item">
+                        <a href="#profile" class="nav__link">
+                            <i class="ri-user-line"></i> Profile
+                        </a>
+                    </li>
+
+                    <li class="nav__item">
+                        <a href="#username" class="nav__link">
+                            <i class="ri-hashtag"></i> Username
+                        </a>
+                    </li>
+
+                    <li class="nav__item">
+                        <a href="#password" class="nav__link">
+                            <i class="ri-key-2-line"></i> Password
+                        </a>
+                    </li>
+                </ul>
+
+                <!--            Close button-->
+                <div class="nav__close" id="nav-close">
+                    <i class="ri-close-circle-line"></i>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="nav__buttons">
+            <!--Theme change button-->
+            <i class="ri-moon-line change-theme" id="theme-button"></i>
+
+            <!--            Toggle button-->
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="ri-menu-5-line"></i>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!--==================== MAIN ====================-->
+<main class="main">
+    <section class="profile section" id="profile">
+        <div class="{% if telegram_link_status %}profile__container{% endif %} section__border container grid">
+            <div class="profile__data grid">
+                <h1 class="profile__title">
+                    Profile page <br>
+                    {{username}} <br>
+                </h1>
+
+                <div class="profile__blob grid">
+                    <!--        <div class="profile__perfil">-->
+                    <img src="{% if telegram_photo_url %} {{telegram_photo_url}} {% else %} {% static 'freedom_of_speech/assets/img/blank-profile-picture.png' %} {% endif %}" alt="profile perfil">
+                    <!--        </div>-->
+
+                    <!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-waves.svg' %}" alt="profile waves" class="profile__shape-waves">-->
+                    <!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-circle.svg' %}" alt="profile circle" class="profile__shape-circle">-->
+                </div>
+            {%if authorized %}
+                <ul class="profile__community">
+                    <a href="https://t.me/freed0m0fspeech" target="_blank" class="profile__community-link profile__community-link__{{telegram_link_status}}" id="auth-telegram_button">
+                        <i class="uil uil-telegram"></i>
+                    </a>
+                    <!--          <a href="https://discord.com/invite/dwKpNwQ" target="_blank" class="profile__community-link__unlinked profile__community-link">-->
+                    <!--            <i class="uil uil-discord"></i>-->
+                    <!--          </a>-->
+                    <!--          <a href="https://vk.me/join/AAAAAOUSazBFPCDP0CGaVjyh" target="_blank" class="profile__community-link__unlinked profile__community-link">-->
+                    <!--            <i class="uil uil-vk"></i>-->
+                    <!--          </a>-->
+                </ul>
+            {% endif %}
+            </div>
+
+            {% if telegram_link_status %}
+                <!--==================== PROFILE INFO 1 ====================-->
+                <div class="profile__info">
+                    <div>
+                        <h3 class="profile__info-title">
+                            Information
+                        </h3>
+
+                        <p class="profile__info-description">
+                            {{telegram_first_name}} {{telegram_last_name}} <br><br>
+                            LVL: {{lvl}} <br>
+                            XP: {{xp_have}} | {{xp_need}} <br>
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="profile__info-title">
+                            CONTACT
+                        </h3>
+
+                        <p class="profile__info-description">
+                            <span class="contact__data-info">Telegram: @{{telegram_username}}</span>
+                            <br>
+                            <a href="https://t.me/{{telegram_username}}" target="_blank" class="contact__button">
+                                Contact <i class="ri-arrow-right-line"></i>
+                            </a>
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="profile__info-title">
+                            ROLE
+                        </h3>
+
+                        <p class="profile__info-description">
+                            {{role}}
+                        </p>
+                    </div>
+                </div>
+                <!--==================== PROFILE INFO 2 ====================-->
+                <div class="profile__info">
+                    <div>
+                        <h3 class="profile__info-title">
+                            YEARS OF FREEDOM
+                        </h3>
+
+                        {% if joined_date %}
+                        <p class="profile__info-number" id="profile__info__years_value">
+                            {{joined_date}}
+                            <!--          2017-2023-->
+                        <div class="profile__info-description" id="profile__date_counter"></div>
+                        </p>
+                        {% else %}
+                        <p class="profile__info-number">
+                            ∞
+                            <!--          2017-2023-->
+                        <div class="profile__info-description"></div>
+                        </p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <h3 class="profile__info-title">
+                            MESSAGES COUNT
+                        </h3>
+
+                        <p class="profile__info-number">
+                            {{messages_count}}
+                            <!--          <div class="animated_number profile__info-number"></div>-->
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="profile__info-title">
+                            VOICE
+                        </h3>
+
+                        <p class="profile__info-number">
+                            {{hours_in_voice_channel}}h <br>
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+    {%if authorized %}
+        <section class="entry section" id="username">
+            <h2 class="section__title">Username</h2>
+            <span class="section__subtitle">Change username for your personal account</span>
+
+            <div class="entry__container container grid section__border">
+                <div class="entry__content">
+                    <form action="" class="entry__form" id="entry-form-username">
+                        <div class="entry__form-div">
+                            <label class="entry__form-tag">Username</label>
+                            <input type="text" name="user_name" required placeholder="Write your username" class="entry__form-input" id="username-change_username" autocomplete="off">
+                        </div>
+
+                        <div class="entry__form-div">
+                            <label class="entry__form-tag">Password</label>
+                            <input type="password" name="user_password" required placeholder="Write your password" class="entry__form-input" id="username-change_password" autocomplete="off">
+                        </div>
+
+                        <p class="entry__message" id="entry-message-username"></p>
+                        <button class="entry__button" id="username-change_button">
+                            Submit <i class="ri-swap-line"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section class="entry section" id="password">
+            <h2 class="section__title">Password</h2>
+            <span class="section__subtitle">Change password for your personal account</span>
+
+            <div class="entry__container container grid section__border">
+                <div class="entry__content">
+                    <form action="" class="entry__form" id="entry-form-password">
+                        <div class="entry__form-div">
+                            <label class="entry__form-tag">Current password</label>
+                            <input type="password" name="user_password_old" required placeholder="Write your password" class="entry__form-input" id="password-change_old_password" autocomplete="off">
+                        </div>
+
+                        <div class="entry__form-div">
+                            <label class="entry__form-tag">New password</label>
+                            <input type="password" name="user_password_new" required placeholder="Write your new password" class="entry__form-input" id="password-change_new_password" autocomplete="off">
+                        </div>
+
+                        <p class="entry__message" id="entry-message-password"></p>
+                        <button class="entry__button" id="password-change_button">
+                            Submit <i class="ri-swap-line"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <section class="entry section" id="signout">
+            <div class="entry__container container grid section__border">
+                <div class="entry__content">
+                    <form action="" class="entry__form">
+                        <button class="entry__button" id="signout-button">
+                            Sign out <i class="ri-logout-circle-r-line"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+</main>
+
+<!--==================== FOOTER ====================-->
+
+
+<!--========== SCROLL UP ==========-->
+<a href="#" class="scrollup" id="scroll-up">
+    <i class="ri-arrow-up-circle-line"></i>
+</a>
+
+<!--=============== SCROLL REVEAL ===============-->
+<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
+
+<!--=============== SWIPER JS ===============-->
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+<!--=============== EMAIL JS ===============-->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<!--=============== FONT AWESOME ===============-->
+<script src="https://kit.fontawesome.com/95c0aa19f9.js" crossorigin="anonymous"></script>
+
+<!--=============== jQuery Core 3.6.3 ===============-->
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+<!--=============== TELEGRAM JS ===============-->
+<script src="https://telegram.org/js/telegram-widget.js?"></script>
+
+<!--=============== MAIN JS ===============-->
+<script src="{% static 'freedom_of_speech/assets/js/main.js' %}"></script>
+</body>
+</html>

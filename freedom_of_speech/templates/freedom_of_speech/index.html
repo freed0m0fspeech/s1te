@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--=============== FAVICON ===============-->
+    <link rel="shortcut icon" href="{% static 'freedom_of_speech/assets/img/favicon.jpg' %}" type="image/x-icon">
+
+    <!--=============== REMIXICONS ===============-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+
+    <!--=============== UNICONS ===============-->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.0/css/line.css">
+
+    <!--=============== SWIPER CSS ===============-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+
+    <!--FONT AWESOME-->
+<!--    <link rel="stylesheet" href="https://kit.fontawesome.com/95c0aa19f9.css" crossorigin="anonymous">-->
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'freedom_of_speech/assets/css/styles.css' %}">
+
+    <title>Freedom of speech</title>
+</head>
+<body>
+{% csrf_token %}
+<!--==================== HEADER ====================-->
+{% include 'freedom_of_speech/header.html' %}
+
+<!--==================== MAIN ====================-->
+<main class="main">
+    <!--==================== HOME ====================-->
+    {% include 'freedom_of_speech/home.html' %}
+
+    <!--==================== SKILLS ====================-->
+
+
+    <!--==================== QUALIFICATION ====================-->
+
+
+    <!--==================== GOVERNMENT ====================-->
+    {% include 'freedom_of_speech/government.html' %}
+
+    <!--==================== CONSTITUTION ====================-->
+    {% include 'freedom_of_speech/constitution.html' %}
+
+    <!--==================== LAWS ====================-->
+    {% include 'freedom_of_speech/laws.html' %}
+
+    <!--==================== TESTIMONIAL ====================-->
+    {% include 'freedom_of_speech/testimonial.html' %}
+
+    <!--==================== CONTACT ====================-->
+    {% include 'freedom_of_speech/contact.html' %}
+</main>
+
+<!--==================== FOOTER ====================-->
+{% include 'freedom_of_speech/footer.html' %}
+
+<!--========== SCROLL UP ==========-->
+<a href="#" class="scrollup" id="scroll-up">
+    <i class="ri-arrow-up-circle-line"></i>
+</a>
+
+<!--=============== SCROLL REVEAL ===============-->
+<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
+
+<!--=============== SWIPER JS ===============-->
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+<!--=============== EMAIL JS ===============-->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<!--=============== FONT AWESOME ===============-->
+<script src="https://kit.fontawesome.com/95c0aa19f9.js" crossorigin="anonymous"></script>
+
+<!--=============== jQuery Core 3.6.3 ===============-->
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+<!--=============== TELEGRAM JS ===============-->
+<script src="https://telegram.org/js/telegram-widget.js?"></script>
+
+<!--=============== MAIN JS ===============-->
+<script src="{% static 'freedom_of_speech/assets/js/main.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<section class="constitution section" id="constitution">
+    <h2 class="section__title">Constitution</h2>
+    <span class="section__subtitle">Legal constitution of Freedom of speech</span>
+
+    <div class="constitution__container container grid section__border">
+        <div class="constitution__content">
+            <div class="constitution__text" contenteditable="{{administrator}}" id="constitution_text"><span id="constitution_text_span">{{constitution}}</span></div>
+        </div>
+
+        {% if administrator %}
+        <button class="constitution__button" id="constitution_button">
+            Edit <i class="fa-regular fa-pen-to-square"></i>
+        </button>
+        {% endif %}
+    </div>
+</section>

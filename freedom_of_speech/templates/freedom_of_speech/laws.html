@@ -1,0 +1,15 @@
+<section class="laws section" id="laws">
+    <h2 class="section__title">Laws</h2>
+    <span class="section__subtitle">Legal laws of Freedom of speech</span>
+
+    <div class="laws__container container grid section__border">
+        <div class="laws__content">
+            <div class="laws__text" contenteditable="{{moderator}}" id="laws_text"><span id="laws_text_span">{{laws}}</span></div>
+        </div>
+        {% if moderator or administrator %}
+        <button class="laws__button" id="laws_button">
+            Edit <i class="fa-regular fa-pen-to-square"></i>
+        </button>
+        {% endif %}
+    </div>
+</section>

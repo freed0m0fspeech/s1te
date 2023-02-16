@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home page</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'assets\css\styles.css' %}">
+</head>
+<body>
+
+<div class="header">{% include 'freedom_of_speech/header.html' %}
+  {% include 'freedom_of_speech/html_css_editor.html' %}
+</div>
+
+<div class="content">{% block content %} {% endblock %}
+</div>
+
+<div class="footer">{% include 'freedom_of_speech/footer.html' %}
+</div>
+
+</body>
+</html>
+
+<!--<ul>-->
+<!--  {% for x in members %}-->
+<!--    <li><a href="rules/{{ x.id }}">{{ x.firstname }} {{ x.lastname }} </a></li>-->
+<!--  {% endfor %}-->
+<!--</ul>-->

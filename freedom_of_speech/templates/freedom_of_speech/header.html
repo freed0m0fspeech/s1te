@@ -1,0 +1,68 @@
+<header class="header" id="header">
+    <nav class="nav container">
+            {% if username %}
+                <a href="/freedom_of_speech/profile/{{username}}/" class="nav__logo">
+                    {{username}}
+                </a>
+            {% else %}
+                <a href="/freedom_of_speech/signin/" class="nav__logo">
+                    Sign In
+                </a>
+            {% endif %}
+
+        <div class="nav__menu" id="nav-menu">
+            <ul class="nav__list grid">
+                <li class="nav__item">
+                    <a href="#home" class="nav__link">
+                        <i class="ri-home-2-line"></i> Home
+                    </a>
+                </li>
+
+                <li class="nav__item">
+                    <a href="#government" class="nav__link">
+                        <i class="ri-government-line"></i> Government
+                    </a>
+                </li>
+
+                <li class="nav__item">
+                    <a href="#constitution" class="nav__link">
+                        <i class="ri-book-open-line"></i> Constitution
+                    </a>
+                </li>
+
+                <li class="nav__item">
+                    <a href="#laws" class="nav__link">
+                        <i class="fa-solid fa-scale-balanced"></i> Laws
+                    </a>
+                </li>
+
+                <li class="nav__item">
+                    <a href="#testimonial" class="nav__link">
+                        <i class="ri-at-line"></i> Testimonial
+                    </a>
+                </li>
+
+                <li class="nav__item">
+                    <a href="#contact" class="nav__link">
+                        <i class="ri-chat-3-line"></i> Contact
+                    </a>
+                </li>
+            </ul>
+
+            <!--            Close button-->
+            <div class="nav__close" id="nav-close">
+                <i class="ri-close-circle-line"></i>
+            </div>
+        </div>
+
+        <div class="nav__buttons">
+            <!--            Theme change button-->
+            <i class="ri-moon-line change-theme" id="theme-button"></i>
+
+            <!--            Toggle button-->
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="ri-menu-5-line"></i>
+            </div>
+        </div>
+    </nav>
+</header>

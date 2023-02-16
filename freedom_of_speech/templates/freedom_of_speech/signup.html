@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--=============== FAVICON ===============-->
+    <link rel="shortcut icon" href="{% static 'freedom_of_speech/assets/img/favicon.jpg' %}" type="image/x-icon">
+
+    <!--=============== REMIXICONS ===============-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+
+    <!--=============== UNICONS ===============-->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.0/css/line.css">
+
+    <!--=============== BOOTSTRAP ===============-->
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">-->
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'freedom_of_speech/assets/css/styles.css' %}">
+
+    <title>Sign Up</title>
+</head>
+<body class="body">
+{% csrf_token %}
+<!--==================== HEADER ====================-->
+<header class="header" id="header">
+    <nav class="nav container">
+        <a href="/freedom_of_speech" class="nav__logo">
+            Freedom of speech
+        </a>
+
+        <div class="nav__buttons">
+            <!--Theme change button-->
+            <i class="ri-moon-line change-theme" id="theme-button"></i>
+        </div>
+    </nav>
+</header>
+
+<!--==================== MAIN ====================-->
+<main class="main">
+    <section class="entry section">
+        <h2 class="section__title">Sign up</h2>
+        <span class="section__subtitle">Sign up your personal account</span>
+
+        <div class="entry__container container grid">
+            <div class="entry__content">
+                <form action="" class="entry__form" id="entry-form">
+                    <div class="entry__form-div">
+                        <label class="entry__form-tag">Username</label>
+                        <input type="text" name="user_name" required placeholder="Write your username" class="entry__form-input" id="signup-username" autocomplete="username">
+                    </div>
+
+                    <div class="entry__form-div">
+                        <label class="entry__form-tag">Password</label>
+                        <input type="password" name="user_password" required placeholder="Write your password" class="entry__form-input" id="signup-password" autocomplete="new-password">
+                    </div>
+                    <p class="entry__message" id="entry-message"></p>
+
+                    <div class="entry__form-div">
+                        <label class="entry__form-tag">Repeat password</label>
+                        <input type="password" name="user_password_repeat" required placeholder="Repeat your password" class="entry__form-input" id="signup-password_repeat" autocomplete="new-password">
+                    </div>
+
+                    <div class="entry__data">
+                        <a href="/freedom_of_speech/signin" class="contact__button">
+                            Already have account? Sign in <i class="ri-arrow-right-line"></i>
+                        </a>
+                    </div>
+
+                    <button class="entry__button" id="signup-button">
+                        Sign up <i class="ri-login-circle-line"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!--=============== SCROLL REVEAL ===============-->
+<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
+
+<!--=============== SWIPER JS ===============-->
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+<!--=============== EMAIL JS ===============-->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<!--FONT AWESOME-->
+<script src="https://kit.fontawesome.com/95c0aa19f9.js" crossorigin="anonymous"></script>
+
+<!--jQuery Core 3.6.3-->
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+<!--=============== MAIN JS ===============-->
+<script src="{% static 'freedom_of_speech/assets/js/main.js' %}"></script>
+</body>
+</html>

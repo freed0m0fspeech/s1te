@@ -1,0 +1,103 @@
+{% load static %}
+<section class="home section" id="home">
+  <div class="home__container container grid section__border">
+    <div class="home__data grid">
+      <h1 class="home__title">
+        Official page <br>
+        Freedom of speech <br>
+      </h1>
+
+      <div class="home__blob grid">
+<!--        <div class="home__perfil">-->
+        <img src="{% static 'freedom_of_speech/assets/img/freedom_of_speech-logo.jpg' %}" alt="home perfil">
+<!--        </div>-->
+
+<!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-waves.svg' %}" alt="home waves" class="home__shape-waves">-->
+<!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-circle.svg' %}" alt="home circle" class="home__shape-circle">-->
+      </div>
+      <ul class="home__community">
+        <a href="https://t.me/freed0m0fspeech" target="_blank" class="home__community-link">
+          <i class="uil uil-telegram"></i>
+        </a>
+        <a href="https://discord.com/invite/dwKpNwQ" target="_blank" class="home__community-link">
+          <i class="uil uil-discord"></i>
+        </a>
+        <a href="https://vk.me/join/AAAAAOUSazBFPCDP0CGaVjyh" target="_blank" class="home__community-link">
+          <i class="uil uil-vk"></i>
+        </a>
+      </ul>
+    </div>
+
+    <!--==================== HOME INFO 1 ====================-->
+    <div class="home__info">
+      <div>
+        <h3 class="home__info-title">
+          BIOGRAPHY
+        </h3>
+
+        <p class="home__info-description">
+          Freedom of speech - is project about true freedom, but in different way. The story starts on February 3, 2017
+        </p>
+      </div>
+
+      <div>
+        <h3 class="home__info-title">
+          CONTACT
+        </h3>
+
+        <p class="home__info-description">
+          Email: prostre1@ukr.net <br>
+          Telegram: @pr0stre1 <br>
+        </p>
+      </div>
+
+      <div>
+        <h3 class="home__info-title">
+          SERVICES
+        </h3>
+
+        <p class="home__info-description">
+          Discord bot <br>
+          Telegram bot <br>
+          Official page <br>
+        </p>
+      </div>
+    </div>
+    <!--==================== HOME INFO 2 ====================-->
+    <div class="home__info">
+      <div>
+        <h3 class="home__info-title">
+          YEARS OF FREEDOM
+        </h3>
+
+        <p class="home__info-number" id="home__info__years_value">
+            Feb 3, 2017
+<!--          2017-2023-->
+          <div class="home__info-description" id="home__date_counter"></div>
+        </p>
+      </div>
+
+      <div>
+        <h3 class="home__info-title">
+          MEMBERS
+        </h3>
+
+        <p class="home__info-number" id="members_value">
+          {{members_count}}
+<!--          <div class="animated_number home__info-number"></div>-->
+        </p>
+      </div>
+
+      <div>
+        <h3 class="home__info-title">
+          FUN
+        </h3>
+
+        <p class="home__info-number" id="fun_value">
+          100 %
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
