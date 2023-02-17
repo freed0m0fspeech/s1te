@@ -81,7 +81,7 @@ body {
     font-size: var(--normal-font-size);
     background-color: var(--body-color);
     color: var(--text-color);
-    transition: background .4s; /* for dark mode animation */
+    /*transition: background .4s; !* for dark mode animation *!*/
     scroll-behavior: smooth;
 }
 
@@ -152,11 +152,14 @@ body.dark-theme {
     the website, in light theme
 ==========*/
 .dark-theme .nav,
-.dark-theme .nav__menu,
+.dark-theme .nav__menu{
+    background-color: var(--container-color);
+    box-shadow: 0 4px 20px hsla(207, 24%, 8%, .4);
+}
+
 .dark-theme .scrollup{
     background-color: var(--container-color);
-    /*box-shadow: 0 4px 20px hsla(207, 24%, 8%, .4);*/
-    box-shadow: 0 4px 20px hsla(0, 0%, 25%);
+    box-shadow: 0 4px 20px hsla(0, 0%, 0%);
 }
 
 .dark-theme .home__shape-waves,
@@ -296,7 +299,7 @@ input:-webkit-autofill:active{
     box-shadow: 0 4px 20px hsla(207, 24%, 35%, .1);
     padding-inline: 1.5rem;
     border-radius: 3rem;
-    transition: background .4s; /* for dark mode animation */
+    /*transition: background .4s; !* for dark mode animation *!*/
 }
 
 .nav__logo,
@@ -403,7 +406,7 @@ input:-webkit-autofill:active{
     border-radius: 6.25rem;
     /*overflow: hidden;*/
     place-items: center;
-    transition: background .4s; /* for dark mode animation */
+    /*transition: background .4s; !* for dark mode animation *!*/
 }
 
 .home__blob img{
@@ -528,7 +531,7 @@ input:-webkit-autofill:active{
     border-radius: 6.25rem !important;
     /*overflow: hidden;*/
     place-items: center;
-    transition: background .4s; /* for dark mode animation */
+    /*transition: background .4s; !* for dark mode animation *!*/
 }
 
 .profile__blob img{
@@ -575,16 +578,16 @@ input:-webkit-autofill:active{
 .profile__community{
     justify-self: center;
 
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 1rem);
-    grid-auto-flow: column;
-    align-items: center;
+    /*display: grid;*/
+    /*grid-template-columns: repeat(auto-fit, 1rem);*/
+    /*grid-auto-flow: column;*/
+    /*align-items: center;*/
 
-    column-gap: 1.25rem;
+    /*column-gap: 1.25rem;*/
 }
 
 .profile__community-link{
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     color: var(--text-color-light);
     transition: color .3s;
 }
@@ -673,7 +676,7 @@ input:-webkit-autofill:active{
     border-radius: 3rem;
     place-items: center;
     margin-bottom: 1rem;
-    transition: background .4s; /* for dark mode animation */
+    /*transition: background .4s; !* for dark mode animation *!*/
 }
 
 .skills__blob img{
@@ -781,7 +784,7 @@ input:-webkit-autofill:active{
     text-align: center;
     padding: 3.5rem 1rem;
     border-radius: 7.25rem;
-    transition: background .4s; /* for dark mode animation */
+    /*transition: background .4s; !* for dark mode animation *!*/
 }
 
 .services__card i{
@@ -834,7 +837,7 @@ input:-webkit-autofill:active{
     text-align: center;
     padding: 3.5rem 1rem;
     border-radius: 7.25rem;
-    transition: background .4s; /* for dark mode animation */
+    /*transition: background .4s; !* for dark mode animation *!*/
 }
 
 .government__card i{
@@ -1250,7 +1253,7 @@ input:-webkit-autofill:active{
     font-size: var(--smaller-font-size);
     font-weight: var(--font-medium);
     padding: .35rem;
-    transition: background .4s; /* for dark mode animation */
+    /*transition: background .4s; !* for dark mode animation *!*/
 }
 
 .contact__form-area{
@@ -1456,7 +1459,7 @@ input:-webkit-autofill:active{
     font-size: var(--smaller-font-size);
     font-weight: var(--font-medium);
     padding: .35rem;
-    transition: background .4s; /* for dark mode animation */
+    /*transition: background .4s; !* for dark mode animation *!*/
 }
 
 .entry__form-area{
@@ -1776,7 +1779,7 @@ input:-webkit-autofill:active{
         top: 0;
         bottom: initial;
         background-color: var(--body-color);
-        transition: .4s;
+        /*transition: .4s;*/
     }
 
     .nav{
@@ -1799,7 +1802,7 @@ input:-webkit-autofill:active{
         width: initial;
         margin-left: auto;
         background-color: var(--body-color);
-        transition: background .4s;
+        /*transition: background .4s;*/
     }
 
     .nav__list{
@@ -1968,7 +1971,7 @@ input:-webkit-autofill:active{
     }
 
     .profile__community-link{
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
 
     .profile__info{
