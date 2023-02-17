@@ -64,10 +64,12 @@
             <!--Theme change button-->
             <i class="ri-moon-line change-theme" id="theme-button"></i>
 
-            <!--            Toggle button-->
-            <div class="nav__toggle" id="nav-toggle">
-                <i class="ri-menu-5-line"></i>
-            </div>
+            {% if authorized %}
+                <!--            Toggle button-->
+                <div class="nav__toggle" id="nav-toggle">
+                    <i class="ri-menu-5-line"></i>
+                </div>
+            {% endif %}
         </div>
     </nav>
 </header>
@@ -92,9 +94,10 @@
                 </div>
             {%if authorized %}
                 <ul class="profile__community">
-                    <a href="https://t.me/freed0m0fspeech" target="_blank" class="profile__community-link profile__community-link__{{telegram_link_status}}" id="auth-telegram_button">
+                    <a href="#" target="_blank" class="profile__community-link profile__community-link__{{telegram_link_status}}" id="auth-telegram_button">
                         <i class="uil uil-telegram"></i>
                     </a>
+
                     <!--          <a href="https://discord.com/invite/dwKpNwQ" target="_blank" class="profile__community-link__unlinked profile__community-link">-->
                     <!--            <i class="uil uil-discord"></i>-->
                     <!--          </a>-->
@@ -197,15 +200,15 @@
 
             <div class="entry__container container grid section__border">
                 <div class="entry__content">
-                    <form action="" class="entry__form" id="entry-form-username">
+                    <form action='' class="entry__form" id="entry-form-username">
                         <div class="entry__form-div">
                             <label class="entry__form-tag">Username</label>
-                            <input type="text" name="user_name" required placeholder="Write your username" class="entry__form-input" id="username-change_username" autocomplete="off">
+                            <input type="text" name="user_name" required placeholder="Write your username" class="entry__form-input" id="username-change_username" autocomplete="username">
                         </div>
 
                         <div class="entry__form-div">
                             <label class="entry__form-tag">Password</label>
-                            <input type="password" name="user_password" required placeholder="Write your password" class="entry__form-input" id="username-change_password" autocomplete="off">
+                            <input type="password" name="user_password" required placeholder="Write your password" class="entry__form-input" id="username-change_password" autocomplete="password">
                         </div>
 
                         <p class="entry__message" id="entry-message-username"></p>
@@ -223,15 +226,17 @@
 
             <div class="entry__container container grid section__border">
                 <div class="entry__content">
-                    <form action="" class="entry__form" id="entry-form-password">
+                    <form action='' class="entry__form" id="entry-form-password">
+                        <input hidden autocomplete="username" name="username" type="text" value="{{..}}"/>
+
                         <div class="entry__form-div">
                             <label class="entry__form-tag">Current password</label>
-                            <input type="password" name="user_password_old" required placeholder="Write your password" class="entry__form-input" id="password-change_old_password" autocomplete="off">
+                            <input type="password" name="user_password_old" required placeholder="Write your password" class="entry__form-input" id="password-change_old_password" autocomplete="current-password">
                         </div>
 
                         <div class="entry__form-div">
                             <label class="entry__form-tag">New password</label>
-                            <input type="password" name="user_password_new" required placeholder="Write your new password" class="entry__form-input" id="password-change_new_password" autocomplete="off">
+                            <input type="password" name="user_password_new" required placeholder="Write your new password" class="entry__form-input" id="password-change_new_password" autocomplete="new-password">
                         </div>
 
                         <p class="entry__message" id="entry-message-password"></p>

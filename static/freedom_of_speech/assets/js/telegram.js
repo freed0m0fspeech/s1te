@@ -1,4 +1,4 @@
-$('#test_button').on('click', function(e) {
+$('#auth-telegram_button').on('click', function(e) {
     e.preventDefault();
 
     window.Telegram.Login.auth(

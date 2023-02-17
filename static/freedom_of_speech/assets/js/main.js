@@ -364,7 +364,7 @@ $('#signin-button').on('click', function(e) {
 
             setTimeout(() => {
                 window.location.replace(`/freedom_of_speech/profile/${username.val()}`)
-            }, 1000);
+            }, 2000);
             // setTimeout(redirect('/freedom_of_speech/'), 5000)
             // redirect('/freedom_of_speech/')
 
@@ -445,7 +445,7 @@ $('#signup-button').on('click', function(e) {
 
             setTimeout(() => {
                 window.location.replace(`/freedom_of_speech/profile/${username.val()}`)
-            }, 1000);
+            }, 2000);
 
             username.val('')
             password.val('')
@@ -515,7 +515,7 @@ $('#username-change_button').on('click', function(e) {
 
             setTimeout(() => {
                 window.location.replace(`/freedom_of_speech/profile/${new_username}`)
-            }, 1000);
+            }, 2000);
 
             username.val('')
             password.val('')
@@ -623,7 +623,7 @@ $('#signout-button').on('click', function(e) {
         success: function (data, status, jqXHR) {
             setTimeout(() => {
                 window.location.replace('/freedom_of_speech/')
-            }, 1000);
+            }, 2000);
         },
         error(xhr,status,error){
             // Some error
@@ -739,10 +739,6 @@ $('#contact_button').on('click', function(e) {
     }
 });
 
-// function onTelegramAuth(user) {
-//     alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');
-// }
-
 $('#auth-telegram_button').on('click', function(e) {
     e.preventDefault();
 
@@ -790,7 +786,7 @@ $('#auth-telegram_button').on('click', function(e) {
 
                 setTimeout(() => {
                     window.location.reload()
-                }, 1000);
+                }, 2000);
             },
             error(xhr,status,error){
                 // Some error
