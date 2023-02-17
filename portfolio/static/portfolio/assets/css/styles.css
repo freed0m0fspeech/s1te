@@ -846,6 +846,10 @@ input:-webkit-autofill:active{
     margin-bottom: 1.5rem;
 }
 
+.government__description a{
+    color: var(--title-color);
+}
+
 .government__border{
     width: 248px;
     height: 342px;

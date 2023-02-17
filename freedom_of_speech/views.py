@@ -672,7 +672,7 @@ class AuthTelegramPageView(TemplateView):
                         role = role.lower()
 
                         if role == 'судья':
-                            query = {f"{role}": role}
+                            query = {f"judge": username}
                             mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                        action='$set', query=query)
 
@@ -685,10 +685,10 @@ class AuthTelegramPageView(TemplateView):
                                     if old_username == username:
                                         return HttpResponse(status=200)
 
-                                    query = {f"{role}": username, f'users.{username}.permissions.moderator': True,
+                                    query = {f"president": username, f'users.{username}.permissions.moderator': True,
                                              f'users.{old_username}.permissions.moderator': False}
                                 else:
-                                    query = {f"{role}": username, f'users.{username}.permissions.moderator': True}
+                                    query = {f"president": username, f'users.{username}.permissions.moderator': True}
 
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$set', query=query)
@@ -702,10 +702,10 @@ class AuthTelegramPageView(TemplateView):
                                     if old_username == username:
                                         return HttpResponse(status=200)
 
-                                    query = {f"{role}": username, f'users.{username}.permissions.moderator': True,
+                                    query = {f"parliament": username, f'users.{username}.permissions.moderator': True,
                                              f'users.{old_username}.permissions.moderator': False}
                                 else:
-                                    query = {f"{role}": username, f'users.{username}.permissions.moderator': True}
+                                    query = {f"parliament": username, f'users.{username}.permissions.moderator': True}
 
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$set', query=query)
@@ -719,7 +719,11 @@ class ProfilePageView(TemplateView):
     async def get(self, request, *args, **kwargs):
         # access self.args, self.kwargs
         # kwargs: {'username': '01eh'}
-        username = self.kwargs.get('username', '')
+        if not self.kwargs:
+            username = ''
+        else:
+            username = self.kwargs.get('username', '')
+
         cockies = request.COOKIES
 
         query = {'_id': 0, 'users': 1}
