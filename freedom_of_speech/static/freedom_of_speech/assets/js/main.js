@@ -189,10 +189,10 @@ window.onload = function() {
     }
 
     if (document.getElementById('profile__info__years_value'))
-        document.getElementById('profile__info__years_value').textContent += ''.concat(' - ', new Date().toLocaleString('en', {month: 'short', day: 'numeric', year: 'numeric'}))
+        document.getElementById('profile__info__years_value').textContent = new Date(document.getElementById('profile__info__years_value').textContent).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}).concat(' - ', new Date().toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}))
 
     if (document.getElementById('home__info__years_value'))
-        document.getElementById('home__info__years_value').textContent += ''.concat(' - ', new Date().toLocaleString('en', {month: 'short', day: 'numeric', year: 'numeric'}));
+        document.getElementById('home__info__years_value').textContent = new Date(document.getElementById('home__info__years_value').textContent).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}).concat(' - ', new Date().toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}));
 
     if (document.getElementById('footer__copy__years_value')) {
         footer__copy__years_value = document.getElementById('footer__copy__years_value');
@@ -207,7 +207,7 @@ window.onload = function() {
 
         setInterval(function () {
             animateValue(fun_value, parseInt(fun_value.textContent), getRandomInt(1, fun_value_int), 1500);
-        }, 2000);
+        }, 5000);
         setTimeout(function () {
             animateValue(fun_value, parseInt(fun_value.textContent), getRandomInt(1, fun_value_int), 1500);
         });
@@ -335,7 +335,7 @@ $('#signin-button').on('click', function(e) {
         entryMessage.addClass('color-red')
 
         // Show message
-        entryMessage.text('Write information in all input fields');
+        entryMessage.text('Заполните все поля');
 
         setTimeout(() => {
             entryMessage.text('')
@@ -360,11 +360,11 @@ $('#signin-button').on('click', function(e) {
         success: function (data, status, jqXHR) {
             entryMessage.removeClass('color-red')
             entryMessage.addClass('color-green')
-            entryMessage.text('Sign in successful')
+            entryMessage.text('Авторизация успешна')
 
             setTimeout(() => {
                 window.location.replace(`/freedom_of_speech/profile/${username.val()}`)
-            }, 2000);
+            }, 5000);
             // setTimeout(redirect('/freedom_of_speech/'), 5000)
             // redirect('/freedom_of_speech/')
 
@@ -379,7 +379,7 @@ $('#signin-button').on('click', function(e) {
             entryMessage.removeClass('color-green')
             entryMessage.addClass('color-red')
             if (xhr.status === 401)
-                entryMessage.text('Wrong credentials')
+                entryMessage.text('Неверные данные')
 
             setTimeout(() => {
                 entryMessage.text('')
@@ -401,7 +401,7 @@ $('#signup-button').on('click', function(e) {
         entryMessage.addClass('color-red')
 
         // Show message
-        entryMessage.text('Passwords mismatches');
+        entryMessage.text('Пароли не совпадают');
 
         setTimeout(() => {
             entryMessage.text('')
@@ -415,7 +415,7 @@ $('#signup-button').on('click', function(e) {
         entryMessage.addClass('color-red')
 
         // Show message
-        entryMessage.text('Write information in all input fields');
+        entryMessage.text('Заполните все поля');
 
         setTimeout(() => {
             entryMessage.text('')
@@ -441,11 +441,11 @@ $('#signup-button').on('click', function(e) {
         success: function (data, status, jqXHR) {
             entryMessage.removeClass('color-red')
             entryMessage.addClass('color-green')
-            entryMessage.text('Sign up successful')
+            entryMessage.text('Регистрация успешна')
 
             setTimeout(() => {
                 window.location.replace(`/freedom_of_speech/profile/${username.val()}`)
-            }, 2000);
+            }, 5000);
 
             username.val('')
             password.val('')
@@ -456,13 +456,13 @@ $('#signup-button').on('click', function(e) {
             entryMessage.addClass('color-red')
 
             if (xhr.status === 409)
-                entryMessage.text('Username already registered')
+                entryMessage.text('Такой пользователь уже зарегистрирован')
 
             if (xhr.status === 500)
-                entryMessage.text('Server registration problem')
+                entryMessage.text('Возникли проблемы во время регистрации')
 
             if (xhr.status === 422)
-                entryMessage.text('Some problems with your request')
+                entryMessage.text('Возникли пробемы с вашим запросом')
 
             setTimeout(() => {
                 entryMessage.text('')
@@ -483,7 +483,7 @@ $('#username-change_button').on('click', function(e) {
         entryMessage.addClass('color-red')
 
         // Show message
-        entryMessage.text('Write information in all input fields');
+        entryMessage.text('Заполните все поля');
 
         setTimeout(() => {
             entryMessage.text('')
@@ -509,13 +509,13 @@ $('#username-change_button').on('click', function(e) {
             entryMessage.removeClass('color-red')
             entryMessage.addClass('color-green')
 
-            entryMessage.text('Username changed successfully')
+            entryMessage.text('Никнейм успешно изменено')
 
             new_username = username.val()
 
             setTimeout(() => {
                 window.location.replace(`/freedom_of_speech/profile/${new_username}`)
-            }, 2000);
+            }, 5000);
 
             username.val('')
             password.val('')
@@ -525,13 +525,13 @@ $('#username-change_button').on('click', function(e) {
             entryMessage.addClass('color-red')
 
             if (xhr.status === 401)
-                entryMessage.text('Wrong credentials')
+                entryMessage.text('Неверные данные')
 
             if (xhr.status === 409)
-                entryMessage.text('Username already registered')
+                entryMessage.text('Такой пользователь уже зарегистрирован')
 
             if (xhr.status === 422)
-                entryMessage.text('Some problems with your request')
+                entryMessage.text('Возникли проблемы с вашим запросом')
 
             setTimeout(() => {
                 entryMessage.text('')
@@ -552,7 +552,7 @@ $('#password-change_button').on('click', function(e) {
         entryMessage.addClass('color-red')
 
         // Show message
-        entryMessage.text('Write information in all input fields');
+        entryMessage.text('Заполните все поля');
 
         setTimeout(() => {
             entryMessage.text('')
@@ -577,7 +577,7 @@ $('#password-change_button').on('click', function(e) {
         success: function (data, status, jqXHR) {
             entryMessage.removeClass('color-red')
             entryMessage.addClass('color-green')
-            entryMessage.text('Password changed successfully')
+            entryMessage.text('Пароль успешно изменен')
 
             old_password.val('')
             new_password.val('')
@@ -592,10 +592,10 @@ $('#password-change_button').on('click', function(e) {
             // if (xhr.status === 409)
             //     entryMessage.text('Username already registered')
             if (xhr.status === 401)
-                entryMessage.text('Wrong credentials')
+                entryMessage.text('Неверные данные')
 
             if (xhr.status === 422)
-                entryMessage.text('Some problems with your request')
+                entryMessage.text('Возникли проблемы с вашим запросом')
 
             setTimeout(() => {
                 entryMessage.text('')
@@ -623,7 +623,7 @@ $('#signout-button').on('click', function(e) {
         success: function (data, status, jqXHR) {
             setTimeout(() => {
                 window.location.replace('/freedom_of_speech/')
-            }, 2000);
+            }, 5000);
         },
         error(xhr,status,error){
             // Some error
@@ -689,7 +689,7 @@ $('#contact_button').on('click', function(e) {
         contactMessage.addClass('color-red')
 
         // Show message
-        contactMessage.text('Write text in input field');
+        contactMessage.text('Введите текст в поле ввода');
 
         setTimeout(() => {
             contactMessage.text('')
@@ -713,7 +713,7 @@ $('#contact_button').on('click', function(e) {
                 // Show message and add color
                 contactMessage.removeClass('color-red')
                 contactMessage.addClass('color-green')
-                contactMessage.text('Testimonial was sent successfully')
+                contactMessage.text('Отзыв успешно отправлен')
                 // contactMessage.classList.add('color-blue');
                 // contactMessage.textContent = 'Testimonial was sent successfully';
 
@@ -730,7 +730,7 @@ $('#contact_button').on('click', function(e) {
                 contactMessage.addClass('color-red')
 
                 if (xhr.status === 422)
-                    contactMessage.text('Some problems with your request')
+                    contactMessage.text('Возникли проблемы с вашим запросом')
             },
         });
 
@@ -786,7 +786,7 @@ $('#auth-telegram_button').on('click', function(e) {
 
                 setTimeout(() => {
                     window.location.reload()
-                }, 2000);
+                }, 5000);
             },
             error(xhr,status,error){
                 // Some error

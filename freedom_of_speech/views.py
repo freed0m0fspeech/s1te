@@ -577,7 +577,7 @@ class AddTestimonialPageView(TemplateView):
                         if sessionid == users[username]['sessionid']:
                             user = users[username]
 
-        role = 'Stranger'
+        role = 'Незнакомец'
         if user:
             chat = 'freed0m0fspeech'
 
@@ -588,7 +588,7 @@ class AddTestimonialPageView(TemplateView):
                 if member_parameters:
                     role = member_parameters.get('custom_title', 'Member')
         else:
-            username = 'Anonymous'
+            username = 'Аноним'
 
         query = {'testimonials': {'text': testimonial, 'username': username, 'role': role}}
 
@@ -671,12 +671,12 @@ class AuthTelegramPageView(TemplateView):
                     if role:
                         role = role.lower()
 
-                        if role == 'judge':
+                        if role == 'судья':
                             query = {f"{role}": role}
                             mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                        action='$set', query=query)
 
-                        if role == 'president':
+                        if role == 'президент':
                             users = document.get('users', '')
                             if users:
                                 old_username = document.get('president', '')
@@ -693,7 +693,7 @@ class AuthTelegramPageView(TemplateView):
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$set', query=query)
 
-                        if role == 'parliament':
+                        if role == 'парламент':
                             users = document.get('users', '')
                             if users:
                                 old_username = document.get('parliament', '')
@@ -772,7 +772,7 @@ class ProfilePageView(TemplateView):
                             context['xp_need'] = member.get('xp_need', '')
                             context['hours_in_voice_channel'] = member.get('hours_in_voice_channel', '')
                             if member_parameters:
-                                context['role'] = member_parameters.get('custom_title', 'Member')
+                                context['role'] = member_parameters.get('custom_title', 'Участник')
 
                                 joined_date = member_parameters.get('joined_date', '')
                                 if joined_date:

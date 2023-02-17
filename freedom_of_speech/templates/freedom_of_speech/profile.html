@@ -36,19 +36,19 @@
                 <ul class="nav__list grid">
                     <li class="nav__item">
                         <a href="#profile" class="nav__link">
-                            <i class="ri-user-line"></i> Profile
+                            <i class="ri-user-line"></i> Профиль
                         </a>
                     </li>
 
                     <li class="nav__item">
                         <a href="#username" class="nav__link">
-                            <i class="ri-hashtag"></i> Username
+                            <i class="ri-hashtag"></i> Никнейм
                         </a>
                     </li>
 
                     <li class="nav__item">
                         <a href="#password" class="nav__link">
-                            <i class="ri-key-2-line"></i> Password
+                            <i class="ri-key-2-line"></i> Пароль
                         </a>
                     </li>
                 </ul>
@@ -80,7 +80,7 @@
         <div class="{% if telegram_link_status %}profile__container{% endif %} section__border container grid">
             <div class="profile__data grid">
                 <h1 class="profile__title">
-                    Profile page <br>
+                    Станица профиля <br>
                     {{username}} <br>
                 </h1>
 
@@ -113,7 +113,7 @@
                 <div class="profile__info">
                     <div>
                         <h3 class="profile__info-title">
-                            Information
+                            ИНФОРМАЦИЯ
                         </h3>
 
                         <p class="profile__info-description">
@@ -125,7 +125,7 @@
 
                     <div>
                         <h3 class="profile__info-title">
-                            CONTACT
+                            КОНТАКТЫ
                         </h3>
 
                         <p class="profile__info-description">
@@ -139,7 +139,7 @@
 
                     <div>
                         <h3 class="profile__info-title">
-                            ROLE
+                            РОЛЬ
                         </h3>
 
                         <p class="profile__info-description">
@@ -151,7 +151,7 @@
                 <div class="profile__info">
                     <div>
                         <h3 class="profile__info-title">
-                            YEARS OF FREEDOM
+                            СВОБОДНЫХ ЛЕТ
                         </h3>
 
                         {% if joined_date %}
@@ -171,7 +171,7 @@
 
                     <div>
                         <h3 class="profile__info-title">
-                            MESSAGES COUNT
+                            КОЛИЧЕСТВО СООБЩЕНИЙ
                         </h3>
 
                         <p class="profile__info-number">
@@ -182,7 +182,7 @@
 
                     <div>
                         <h3 class="profile__info-title">
-                            VOICE
+                            ВРЕМЯ В ГОЛОСОВОМ КАНАЛЕ
                         </h3>
 
                         <p class="profile__info-number">
@@ -195,25 +195,25 @@
     </section>
     {%if authorized %}
         <section class="entry section" id="username">
-            <h2 class="section__title">Username</h2>
-            <span class="section__subtitle">Change username for your personal account</span>
+            <h2 class="section__title">Никнейм</h2>
+            <span class="section__subtitle">Изменить никнейм персонального профиля</span>
 
             <div class="entry__container container grid section__border">
                 <div class="entry__content">
                     <form action='' class="entry__form" id="entry-form-username">
                         <div class="entry__form-div">
-                            <label class="entry__form-tag">Username</label>
-                            <input type="text" name="user_name" required placeholder="Write your username" class="entry__form-input" id="username-change_username" autocomplete="username">
+                            <label class="entry__form-tag">Никнейм</label>
+                            <input type="text" name="user_name" required placeholder="Напишите новый никнейм" class="entry__form-input" id="username-change_username" autocomplete="username">
                         </div>
 
                         <div class="entry__form-div">
-                            <label class="entry__form-tag">Password</label>
-                            <input type="password" name="user_password" required placeholder="Write your password" class="entry__form-input" id="username-change_password" autocomplete="password">
+                            <label class="entry__form-tag">Текущий пароль</label>
+                            <input type="password" name="user_password" required placeholder="Напишите текущий пароль" class="entry__form-input" id="username-change_password" autocomplete="current-password">
                         </div>
 
                         <p class="entry__message" id="entry-message-username"></p>
                         <button class="entry__button" id="username-change_button">
-                            Submit <i class="ri-swap-line"></i>
+                            Изменить <i class="ri-swap-line"></i>
                         </button>
                     </form>
                 </div>
@@ -221,27 +221,27 @@
         </section>
 
         <section class="entry section" id="password">
-            <h2 class="section__title">Password</h2>
-            <span class="section__subtitle">Change password for your personal account</span>
+            <h2 class="section__title">Пароль</h2>
+            <span class="section__subtitle">Изменить пароль персонального профиля</span>
 
             <div class="entry__container container grid section__border">
                 <div class="entry__content">
                     <form action='' class="entry__form" id="entry-form-password">
-                        <input hidden autocomplete="username" name="username" type="text" value="{{..}}"/>
+                        <input hidden autocomplete="username" name="user_name" type="text" value="{{..}}"/>
 
                         <div class="entry__form-div">
-                            <label class="entry__form-tag">Current password</label>
-                            <input type="password" name="user_password_old" required placeholder="Write your password" class="entry__form-input" id="password-change_old_password" autocomplete="current-password">
+                            <label class="entry__form-tag">Текущий пароль</label>
+                            <input type="password" name="user_password_old" required placeholder="Напишите текущий пароль" class="entry__form-input" id="password-change_old_password" autocomplete="current-password">
                         </div>
 
                         <div class="entry__form-div">
-                            <label class="entry__form-tag">New password</label>
-                            <input type="password" name="user_password_new" required placeholder="Write your new password" class="entry__form-input" id="password-change_new_password" autocomplete="new-password">
+                            <label class="entry__form-tag">Новый пароль</label>
+                            <input type="password" name="user_password_new" required placeholder="Напишите новый пароль" class="entry__form-input" id="password-change_new_password" autocomplete="new-password">
                         </div>
 
                         <p class="entry__message" id="entry-message-password"></p>
                         <button class="entry__button" id="password-change_button">
-                            Submit <i class="ri-swap-line"></i>
+                            Изменить <i class="ri-swap-line"></i>
                         </button>
                     </form>
                 </div>
@@ -252,7 +252,7 @@
                 <div class="entry__content">
                     <form action="" class="entry__form">
                         <button class="entry__button" id="signout-button">
-                            Sign out <i class="ri-logout-circle-r-line"></i>
+                            Выйти <i class="ri-logout-circle-r-line"></i>
                         </button>
                     </form>
                 </div>

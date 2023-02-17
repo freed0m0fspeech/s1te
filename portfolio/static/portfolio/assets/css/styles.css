@@ -491,7 +491,7 @@ input:-webkit-autofill:active{
 }
 
 .home__info-number{
-    font-size: var(--h1-font-size);
+    font-size: var(--h2-font-size);
     font-weight: var(--font-semi-bold);
 }
 
@@ -620,7 +620,7 @@ input:-webkit-autofill:active{
 }
 
 .profile__info-number{
-    font-size: var(--h1-font-size);
+    font-size: var(--h2-font-size);
     font-weight: var(--font-semi-bold);
 }
 

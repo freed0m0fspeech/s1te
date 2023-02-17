@@ -20,7 +20,7 @@
     <!--=============== CSS ===============-->
     <link rel="stylesheet" href="{% static 'freedom_of_speech/assets/css/styles.css' %}">
 
-    <title>Sign In</title>
+    <title>Авторизация</title>
 </head>
 <body class="body">
 {% csrf_token %}
@@ -41,31 +41,31 @@
 <!--==================== MAIN ====================-->
 <main class="main">
     <section class="entry section" id="entry">
-        <h2 class="section__title">Sign in</h2>
-        <span class="section__subtitle">Sign in your personal account</span>
+        <h2 class="section__title">Авторизация</h2>
+        <span class="section__subtitle">Войти в персональный аккаунт</span>
 
         <div class="entry__container container grid">
             <div class="entry__content">
                 <form action="" class="entry__form" id="entry-form">
                     <div class="entry__form-div">
-                        <label class="entry__form-tag">Username</label>
-                        <input type="text" name="user_name" required placeholder="Write your username" class="entry__form-input" id="signin-username" autocomplete="username">
+                        <label class="entry__form-tag">Никнейм</label>
+                        <input type="text" name="user_name" required placeholder="Напишите вам никнейм" class="entry__form-input" id="signin-username" autocomplete="username">
                     </div>
 
                     <div class="entry__form-div">
-                        <label class="entry__form-tag">Password</label>
-                        <input type="password" name="user_password" required placeholder="Write your password" class="entry__form-input" id="signin-password" autocomplete="password">
+                        <label class="entry__form-tag">Пароль</label>
+                        <input type="password" name="user_password" required placeholder="Напишите ваш пароль" class="entry__form-input" id="signin-password" autocomplete="password">
                     </div>
 
                     <div class="entry__data">
                         <a href="/freedom_of_speech/signup" class="contact__button">
-                            Don't have account? Sign up <i class="ri-arrow-right-line"></i>
+                            Нет аккаунта? Регистрация <i class="ri-arrow-right-line"></i>
                         </a>
                     </div>
 
                     <p class="entry__message" id="entry-message"></p>
                     <button class="entry__button" id="signin-button">
-                        Sign in <i class="ri-login-circle-line"></i>
+                        Войти <i class="ri-login-circle-line"></i>
                     </button>
                 </form>
             </div>
