@@ -155,7 +155,8 @@ body.dark-theme {
 .dark-theme .nav__menu,
 .dark-theme .scrollup{
     background-color: var(--container-color);
-    box-shadow: 0 4px 20px hsla(207, 24%, 8%, .4);
+    /*box-shadow: 0 4px 20px hsla(207, 24%, 8%, .4);*/
+    box-shadow: 0 4px 20px hsla(0, 0%, 25%);
 }
 
 .dark-theme .home__shape-waves,
@@ -406,6 +407,10 @@ input:-webkit-autofill:active{
 }
 
 .home__blob img{
+    border-radius: 50%;
+}
+
+.home__blob video{
     border-radius: 50%;
 }
 
