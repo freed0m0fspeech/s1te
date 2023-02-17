@@ -363,7 +363,8 @@ $('#signin-button').on('click', function(e) {
             entryMessage.text('Авторизация успешна')
 
             setTimeout(() => {
-                window.location.replace(`/freedom_of_speech/profile/${username.val()}`)
+                // window.location.replace(`/freedom_of_speech/profile/${username.val()}`)
+                window.location.replace("/freedom_of_speech/")
             }, 3000);
             // setTimeout(redirect('/freedom_of_speech/'), 5000)
             // redirect('/freedom_of_speech/')
@@ -623,7 +624,7 @@ $('#signout-button').on('click', function(e) {
         success: function (data, status, jqXHR) {
             setTimeout(() => {
                 window.location.replace('/freedom_of_speech/')
-            }, 5000);
+            }, 1000);
         },
         error(xhr,status,error){
             // Some error
@@ -721,7 +722,8 @@ $('#contact_button').on('click', function(e) {
                 setTimeout(() => {
                     contactMessage.text('')
 
-                    window.location.replace("/freedom_of_speech/")
+                    // window.location.replace("/freedom_of_speech/")
+                    window.location.reload()
                 }, 1000);
                 // location.reload();
                 // $('#constitution_text_span').text(data);
@@ -754,8 +756,8 @@ $('#auth-telegram_button').on('click', function(e) {
             if (!data) {
                 // authorization failed
                 // console.log('telegram authorization failed')
-                // auth_telegram_button.addClass('profile__community-link__False')
                 // auth_telegram_button.removeClass('profile__community-link__True')
+                // auth_telegram_button.addClass('profile__community-link__False')
             }else {
                 // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
                 // console.log(data)
@@ -787,7 +789,7 @@ $('#auth-telegram_button').on('click', function(e) {
                 // auth_telegram_button.addClass('profile__community-link__True')
 
                 setTimeout(() => {
-                    window.location.reload()
+                    window.location.replace("/freedom_of_speech/profile/")
                 }, 1000);
             },
             error(xhr,status,error){
