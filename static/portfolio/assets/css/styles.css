@@ -893,8 +893,19 @@ input:-webkit-autofill:active{
     /*word-wrap: break-word;*/
     white-space: pre-wrap;
     padding: 1rem;
-    text-align: justify;
+    /*text-align: justify;*/
     /*margin-bottom: 1.5rem;*/
+
+    -ms-word-break: break-all;
+    word-break: break-all;
+
+    /* Non standard for webkit */
+    word-break: break-word;
+
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
 }
 
 .constitution__button{

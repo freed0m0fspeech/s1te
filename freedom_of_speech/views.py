@@ -33,7 +33,7 @@ from pymongo import (
     ReturnDocument
 )
 
-load_dotenv()
+# load_dotenv()
 
 
 class HomePageView(TemplateView):
@@ -139,6 +139,7 @@ class HomePageView(TemplateView):
 
         chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat}", data=data, headers={'Origin': origin})
         members_count = ''
+
         if chat:
             member = chat.json()
             chat_parameters = member.get('chat_parameters', '')
@@ -156,7 +157,6 @@ class HomePageView(TemplateView):
         context['administrator'] = permissions.get('administrator', False)
         context['moderator'] = permissions.get('administrator', permissions.get('moderator', False))
         context['testimonials_html'] = testimonials_html
-        context['members_count'] = members_count
 
         response = render(request=request, template_name='freedom_of_speech/index.html', context=context)
 
