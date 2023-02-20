@@ -4,13 +4,13 @@ import json
 import os
 import random
 import secrets
-from math import sqrt
-
+import rsa
 import requests
-from bson import json_util
 # import uuid
 # import OpenSSL
 
+from math import sqrt
+from bson import json_util
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
@@ -33,7 +33,7 @@ from pymongo import (
     ReturnDocument
 )
 
-# load_dotenv()
+load_dotenv()
 
 
 class HomePageView(TemplateView):
@@ -125,7 +125,19 @@ class HomePageView(TemplateView):
             permissions = {}
 
         chat = 'freed0m0fspeech'
-        chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat}", headers={'Origin': 'https://s1te.fly.dev/'})
+
+        # publicKeyReloaded = rsa.PublicKey.load_pkcs1(os.getenv('RSA_PUBLIC_KEY', '').encode('utf8'))
+
+        data = {
+            'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+        }
+
+        data = json.dumps(data)
+
+        origin = os.getenv('HOSTNAME', '')
+        # origin = rsa.encrypt(origin, publicKeyReloaded)
+
+        chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat}", data=data, headers={'Origin': origin})
         members_count = ''
         if chat:
             member = chat.json()
@@ -481,7 +493,7 @@ class EditLawsPageView(TemplateView):
                 if deleted_lines:
                     deleted_lines = f"||~~{deleted_lines[1::]}~~||"
 
-                text = "**Внесены изменения в [законы](https://s1te.fly.dev/freedom_of_speech/#laws) Freedom of speech:**"
+                text = f"**Внесены изменения в [законы]({os.getenv('HOSTNAME', '')}freedom_of_speech/#laws) Freedom of speech:**"
 
                 text = f"{text}\n\n{added_lines}{deleted_lines}"
 
@@ -490,13 +502,19 @@ class EditLawsPageView(TemplateView):
                 if len(text) > 4096:
                     text = f"{text[0:4093]}.."
 
+                # publicKeyReloaded = rsa.PublicKey.load_pkcs1(os.getenv('RSA_PUBLIC_KEY', '').encode('utf8'))
+
                 data = {
                     "text": text,
+                    'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                 }
 
                 data = json.dumps(data)
 
-                tresponse = requests.post(url, data=data, headers={'Origin': 'https://s1te.fly.dev/'})
+                origin = os.getenv('HOSTNAME', '')
+                # origin = rsa.encrypt(origin, publicKeyReloaded)
+
+                tresponse = requests.post(url, data=data, headers={'Origin': origin})
 
             return response
         else:
@@ -584,7 +602,7 @@ class EditConstitutionPageView(TemplateView):
                 if deleted_lines:
                     deleted_lines = f"||~~{deleted_lines[1::]}~~||"
 
-                text = "**Внесены изменения в [конституцию](https://s1te.fly.dev/freedom_of_speech/#constitution) Freedom of speech:**"
+                text = f"**Внесены изменения в [конституцию]({os.getenv('HOSTNAME', '')}freedom_of_speech/#constitution) Freedom of speech:**"
 
                 text = f"{text}\n\n{added_lines}{deleted_lines}"
 
@@ -593,13 +611,19 @@ class EditConstitutionPageView(TemplateView):
                 if len(text) > 4096:
                     text = f"{text[0:4093]}.."
 
+                # publicKeyReloaded = rsa.PublicKey.load_pkcs1(os.getenv('RSA_PUBLIC_KEY', '').encode('utf8'))
+
                 data = {
                     "text": text,
+                    'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                 }
 
                 data = json.dumps(data)
 
-                tresponse = requests.post(url, data=data, headers={'Origin': 'https://s1te.fly.dev/'})
+                origin = os.getenv('HOSTNAME', '')
+                # origin = rsa.encrypt(origin, publicKeyReloaded)
+
+                tresponse = requests.post(url, data=data, headers={'Origin': origin})
 
                 return response
 
@@ -712,7 +736,18 @@ class AddTestimonialPageView(TemplateView):
         if user:
             chat = 'freed0m0fspeech'
 
-            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{username}", headers={'Origin': 'https://s1te.fly.dev/'})
+            # publicKeyReloaded = rsa.PublicKey.load_pkcs1(os.getenv('RSA_PUBLIC_KEY', '').encode('utf8'))
+
+            data = {
+                'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+            }
+
+            data = json.dumps(data)
+
+            origin = os.getenv('HOSTNAME', '')
+            # origin = rsa.encrypt(origin, publicKeyReloaded)
+
+            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{username}", data=data, headers={'Origin': origin})
             if member:
                 member = member.json()
                 member_parameters = member.get('member_parameters', '')
@@ -793,7 +828,18 @@ class AuthTelegramPageView(TemplateView):
 
             chat = 'freed0m0fspeech'
 
-            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{username}", headers={'Origin': 'https://s1te.fly.dev/'})
+            # publicKeyReloaded = rsa.PublicKey.load_pkcs1(os.getenv('RSA_PUBLIC_KEY', '').encode('utf8'))
+
+            data = {
+                'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+            }
+
+            data = json.dumps(data)
+
+            origin = os.getenv('HOSTNAME', '')
+            # origin = rsa.encrypt(origin, publicKeyReloaded)
+
+            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{username}", data=data, headers={'Origin': origin})
             if member:
                 member = member.json()
                 member_parameters = member.get('member_parameters', '')
@@ -903,7 +949,19 @@ class ProfilePageView(TemplateView):
                         context['telegram_link_status'] = True
 
                         chat = 'freed0m0fspeech'
-                        member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{telegram_username}", headers={'Origin': 'https://s1te.fly.dev/'})
+
+                        # publicKeyReloaded = rsa.PublicKey.load_pkcs1(os.getenv('RSA_PUBLIC_KEY', '').encode('utf8'))
+
+                        data = {
+                            'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+                        }
+
+                        data = json.dumps(data)
+
+                        origin = os.getenv('HOSTNAME', '')
+                        # origin = rsa.encrypt(origin, publicKeyReloaded)
+
+                        member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{telegram_username}", data=data, headers={'Origin': origin})
                         if member:
                             member = member.json()
                             member_parameters = member.get('member_parameters', '')
