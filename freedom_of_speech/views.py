@@ -415,7 +415,7 @@ class EditLawsPageView(TemplateView):
         username = cockies.get('username', '')
 
         if 'sessionid' and 'username' in cockies:
-            query = {'_id': 0, 'users': 1, 'parliament': 1, 'president': 1}
+            query = {'_id': 0, 'users': 1, 'parliament': 1, 'president': 1, 'laws': 1}
         else:
             return HttpResponse(status=422)
 
@@ -456,6 +456,48 @@ class EditLawsPageView(TemplateView):
 
             response = HttpResponse(laws)
 
+            url = "https://telegram-bot-freed0m0fspeech.fly.dev/send/freed0m0fspeech"
+
+            laws_old = document.get('laws', '')
+
+            added_lines = ''
+            deleted_lines = ''
+            laws_old_splitlines = laws_old.splitlines()
+            laws_splitlines = laws.splitlines()
+
+            for line in laws_splitlines:
+                if line not in laws_old_splitlines:
+                    added_lines = f"{added_lines}\n{line}"
+
+            for line in laws_old_splitlines:
+                if line not in laws_splitlines:
+                    deleted_lines = f"{deleted_lines}\n{line}"
+
+            if not deleted_lines and not added_lines:
+                return response
+            else:
+                if added_lines:
+                    added_lines = f"||--{added_lines[1::]}--||"
+                if deleted_lines:
+                    deleted_lines = f"||~~{deleted_lines[1::]}~~||"
+
+                text = "**Внесены изменения в [законы](https://s1te.fly.dev/freedom_of_speech/#laws) Freedom of speech:**"
+
+                text = f"{text}\n\n{added_lines}{deleted_lines}"
+
+                # 4096
+                # ttext = textwrap.shorten(ttext, width=300, placeholder='..', replace_whitespace=False)
+                if len(text) > 4096:
+                    text = f"{text[0:4093]}.."
+
+                data = {
+                    "text": text,
+                }
+
+                data = json.dumps(data)
+
+                tresponse = requests.post(url, data=data)
+
             return response
         else:
             if is_parliament:
@@ -491,7 +533,7 @@ class EditConstitutionPageView(TemplateView):
         username = cockies.get('username', '')
 
         if 'sessionid' and 'username' in cockies:
-            query = {'_id': 0, 'users': 1}
+            query = {'_id': 0, 'users': 1, 'constitution': 1}
         else:
             return HttpResponse(status=422)
 
@@ -517,7 +559,49 @@ class EditConstitutionPageView(TemplateView):
 
             response = HttpResponse(constitution)
 
-            return response
+            url = "https://telegram-bot-freed0m0fspeech.fly.dev/send/freed0m0fspeech"
+
+            constitution_old = document.get('constitution', '')
+
+            added_lines = ''
+            deleted_lines = ''
+            constitution_old_splitlines = constitution_old.splitlines()
+            constitution_splitlines = constitution.splitlines()
+
+            for line in constitution_splitlines:
+                if line not in constitution_old_splitlines:
+                    added_lines = f"{added_lines}\n{line}"
+
+            for line in constitution_old_splitlines:
+                if line not in constitution_splitlines:
+                    deleted_lines = f"{deleted_lines}\n{line}"
+
+            if not deleted_lines and not added_lines:
+                return response
+            else:
+                if added_lines:
+                    added_lines = f"||--{added_lines[1::]}--||"
+                if deleted_lines:
+                    deleted_lines = f"||~~{deleted_lines[1::]}~~||"
+
+                text = "**Внесены изменения в [конституцию](https://s1te.fly.dev/freedom_of_speech/#constitution) Freedom of speech:**"
+
+                text = f"{text}\n\n{added_lines}{deleted_lines}"
+
+                # 4096
+                # ttext = textwrap.shorten(ttext, width=300, placeholder='..', replace_whitespace=False)
+                if len(text) > 4096:
+                    text = f"{text[0:4093]}.."
+
+                data = {
+                    "text": text,
+                }
+
+                data = json.dumps(data)
+
+                tresponse = requests.post(url, data=data)
+
+                return response
 
         return HttpResponse(status=422)
 

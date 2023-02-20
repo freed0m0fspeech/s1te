@@ -326,6 +326,7 @@ $('#laws_button').on('click', function(e) {
         success: function(data, status, jqXHR) {
             // location.reload();
             $('#laws_text_span').text(data);
+            console.log(data)
 
             lawsMessage.removeClass('color-red')
             lawsMessage.addClass('color-green')
