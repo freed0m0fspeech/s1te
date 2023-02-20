@@ -125,7 +125,7 @@ class HomePageView(TemplateView):
             permissions = {}
 
         chat = 'freed0m0fspeech'
-        chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat}")
+        chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat}", headers={'Origin': 'https://s1te.fly.dev/'})
         members_count = ''
         if chat:
             member = chat.json()
@@ -496,7 +496,7 @@ class EditLawsPageView(TemplateView):
 
                 data = json.dumps(data)
 
-                tresponse = requests.post(url, data=data)
+                tresponse = requests.post(url, data=data, headers={'Origin': 'https://s1te.fly.dev/'})
 
             return response
         else:
@@ -599,7 +599,7 @@ class EditConstitutionPageView(TemplateView):
 
                 data = json.dumps(data)
 
-                tresponse = requests.post(url, data=data)
+                tresponse = requests.post(url, data=data, headers={'Origin': 'https://s1te.fly.dev/'})
 
                 return response
 
@@ -712,7 +712,7 @@ class AddTestimonialPageView(TemplateView):
         if user:
             chat = 'freed0m0fspeech'
 
-            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{username}")
+            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{username}", headers={'Origin': 'https://s1te.fly.dev/'})
             if member:
                 member = member.json()
                 member_parameters = member.get('member_parameters', '')
@@ -793,7 +793,7 @@ class AuthTelegramPageView(TemplateView):
 
             chat = 'freed0m0fspeech'
 
-            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{username}")
+            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{username}", headers={'Origin': 'https://s1te.fly.dev/'})
             if member:
                 member = member.json()
                 member_parameters = member.get('member_parameters', '')
@@ -903,7 +903,7 @@ class ProfilePageView(TemplateView):
                         context['telegram_link_status'] = True
 
                         chat = 'freed0m0fspeech'
-                        member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{telegram_username}")
+                        member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{telegram_username}", headers={'Origin': 'https://s1te.fly.dev/'})
                         if member:
                             member = member.json()
                             member_parameters = member.get('member_parameters', '')
