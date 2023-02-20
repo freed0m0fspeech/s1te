@@ -139,8 +139,8 @@ const sr = ScrollReveal({
     // reset: true /* Animations repeat */
 })
 
-sr.reveal(`.home__data, .constitution__container, .laws__container, .testimonial__container, .footer__container, .profile__container, .entry__container`)
-sr.reveal(`.home__info div`, {delay:600, origin: 'bottom', interval: 100})
+sr.reveal(`.home__data, .constitution__container, .laws__container, .testimonial__container, .footer__container, .profile__data, .entry__container`)
+sr.reveal(`.home__info div, .profile__info div`, {delay:600, origin: 'bottom', interval: 100})
 sr.reveal(`.contact__content:nth-child(odd)`, {origin: 'left'})
 sr.reveal(`.contact__content:nth-child(even)`, {origin: 'right'})
 sr.reveal(`.government__card`, {interval: 100})
@@ -265,6 +265,7 @@ $('#constitution_button').on('click', function(e) {
     e.preventDefault();
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
     const constitution = $('#constitution_text');
+    const constitutionMessage = $('#constitution-message')
 
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
@@ -281,9 +282,24 @@ $('#constitution_button').on('click', function(e) {
         success: function(data, status, jqXHR) {
             // location.reload();
             $('#constitution_text_span').text(data);
+
+            constitutionMessage.removeClass('color-red')
+            constitutionMessage.addClass('color-green')
+
+            constitutionMessage.text('Изменения в конституции успешно сохранены')
+            setTimeout(() => {
+                constitutionMessage.text('')
+            }, 5000);
             // console.log(data);
         },
         error(xhr,status,error){
+            constitutionMessage.removeClass('color-green')
+            constitutionMessage.addClass('color-red')
+
+            constitutionMessage.text('Возникли проблемы с вашим запросом')
+            setTimeout(() => {
+                constitutionMessage.text('')
+            }, 5000);
             // Some error
         },
     });
@@ -293,6 +309,7 @@ $('#laws_button').on('click', function(e) {
     e.preventDefault();
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
     const laws = $('#laws_text');
+    const lawsMessage = $('#laws-message')
 
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
@@ -309,10 +326,26 @@ $('#laws_button').on('click', function(e) {
         success: function(data, status, jqXHR) {
             // location.reload();
             $('#laws_text_span').text(data);
+
+            lawsMessage.removeClass('color-red')
+            lawsMessage.addClass('color-green')
+
+            lawsMessage.text('Изменения в законах успешно сохранены')
+            setTimeout(() => {
+                lawsMessage.text('')
+            }, 5000);
+
             // console.log(data);
         },
         error(xhr,status,error){
             // Some Error
+            lawsMessage.removeClass('color-green')
+            lawsMessage.addClass('color-red')
+
+            lawsMessage.text('Возникли проблемы с вашим запросом')
+            setTimeout(() => {
+                lawsMessage.text('')
+            }, 5000);
         },
     });
 });
@@ -463,7 +496,7 @@ $('#signup-button').on('click', function(e) {
                 entryMessage.text('Возникли проблемы во время регистрации')
 
             if (xhr.status === 422)
-                entryMessage.text('Возникли пробемы с вашим запросом')
+                entryMessage.text('Возникли проблемы с вашим запросом')
 
             setTimeout(() => {
                 entryMessage.text('')
@@ -720,7 +753,7 @@ $('#contact_button').on('click', function(e) {
 
                 // Remove message after five seconds
                 setTimeout(() => {
-                    contactMessage.text('')
+                    // contactMessage.text('')
 
                     // window.location.replace("/freedom_of_speech/")
                     window.location.reload()
@@ -735,6 +768,10 @@ $('#contact_button').on('click', function(e) {
 
                 if (xhr.status === 422)
                     contactMessage.text('Возникли проблемы с вашим запросом')
+
+                setTimeout(() => {
+                    contactMessage.text('')
+                }, 5000);
             },
         });
 

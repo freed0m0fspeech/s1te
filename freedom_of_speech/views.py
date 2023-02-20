@@ -40,10 +40,24 @@ class HomePageView(TemplateView):
     async def get(self, request, *args, **kwargs):
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'constitution': 1, 'laws': 1, 'users': 1, 'testimonials': 1, 'president': 1,
+        context = {
+
+        }
+
+        query = {'_id': 0, 'constitution': 1, 'laws': 1, 'tlaws': 1, 'users': 1, 'testimonials': 1, 'president': 1,
                  'parliament': 1, 'judge': 1}
 
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        constitution = document.get('constitution', '')
+        laws = document.get('laws', '')
+        tlaws = document.get('tlaws', '')
+        testimonials = document.get('testimonials', [])
+
+        # Government in database is links to telegram accounts
+        president = document.get('president', '')
+        parliament = document.get('parliament', '')
+        judge = document.get('judge', '')
 
         if not cockies:
             user = {}
@@ -61,14 +75,22 @@ class HomePageView(TemplateView):
                         if sessionid == users[username]['sessionid']:
                             user = users[username]
 
-        constitution = document.get('constitution', '')
-        laws = document.get('laws', '')
-        testimonials = document.get('testimonials', [])
+                            if username == president:
+                                context['is_president'] = True
+                                if tlaws:
+                                    laws = tlaws
+                                    tlaws = True
+                            else:
+                                context['is_president'] = False
 
-        # Government in database is links to telegram accounts
-        president = document.get('president', '')
-        parliament = document.get('parliament', '')
-        judge = document.get('judge', '')
+                            if username == parliament:
+                                context['is_parliament'] = True
+                                if tlaws:
+                                    laws = tlaws
+                                    tlaws = True
+                            else:
+                                context['is_parliament'] = False
+
 
         # 10 random testimonials
         try:
@@ -101,7 +123,6 @@ class HomePageView(TemplateView):
             permissions = user.get('permissions', {'administrator': False, 'moderator': False})
         else:
             permissions = {}
-            username = ''
 
         chat = 'freed0m0fspeech'
         chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat}")
@@ -112,18 +133,18 @@ class HomePageView(TemplateView):
             if chat_parameters:
                 members_count = chat_parameters.get('members_count', '')
 
-        context = {
-            'username': username,
-            'president': president,
-            'parliament': parliament,
-            'judge': judge,
-            'testimonials_html': testimonials_html,
-            'administrator': permissions.get('administrator', False),
-            'moderator': permissions.get('administrator', permissions.get('moderator', False)),
-            'constitution': constitution,
-            'laws': laws,
-            'members_count': members_count,
-        }
+        context['president'] = president
+        context['parliament'] = parliament
+        context['judge'] = judge
+        context['constitution'] = constitution
+        context['members_count'] = members_count
+        context['username'] = username
+        context['laws'] = laws
+        context['tlaws'] = tlaws
+        context['administrator'] = permissions.get('administrator', False)
+        context['moderator'] = permissions.get('administrator', permissions.get('moderator', False))
+        context['testimonials_html'] = testimonials_html
+        context['members_count'] = members_count
 
         response = render(request=request, template_name='freedom_of_speech/index.html', context=context)
 
@@ -385,6 +406,7 @@ class EditLawsPageView(TemplateView):
             return HttpResponse(status=422)
 
         laws = data.get('laws', '')
+
         if not laws:
             return HttpResponse(status=422)
 
@@ -393,12 +415,18 @@ class EditLawsPageView(TemplateView):
         username = cockies.get('username', '')
 
         if 'sessionid' and 'username' in cockies:
-            query = {'_id': 0, 'users': 1}
+            query = {'_id': 0, 'users': 1, 'parliament': 1, 'president': 1}
         else:
             return HttpResponse(status=422)
 
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                               query=query)
+
+        parliament = document.get('parliament')
+        president = document.get('president')
+
+        is_president = False
+        is_parliament = False
 
         users = document.get('users', {})
         if users.get(username, ''):
@@ -406,13 +434,22 @@ class EditLawsPageView(TemplateView):
                 if sessionid == users[username]['sessionid']:
                     user = users[username]
 
+                    if president == username:
+                        is_president = True
+
+                    if parliament == username:
+                        is_parliament = True
+
         if user:
             permissions = user.get('permissions', {'administrator': False, 'moderator': False})
         else:
             permissions = {}
 
-        if permissions.get('administrator', False) or permissions.get('moderator', False):
-            query = {'laws': laws}
+        if permissions.get('administrator', False) or permissions.get('moderator', False) or is_president:
+            if is_president:
+                query = {'laws': laws, 'tlaws': ''}
+            else:
+                query = {'laws': laws}
 
             mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                        query=query)
@@ -420,6 +457,16 @@ class EditLawsPageView(TemplateView):
             response = HttpResponse(laws)
 
             return response
+        else:
+            if is_parliament:
+                query = {'tlaws': laws}
+
+                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
+                                           query=query)
+
+                response = HttpResponse(laws)
+
+                return response
 
         return HttpResponse(status=422)
 
@@ -677,38 +724,44 @@ class AuthTelegramPageView(TemplateView):
                                                        action='$set', query=query)
 
                         if role == 'президент':
-                            users = document.get('users', '')
-                            if users:
-                                old_username = document.get('president', '')
-
-                                if old_username:
-                                    if old_username == username:
-                                        return HttpResponse(status=200)
-
-                                    query = {f"president": username, f'users.{username}.permissions.moderator': True,
-                                             f'users.{old_username}.permissions.moderator': False}
-                                else:
-                                    query = {f"president": username, f'users.{username}.permissions.moderator': True}
-
-                                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                           action='$set', query=query)
+                            query = {f"president": username}
+                            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                       action='$set', query=query)
+                            # users = document.get('users', '')
+                            # if users:
+                            #     old_username = document.get('president', '')
+                            #
+                            #     if old_username:
+                            #         if old_username == username:
+                            #             return HttpResponse(status=200)
+                            #
+                            #         query = {f"president": username, f'users.{username}.permissions.moderator': True,
+                            #                  f'users.{old_username}.permissions.moderator': False}
+                            #     else:
+                            #         query = {f"president": username, f'users.{username}.permissions.moderator': True}
+                            #
+                            #     mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                            #                                action='$set', query=query)
 
                         if role == 'парламент':
-                            users = document.get('users', '')
-                            if users:
-                                old_username = document.get('parliament', '')
-
-                                if old_username:
-                                    if old_username == username:
-                                        return HttpResponse(status=200)
-
-                                    query = {f"parliament": username, f'users.{username}.permissions.moderator': True,
-                                             f'users.{old_username}.permissions.moderator': False}
-                                else:
-                                    query = {f"parliament": username, f'users.{username}.permissions.moderator': True}
-
-                                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                           action='$set', query=query)
+                            query = {f"parliament": username}
+                            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                       action='$set', query=query)
+                            # users = document.get('users', '')
+                            # if users:
+                            #     old_username = document.get('parliament', '')
+                            #
+                            #     if old_username:
+                            #         if old_username == username:
+                            #             return HttpResponse(status=200)
+                            #
+                            #         query = {f"parliament": username, f'users.{username}.permissions.moderator': True,
+                            #                  f'users.{old_username}.permissions.moderator': False}
+                            #     else:
+                            #         query = {f"parliament": username, f'users.{username}.permissions.moderator': True}
+                            #
+                            #     mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                            #                                action='$set', query=query)
         else:
             return HttpResponse(status=422)
 
