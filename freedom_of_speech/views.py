@@ -647,7 +647,7 @@ class EditUsernamePageView(TemplateView):
         if not new_username or not password:
             return HttpResponse(status=422)
 
-        query = {'_id': 0, 'users': 1}
+        query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
         user = {}
@@ -681,6 +681,14 @@ class EditUsernamePageView(TemplateView):
                                            query=query)
                 # Add new account info
                 query = {f'users.{new_username}': users[username]}
+
+                if username == document.get('judge', ''):
+                    query['judge'] = username
+                if username == document.get('president', ''):
+                    query['president'] = username
+                if username == document.get('parliament', ''):
+                    query['parliament'] = username
+
                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                            query=query)
             else:
@@ -811,7 +819,7 @@ class AuthTelegramPageView(TemplateView):
                     if tusername == newtusername:
                         if username == tusername:
                             # Unlinking telegram account
-                            query = {f'users.{username}.telegram': ''}
+                            query = {f'users.{username}.telegram': '', 'judge': ''}
 
                             mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                        action='$unset', query=query)
@@ -839,7 +847,7 @@ class AuthTelegramPageView(TemplateView):
             origin = os.getenv('HOSTNAME', '')
             # origin = rsa.encrypt(origin, publicKeyReloaded)
 
-            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{username}", data=data, headers={'Origin': origin})
+            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{newtusername}", data=data, headers={'Origin': origin})
             if member:
                 member = member.json()
                 member_parameters = member.get('member_parameters', '')
