@@ -2158,8 +2158,8 @@ input:-webkit-autofill:active{
     }
 
     .footer__container{
-        /*padding: 4rem 0 3rem;*/
-        padding: 1rem 0 3rem;
+        padding: 4rem 0 3rem;
+        /*padding: 1rem 0 3rem;*/
     }
 
     .footer__list{

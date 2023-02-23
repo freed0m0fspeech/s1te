@@ -147,8 +147,8 @@ body.dark-theme {
     --container-color: hsl(207, 4%, 12%);
 }
 
-/*========== 
-    Color changes in some parts of 
+/*==========
+    Color changes in some parts of
     the website, in light theme
 ==========*/
 .dark-theme .nav,
@@ -2158,8 +2158,8 @@ input:-webkit-autofill:active{
     }
 
     .footer__container{
-        /*padding: 4rem 0 3rem;*/
-        padding: 1rem 0 3rem;
+        padding: 4rem 0 3rem;
+        /*padding: 1rem 0 3rem;*/
     }
 
     .footer__list{
