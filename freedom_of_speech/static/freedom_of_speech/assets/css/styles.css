@@ -1330,7 +1330,8 @@ input:-webkit-autofill:active{
 
 .footer__list{
     grid-template-columns: repeat(auto-fit, 100px);
-    margin: 2.5rem 0;
+    /*margin: 2.5rem 0;*/
+    margin: 0 0 2.5rem;
     column-gap: 2.5rem;
 }
 
@@ -2157,12 +2158,14 @@ input:-webkit-autofill:active{
     }
 
     .footer__container{
-        padding: 4rem 0 3rem;
+        /*padding: 4rem 0 3rem;*/
+        padding: 1rem 0 3rem;
     }
 
     .footer__list{
         column-gap: 3rem;
-        margin: 3rem 0;
+        /*margin: 3rem 0;*/
+        margin: 0 0 3rem;
     }
 
     .footer__community{
