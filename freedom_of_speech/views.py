@@ -489,7 +489,7 @@ class EditLawsPageView(TemplateView):
                 return response
             else:
                 if added_lines:
-                    added_lines = f"||--{added_lines[1::]}--||"
+                    added_lines = f"||{added_lines[1::]}||"
                 if deleted_lines:
                     deleted_lines = f"||~~{deleted_lines[1::]}~~||"
 
@@ -598,7 +598,7 @@ class EditConstitutionPageView(TemplateView):
                 return response
             else:
                 if added_lines:
-                    added_lines = f"||--{added_lines[1::]}--||"
+                    added_lines = f"||{added_lines[1::]}||"
                 if deleted_lines:
                     deleted_lines = f"||~~{deleted_lines[1::]}~~||"
 
