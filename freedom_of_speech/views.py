@@ -495,7 +495,10 @@ class EditLawsPageView(TemplateView):
 
                 text = f"**Внесены изменения в [законы]({os.getenv('HOSTNAME', '')}freedom_of_speech/#laws) Freedom of speech:**"
 
-                text = f"{text}\n\n{added_lines}{deleted_lines}"
+                if added_lines and deleted_lines:
+                    text = f"{text}\n\n{added_lines}\n\n{deleted_lines}"
+                else:
+                    text = f"{text}\n\n{added_lines}{deleted_lines}"
 
                 # 4096
                 # ttext = textwrap.shorten(ttext, width=300, placeholder='..', replace_whitespace=False)
@@ -604,7 +607,10 @@ class EditConstitutionPageView(TemplateView):
 
                 text = f"**Внесены изменения в [конституцию]({os.getenv('HOSTNAME', '')}freedom_of_speech/#constitution) Freedom of speech:**"
 
-                text = f"{text}\n\n{added_lines}{deleted_lines}"
+                if added_lines and deleted_lines:
+                    text = f"{text}\n\n{added_lines}\n\n{deleted_lines}"
+                else:
+                    text = f"{text}\n\n{added_lines}{deleted_lines}"
 
                 # 4096
                 # ttext = textwrap.shorten(ttext, width=300, placeholder='..', replace_whitespace=False)
