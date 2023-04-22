@@ -183,13 +183,13 @@ body.dark-theme {
 
 /*=============== SCROLL BAR ===============*/
 .dark-theme::-webkit-scrollbar{
-    width: .6rem;
+    width: .5rem;
     border-radius: .5rem;
     background-color: var(--body-color);
 }
 
 .dark-theme::-webkit-scrollbar:hover{
-    width: .6rem;
+    width: .5rem;
     border-radius: .5rem;
     background-color: var(--body-color)
 }
@@ -320,6 +320,10 @@ input:-webkit-autofill:active{
 }
 
 @media screen and (max-width: 1023px){
+    .profile__container{
+        padding-bottom: 6rem;
+    }
+
     .nav__menu{
         position: fixed;
         width: 88%;
@@ -1566,13 +1570,13 @@ input:-webkit-autofill:active{
 /*=============== SCROLL BAR ===============*/
 ::-webkit-scrollbar{
     width: .5rem;
-    border-radius: 0.5rem;
+    border-radius: .5rem;
     background-color: var(--body-color);
 }
 
 ::-webkit-scrollbar:hover{
     width: .5rem;
-    border-radius: 0.5rem;
+    border-radius: .5rem;
     background-color: hsl(0, 0%, 100%);
 }
 
