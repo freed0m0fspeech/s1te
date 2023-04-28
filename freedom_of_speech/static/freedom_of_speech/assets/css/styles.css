@@ -277,8 +277,8 @@ input:-webkit-autofill:active{
     /*border: solid;*/
     box-shadow: none;
 
-    -webkit-box-shadow: 0 0 0 30px var(--body-color) inset;
-    -webkit-text-fill-color: var(--title-color);
+    -webkit-box-shadow: 0 0 0 1000px var(--body-color) inset !important;
+    -webkit-text-fill-color: var(--title-color) !important;
 }
 
 /*=============== HEADER & NAV ===============*/
