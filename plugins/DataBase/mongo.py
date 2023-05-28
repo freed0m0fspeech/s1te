@@ -2,6 +2,7 @@
 MongoDataBase plugin to work with MongoDataBase
 """
 from pymongo import MongoClient, errors, ReturnDocument
+from pymongo.server_api import ServerApi
 from pymongo.cursor import Cursor
 from urllib.parse import quote_plus
 from typing import Optional
@@ -26,7 +27,7 @@ class MongoDataBase:
         :return: typing.Optional[pymongo.MongoClient]
         """
         uri = "mongodb+srv://%s:%s@%s" % (quote_plus(user), quote_plus(passwd), host)
-        mdb_client = MongoClient(uri)
+        mdb_client = MongoClient(uri, server_api=ServerApi('1'))
 
         # mdb_client = pymongo.MongoClient(
         #    f"mongodb+srv://{user}:{passwd}@botcluster.iy7wi.mongodb.net/AiogramBot?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE")
