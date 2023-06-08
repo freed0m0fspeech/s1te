@@ -59,17 +59,17 @@ FROM ubuntu:20.04
 RUN apt-get update && apt-get install --no-install-recommends -y python3.9 python3-pip
 
 # set work directory
-WORKDIR /usr/src/app
+WORKDIR /usr/src/s1te
 
 # create the app directory - and switch to it
-RUN mkdir -p /app
-WORKDIR /app
+RUN mkdir -p /s1te
+WORKDIR /s1te
 
 # install dependencies
-COPY requirements.txt /app/
+COPY requirements.txt /s1te/
 RUN pip install -r requirements.txt
 
 # copy project
-COPY . /app/
+COPY . /s1te/
 CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "personal_site.wsgi:application"]
 #CMD python3 main.py
