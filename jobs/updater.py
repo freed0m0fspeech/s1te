@@ -16,4 +16,4 @@ def start():
 
     schduler.start()
 
-    schduler.print_jobs()
+    # schduler.print_jobs()

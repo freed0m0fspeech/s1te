@@ -137,10 +137,10 @@ class HomePageView(TemplateView):
             if chat_parameters:
                 members_count = chat_parameters.get('members_count', '')
 
-        if context['is_president']:
+        if context.get('is_president', ''):
             context['judge'] = judge.get('president', '')
         else:
-            if context['is_parliament']:
+            if context.get('is_parliament', ''):
                 context['judge'] = judge.get('parliament', '')
             else:
                 context['judge'] = judge.get('judge', '')
