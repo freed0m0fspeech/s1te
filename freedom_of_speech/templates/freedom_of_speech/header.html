@@ -1,14 +1,14 @@
 <header class="header" id="header">
     <nav class="nav container">
-            {% if username %}
-                <a href="/freedom_of_speech/profile/{{username}}/" class="nav__logo">
-                    {{username}}
-                </a>
-            {% else %}
-                <a href="/freedom_of_speech/signin/" class="nav__logo">
-                    Войти
-                </a>
-            {% endif %}
+        {% if username %}
+            <a href="/freedom_of_speech/profile/{{username}}/" class="nav__logo">
+                {{username}}
+            </a>
+        {% else %}
+            <a href="/freedom_of_speech/signin/" class="nav__logo">
+                Войти
+            </a>
+        {% endif %}
 
         <div class="nav__menu" id="nav-menu">
             <ul class="nav__list grid">

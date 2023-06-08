@@ -6,9 +6,15 @@ from plugins.DataBase.mongo import (
 )
 
 
-class DataBases:
+class DataBases():
+
     def __init__(self):
         self.mongodb_client = self.__get_mongodb_client()
+
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(DataBases, cls).__new__(cls)
+        return cls.instance
 
     @staticmethod
     def __get_mongodb_client():

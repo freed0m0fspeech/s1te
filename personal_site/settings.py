@@ -15,7 +15,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# load_dotenv()
+load_dotenv()
 
 # configParser = configparser.ConfigParser()
 # configParser.read('config.ini')
@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # "templatetags.filter",
+    # "django_cron",
     "freedom_of_speech.apps.FreedomOfSpeechConfig",
     "portfolio.apps.PortfolioConfig",
 ]
@@ -62,6 +64,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
+
+# CRON_CLASSES = [
+#     "freedom_of_speech.cron.MyCronJob",
+# ]
 
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
@@ -93,6 +99,9 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            # 'libraries':{
+            #     'filter': 'templatetags.filter',
+            # }
         },
     },
 ]

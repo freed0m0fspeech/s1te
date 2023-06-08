@@ -180,7 +180,12 @@ window.onload = function() {
     // Month Day, Year Hour:Minute:Second, id-of-element-container
     if (document.getElementById('home__date_counter')) {
         date = document.getElementById('home__info__years_value').textContent;
-        countUpFromTime(date, 'home__date_counter'); // ****** Change this line!
+        document.getElementById('home__info__years_value').textContent = ''.concat(new Date(document.getElementById('home__info__years_value').textContent).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}))
+        // countUpFromTime(date, 'home__date_counter'); // ****** Change this line!
+        // date = new Date('2023-06-01 23:23:12')
+        // var today = new Date();
+        // var date = new Date(today.getFullYear(), today.getMonth()+1, 0);
+        countDownFromTime(date, 'home__date_counter');
     }
 
     if (document.getElementById('profile__date_counter')) {
@@ -191,8 +196,8 @@ window.onload = function() {
     if (document.getElementById('profile__info__years_value'))
         document.getElementById('profile__info__years_value').textContent = new Date(document.getElementById('profile__info__years_value').textContent).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}).concat(' - ', new Date().toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}))
 
-    if (document.getElementById('home__info__years_value'))
-        document.getElementById('home__info__years_value').textContent = new Date(document.getElementById('home__info__years_value').textContent).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}).concat(' - ', new Date().toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}));
+    //if (document.getElementById('home__info__years_value'))
+    //    document.getElementById('home__info__years_value').textContent = new Date(document.getElementById('home__info__years_value').textContent).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}).concat(' - ', new Date().toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}));
 
     if (document.getElementById('footer__copy__years_value')) {
         footer__copy__years_value = document.getElementById('footer__copy__years_value');
@@ -226,6 +231,9 @@ window.onload = function() {
 };
 function countUpFromTime(countFrom, id) {
     countFrom = new Date(countFrom).getTime();
+
+    if (isNaN(countFrom)) return
+
     var now = new Date(),
         countFrom = new Date(countFrom),
         timeDifference = (now - countFrom);
@@ -250,6 +258,37 @@ function countUpFromTime(countFrom, id) {
 
     clearTimeout(countUpFromTime.interval);
     countUpFromTime.interval = setTimeout(function(){ countUpFromTime(countFrom, id); }, 1000);
+}
+
+function countDownFromTime(countTo, id, date) {
+    countTo = new Date(countTo).getTime();
+
+    if (isNaN(countTo)) return
+
+    var now = new Date(),
+        countTo = new Date(countTo),
+        timeDifference = (countTo - now);
+
+    var secondsInADay = 60 * 60 * 1000 * 24,
+        secondsInAHour = 60 * 60 * 1000;
+
+    days = Math.floor(timeDifference / (secondsInADay) * 1);
+    // years = Math.floor(days / 365);
+    // if (years > 0){ days = days - (years * 365) }
+    hours = Math.floor((timeDifference % (secondsInADay)) / (secondsInAHour) * 1);
+    mins = Math.floor(((timeDifference % (secondsInADay)) % (secondsInAHour)) / (60 * 1000) * 1);
+    secs = Math.floor((((timeDifference % (secondsInADay)) % (secondsInAHour)) % (60 * 1000)) / 1000 * 1);
+
+    var idEl = document.getElementById(id);
+    // idEl.getElementsByClassName('years')[0].innerHTML = years;
+    // idEl.getElementsByClassName('days')[0].innerHTML = days;
+    // idEl.getElementsByClassName('hours')[0].innerHTML = hours;
+    // idEl.getElementsByClassName('minutes')[0].innerHTML = mins;
+    // idEl.getElementsByClassName('seconds')[0].innerHTML = secs;
+    idEl.textContent = ''.concat(days.toString(), ' day(s) ', hours.toString(), 'h:', mins.toString(), 'm:', secs.toString(), 's');
+
+    clearTimeout(countDownFromTime.interval);
+    countDownFromTime.interval = setTimeout(function(){ countDownFromTime(countTo, id); }, 1000);
 }
 
 const genPercent = () => {
@@ -830,6 +869,8 @@ $('#auth-telegram_button').on('click', function(e) {
                 }, 1000);
             },
             error(xhr,status,error){
+                if (xhr.status === 409)
+                    alert('Твоя роль не позволяет отвязать Telegram')
                 // Some error
             },
         });
@@ -856,4 +897,182 @@ $('#auth-telegram_button').on('click', function(e) {
     //         print(data)
     //     }
     // });
+});
+
+$('#government__vote').on('click', function(e) {
+    e.preventDefault();
+
+    $('#government__votes').toggleClass('government__votes-open')
+});
+$('#government__vote_president').on('click', function(e) {
+    e.preventDefault();
+
+    $('#government__votes_president').toggleClass('government__votes-open')
+});
+
+$('#government__vote_parliament').on('click', function(e) {
+    e.preventDefault();
+
+    $('#government__votes_parliament').toggleClass('government__votes-open')
+});
+
+$('#government__vote_judge').on('click', function(e) {
+    e.preventDefault();
+
+    $('#government__votes_judge').toggleClass('government__votes-open')
+});
+
+$('#government__votes_president > li').on('click', function (e){
+    const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+    let candidate = $(this).text();
+
+    if(confirm('Проголосовать за кандидата '.concat(candidate, '?'))){
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader('X-CSRFToken', csrf_token);
+            }
+        });
+
+        $.ajax({
+            type: 'post',
+            url: '/freedom_of_speech/vote/president/',
+            data: {
+                candidate: candidate,
+            },
+            success: function(data, status, jqXHR) {
+                candidate = data
+
+                $('#government__vote_president').off('click')
+                $('#government__vote_president-selected').prop('href', "/freedom_of_speech/profile/".concat(candidate, '/')).text(candidate)
+                $('#government__votes_president').toggleClass('government__votes-open')
+            },
+            error(xhr,status,error){
+                if (xhr.status === 403)
+                    console.log(403)
+                if (xhr.status === 422)
+                    alert('Только авторизованные пользователи могут голосовать')
+                if (xhr.status === 404)
+                    alert('Только пользователи которые привязали Telegram могут голосовать')
+            },
+        });
+    }else {
+        console.log('Cancel vote')
+    }
+});
+
+$('#government__votes_parliament > li').on('click', function (e){
+    const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+    let candidate = $(this).text();
+
+    if(confirm('Проголосовать за кандидата '.concat(candidate, '?'))){
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader('X-CSRFToken', csrf_token);
+            }
+        });
+
+        $.ajax({
+            type: 'post',
+            url: '/freedom_of_speech/vote/parliament/',
+            data: {
+                candidate: candidate,
+            },
+            success: function(data, status, jqXHR) {
+                candidate = data
+
+                $('#government__vote_parliament').off('click')
+                $('#government__vote_parliament-selected').prop("href", "/freedom_of_speech/profile/".concat(candidate, '/')).text(candidate)
+                $('#government__votes_parliament').toggleClass('government__votes-open')
+            },
+            error(xhr,status,error){
+                if (xhr.status === 403)
+                    console.log(403)
+                if (xhr.status === 422)
+                    alert('Только авторизованные пользователи могут голосовать')
+                if (xhr.status === 404)
+                    alert('Только пользователи которые привязали Telegram могут голосовать')
+            },
+        });
+    }else {
+        console.log('Cancel vote')
+    }
+});
+
+$('#government__votes_judge > li').on('click', function (e){
+    const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+    let candidate = $(this).text();
+
+    if(confirm('Проголосовать за кандидата '.concat(candidate, '?'))){
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader('X-CSRFToken', csrf_token);
+            }
+        });
+
+        $.ajax({
+            type: 'post',
+            url: '/freedom_of_speech/vote/judge/',
+            data: {
+                candidate: candidate,
+            },
+            success: function(data, status, jqXHR) {
+                candidate = data
+
+                // $('#government__vote_judge').off('click')
+                $('#government__vote_judge-selected').prop("href", "/freedom_of_speech/profile/".concat(candidate, '/')).text(candidate)
+                $('#government__votes_judge').toggleClass('government__votes-open')
+            },
+            error(xhr,status,error){
+                if (xhr.status === 422)
+                    console.log('422')
+                if (xhr.status === 404)
+                    if (candidate === '')
+                        alert('Судьи в данный момент нет')
+                    else
+                        alert('Этот пользователь не может быть судьей')
+                // contactMessage.text('Возникли проблемы с вашим запросом')
+            },
+        });
+    }else {
+        console.log('Cancel vote')
+    }
+});
+
+$('#government__votes > li').on('click', function (e){
+    const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+    let role = $(this).text();
+
+    if(confirm('Баллотироваться на '.concat(role, '?'))){
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader('X-CSRFToken', csrf_token);
+            }
+        });
+
+        $.ajax({
+            type: 'post',
+            url: '/freedom_of_speech/vote/candidate/',
+            data: {
+                role: role,
+            },
+            success: function(data, status, jqXHR) {
+                role = data
+
+                if (role)
+                    $('#government__vote-selected').html(role.concat(' <i class="ri-arrow-down-circle-line"></i>'))
+                else
+                    $('#government__vote-selected').html('Баллотироваться <i class="ri-arrow-down-circle-line"></i>')
+
+                $('#government__votes').toggleClass('government__votes-open')
+            },
+            error(xhr,status,error){
+                if (xhr.status === 422)
+                    console.log('422')
+                if (xhr.status === 409)
+                    alert('Вы не можете баллотироваться во время выборов')
+            },
+        });
+    }else {
+        console.log('Cancel vote')
+    }
 });

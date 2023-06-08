@@ -7,15 +7,23 @@
         Freedom of speech <br>
       </h1>
 
-      <div class="home__blob grid">
+      {% if end_vote %}
+        <div class="home__blob grid voting">
+          <img src="{% static 'freedom_of_speech/assets/img/freedom_of_speech-logo-light.gif' %}" alt="home perfil">
+          <a href="#government"> Проголосуй <i class="ri-arrow-down-circle-line"></i></a>
+        </div>
+      {% else %}
+        <div class="home__blob grid">
+          <img src="{% static 'freedom_of_speech/assets/img/freedom_of_speech-logo-light.gif' %}" alt="home perfil">
+        </div>
+      {% endif %}
+<!--      <div class="home__blob grid">-->
 <!--        <div class="home__perfil">-->
-        <img src="{% static 'freedom_of_speech/assets/img/freedom_of_speech-logo-light.gif' %}" alt="home perfil">
 <!--        <video src="{% static 'freedom_of_speech/assets/video/freedom_of_speech-logo.mp4' %}" autoplay loop muted></video>-->
 <!--        </div>-->
 
 <!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-waves.svg' %}" alt="home waves" class="home__shape-waves">-->
 <!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-circle.svg' %}" alt="home circle" class="home__shape-circle">-->
-      </div>
       <ul class="home__community">
         <a href="https://t.me/freed0m0fspeech" target="_blank" class="home__community-link">
           <i class="uil uil-telegram"></i>
@@ -76,11 +84,20 @@
 <!--      TODO countdown to next vote date (voting)-->
       <div>
         <h3 class="home__info-title">
-          СВОБОДА
+          {% if end_vote %}
+            Выборы
+          {% else %}
+            Следующие выборы
+          {% endif %}
         </h3>
 
         <p class="home__info-number" id="home__info__years_value">
-            Feb 3, 2017
+          {% if end_vote %}
+            {{end_vote}}
+          {% else %}
+            {{start_vote}}
+          {% endif %}
+<!--          Feb 3, 2017-->
 <!--          2017-2023-->
           <div class="home__info-description" id="home__date_counter"></div>
         </p>

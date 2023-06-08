@@ -24,6 +24,7 @@
 </head>
 <body>
 {% csrf_token %}
+{% load filter %}
 <!--==================== HEADER ====================-->
 <header class="header" id="header">
     <nav class="nav container">
@@ -34,9 +35,16 @@
         {% if authorized %}
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list grid">
+
                     <li class="nav__item">
                         <a href="#profile" class="nav__link">
                             <i class="ri-user-line"></i> Профиль
+                        </a>
+                    </li>
+
+                    <li class="nav__item">
+                        <a href="#vote" class="nav__link">
+                            <i class="ri-user-line"></i> Выборы
                         </a>
                     </li>
 
@@ -194,6 +202,38 @@
         </div>
     </section>
     {%if authorized %}
+        {% if telegram_link_status %}
+            <section class="entry section" id="vote">
+                <h2 class="section__title">Выборы</h2>
+                <span class="section__subtitle">Баллотироваться на выборы в Правительство</span>
+
+                <div class="entry__container container grid section__border">
+                    <div class="government__stand">
+                        <div class="government__vote" id="government__vote">
+                            <a href="" class="government__vote-selected" id="government__vote-selected">
+                                {% if candidate == 'president' %}
+                                    Президент
+                                {% else %}
+                                    {% if candidate == 'parliament' %}
+                                        Парламент
+                                    {% else %}
+                                        Баллотироваться
+                                    {% endif %}
+                                {% endif %}
+                                <i class="ri-arrow-down-circle-line"></i>
+                            </a>
+                            <!--                    <div class="government__caret"></div>-->
+                        </div>
+                        <ul class="government__votes" id="government__votes">
+                            <li></li>
+                            <li>Президент</li>
+                            <li>Парламент</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+
         <section class="entry section" id="username">
             <h2 class="section__title">Никнейм</h2>
             <span class="section__subtitle">Изменить никнейм персонального профиля</span>
