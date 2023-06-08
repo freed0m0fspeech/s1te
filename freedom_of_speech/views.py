@@ -158,7 +158,7 @@ class HomePageView(TemplateView):
         context['start_vote'] = start_vote
         context['end_vote'] = end_vote
         context['candidates'] = document.get('candidates', {})
-        context['users'] = document.get('users', {})
+        context['users'] = document.get('users', {}).keys()
         context['parliament_voted'] = document.get('votes', {}).get('parliament', {}).get(username, '')
         context['president_voted'] = document.get('votes', {}).get('president', {}).get(username, '')
 
