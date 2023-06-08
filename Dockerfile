@@ -53,12 +53,22 @@
 ## expose port 8000
 #EXPOSE 8000
 
+# pull official base image
 FROM ubuntu:20.04
 RUN apt-get update && apt-get install --no-install-recommends -y python3.9 python3-pip
 
-WORKDIR /s1te
-COPY requirements.txt /s1te/
+# set work directory
+WORKDIR /usr/src/app
+
+# create the app directory - and switch to it
+RUN mkdir -p /app
+WORKDIR /app
+
+# install dependencies
+COPY requirements.txt /app/
 RUN pip install -r requirements.txt
-COPY . /s1te/
+
+# copy project
+COPY . /app/
 CMD ["gunicorn", "--bind", ":8000", "--workers", "1", "personal_site.wsgi:application"]
 #CMD python3 main.py
