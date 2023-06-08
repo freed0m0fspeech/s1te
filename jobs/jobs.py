@@ -38,7 +38,6 @@ def scheduled_start_voting():
         text = f"**В данный момент на [официальном сайте]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) проходят выборы Правительства Freedom of speech**"
 
         chat = 'freed0m0fspeech'
-        chat = 'gr0up_test'
         origin = os.getenv('HOSTNAME', '')
 
         data = {

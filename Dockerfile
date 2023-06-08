@@ -55,6 +55,7 @@
 
 # pull official base image
 FROM ubuntu:20.04
+#FROM ubuntu:20.10.12
 RUN apt-get update && apt-get install --no-install-recommends -y python3.9 python3-pip
 
 # set work directory
@@ -70,5 +71,5 @@ RUN pip install -r requirements.txt
 
 # copy project
 COPY . /app/
-CMD ["gunicorn", "--bind", ":8000", "--workers", "1", "personal_site.wsgi:application"]
+CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "personal_site.wsgi:application"]
 #CMD python3 main.py
