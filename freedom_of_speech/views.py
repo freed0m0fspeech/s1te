@@ -692,7 +692,7 @@ class EditUsernamePageView(TemplateView):
                 # Add new account info
                 query = {f'users.{new_username}': users[username]}
 
-                if username == document.get('judge', ''):
+                if username == document.get('judge', {}).get('judge', ''):
                     query['judge.judge'] = username
                 if username == document.get('president', ''):
                     query['president'] = username
@@ -796,7 +796,7 @@ class AuthTelegramPageView(TemplateView):
             username = cookies.get('username', '')
 
             if 'sessionid' and 'username' in cookies:
-                query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1}
+                query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'candidates': 1}
 
                 document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                                       query=query)
@@ -815,25 +815,25 @@ class AuthTelegramPageView(TemplateView):
             for tuser in users.values():
                 telegram = tuser.get('telegram', '')
                 if telegram:
-                    tusername = telegram.get('username')
+                    tusername = telegram.get('username', '')
                     if tusername == newtusername:
-                        if username == tusername:
+                        if user.get('telegram', {}).get('username', '') == tusername:
                             # Unlinking telegram account
                             # Unlink rules prevent from unlink
                             if (
                                     document.get('president', '') == username or
                                     document.get('parliament', '') == username or
-                                    document.get('judge', '') == username or
+                                    document.get('judge', {}).get('judge', '') == username or
                                     username in document.get('candidates', {})
                             ):
                                 return HttpResponse(status=409)
+                            else:
+                                query = {f'users.{username}.telegram': ''}
 
-                            query = {f'users.{username}.telegram': ''}
+                                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                           action='$unset', query=query)
 
-                            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                       action='$unset', query=query)
-
-                            return HttpResponse(status=200)
+                                return HttpResponse(status=200)
 
             query = {f'users.{username}.telegram.first_name': data.get('first_name', ''),
                      f'users.{username}.telegram.last_name': data.get('last_name', ''),
@@ -867,7 +867,7 @@ class AuthTelegramPageView(TemplateView):
                         role = role.lower()
 
                         if role == 'судья':
-                            if document.get('judge', '') != username:
+                            if document.get('judge', {}).get('judge', '') != username:
                                 query = {f"judge.judge": username}
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$set', query=query)
