@@ -953,6 +953,8 @@ $('#government__votes_president > li').on('click', function (e){
                     alert('Только авторизованные пользователи могут голосовать')
                 if (xhr.status === 404)
                     alert('Только пользователи которые привязали Telegram могут голосовать')
+                if (xhr.status === 409)
+                    alert('Только пользователи свобода которых больше 30 дней могут голосовать')
             },
         });
     }else {
@@ -1002,7 +1004,14 @@ $('#government__votes_judge > li').on('click', function (e){
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
     let candidate = $(this).text();
 
-    if(confirm('Проголосовать за кандидата '.concat(candidate, '?'))){
+    let confirm_text
+
+    if (candidate === '')
+        confirm_text = 'Снять кандидата?'
+    else
+        confirm_text = 'Проголосовать за кандидата '.concat(candidate, '?')
+
+    if(confirm(confirm_text)){
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 xhr.setRequestHeader('X-CSRFToken', csrf_token);
@@ -1041,8 +1050,14 @@ $('#government__votes_judge > li').on('click', function (e){
 $('#government__votes > li').on('click', function (e){
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
     let role = $(this).text();
+    let confirm_text
 
-    if(confirm('Баллотироваться на '.concat(role, '?'))){
+    if (role === '')
+        confirm_text = 'Снять свою кандидатуру?'
+    else
+        confirm_text = 'Баллотироваться на '.concat(role, '?')
+
+    if(confirm(confirm_text)){
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 xhr.setRequestHeader('X-CSRFToken', csrf_token);

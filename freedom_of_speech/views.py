@@ -1054,15 +1054,26 @@ class VotePresidentPageView(TemplateView):
                 # Users without telegram account can't vote
                 return HttpResponse(status=404)
 
-            query = {f'votes.president.{username}': president}
-            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                       query=query)
+            # Users with freedom less than 30 days can't vote
+            joined_date = users.get(username, {}).get('member', {}).get('member_parameters', {}).get('joined_date', '')
+            if joined_date:
+                date = json.loads(joined_date, object_hook=json_util.object_hook)
+                if date:
+                    # timedelta in group
+                    freedom = datetime.now() - date
+                    if freedom.days >= 30:
+                        query = {f'votes.president.{username}': president}
+                        mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                   action='$set',
+                                                   query=query)
+
+                        response = HttpResponse(president)
+
+                        return response
         else:
             return HttpResponse(status=403)
 
-        response = HttpResponse(president)
-
-        return response
+        return HttpResponse(status=409)
 
 
 class VoteParliamentPageView(TemplateView):
@@ -1115,16 +1126,26 @@ class VoteParliamentPageView(TemplateView):
                 # Users without telegram account can't vote
                 return HttpResponse(status=404)
 
-            query = {f'votes.parliament.{username}': parliament}
-            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                       query=query)
+            # Users with freedom less than 30 days can't vote
+            joined_date = users.get(username, {}).get('member', {}).get('member_parameters', {}).get('joined_date', '')
+            if joined_date:
+                date = json.loads(joined_date, object_hook=json_util.object_hook)
+                if date:
+                    # timedelta in group
+                    freedom = datetime.now() - date
+                    if freedom.days >= 30:
+                        query = {f'votes.parliament.{username}': parliament}
+                        mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                   action='$set',
+                                                   query=query)
+
+                        response = HttpResponse(parliament)
+
+                        return response
         else:
             HttpResponse(status=403)
 
-        response = HttpResponse(parliament)
-
-        return response
-
+        return HttpResponse(409)
 
 class VoteJudgePageView(TemplateView):
     async def get(self, request, *args, **kwargs):
@@ -1394,16 +1415,18 @@ class VoteCandidatePageView(TemplateView):
             return HttpResponse(status=409)
 
         if role == 'Президент':
-            trole = 'president'
+            query = {f'candidates.{username}': 'president'}
+            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
+                                       query=query)
         else:
             if role == 'Парламент':
-                trole = 'parliament'
+                query = {f'candidates.{username}': 'parliament'}
+                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
+                                           query=query)
             else:
-                trole = role
-
-        query = {f'candidates.{username}': trole}
-        mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                   query=query)
+                query = {f'candidates.{username}': ''}
+                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$unset',
+                                           query=query)
 
         response = HttpResponse(role)
 

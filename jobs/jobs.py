@@ -9,9 +9,10 @@ import requests
 from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv
 from pytz import utc
-from utils import mongoDataBase
 
 load_dotenv()
+
+from utils import mongoDataBase
 
 
 def scheduled_start_voting():
