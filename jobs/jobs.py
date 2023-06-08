@@ -9,14 +9,13 @@ import requests
 from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv
 from pytz import utc
+from utils import mongoDataBase
 
 load_dotenv()
 
-from utils import mongoDataBase
-
 
 def scheduled_start_voting():
-    print('Scheduled Start Voting Running')
+    # print('Scheduled Start Voting Running')
     try:
         query = {'_id': 0, 'candidates': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
@@ -49,13 +48,14 @@ def scheduled_start_voting():
 
         data = json.dumps(data)
 
-        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat}", data=data, headers={'Origin': origin})
+        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat}", data=data,
+                      headers={'Origin': origin})
     except:
         pass
 
 
 def scheduled_end_voting():
-    print('Scheduled End Voting Running')
+    # print('Scheduled End Voting Running')
     try:
         query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'start_vote': 1, 'end_vote': 1,
                  'votes': 1, 'candidates': 1}
@@ -101,7 +101,8 @@ def scheduled_end_voting():
                 # No president votes
                 if candidates:
                     # List of president candidates
-                    parliament_candidates = [candidate for candidate, role in candidates.items() if role == 'parliament']
+                    parliament_candidates = [candidate for candidate, role in candidates.items() if
+                                             role == 'parliament']
                     # Random candidate winner from all candidates for president
                     parliament = random.sample(parliament_candidates, 1)[0]
                 else:
@@ -159,7 +160,7 @@ def scheduled_end_voting():
             data = json.dumps(data)
 
             requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat}/{parliament}",
-                         data=data, headers={'Origin': origin})
+                          data=data, headers={'Origin': origin})
 
         # Delete vote and votes information from database
         query = {'end_vote': '', 'votes': '', 'candidates': ''}
@@ -193,13 +194,14 @@ def scheduled_end_voting():
 
         data = json.dumps(data)
 
-        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat}", data=data, headers={'Origin': origin})
+        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat}", data=data,
+                      headers={'Origin': origin})
     except:
         pass
 
 
 def scheduled_telegram_synching():
-    print('Scheduled Telegram Synching Running')
+    # print('Scheduled Telegram Synching Running')
     try:
         chat = 'freed0m0fspeech'
         data = {
