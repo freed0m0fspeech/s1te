@@ -1064,6 +1064,7 @@ class VotePresidentPageView(TemplateView):
 
         return response
 
+
 class VoteParliamentPageView(TemplateView):
     async def get(self, request, *args, **kwargs):
         return HttpResponse(status=404)
@@ -1123,6 +1124,7 @@ class VoteParliamentPageView(TemplateView):
         response = HttpResponse(parliament)
 
         return response
+
 
 class VoteJudgePageView(TemplateView):
     async def get(self, request, *args, **kwargs):
@@ -1327,7 +1329,8 @@ class VoteJudgePageView(TemplateView):
 
                 data = json.dumps(data)
 
-                requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat}", data=data, headers={'Origin': origin})
+                requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat}", data=data,
+                              headers={'Origin': origin})
 
             mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                        query=query)
@@ -1335,6 +1338,7 @@ class VoteJudgePageView(TemplateView):
             response = HttpResponse(judge)
 
             return response
+
 
 class VoteCandidatePageView(TemplateView):
     async def get(self, request, *args, **kwargs):
