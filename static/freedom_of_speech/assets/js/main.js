@@ -235,7 +235,7 @@ function countUpFromTime(countFrom, id) {
     if (isNaN(countFrom)) return
 
     var now = new Date(),
-        countFrom = new Date(countFrom),
+        // countFrom = new Date(countFrom),
         timeDifference = (now - countFrom);
 
     var secondsInADay = 60 * 60 * 1000 * 24,
@@ -266,7 +266,7 @@ function countDownFromTime(countTo, id, date) {
     if (isNaN(countTo)) return
 
     var now = new Date(),
-        countTo = new Date(countTo),
+        // countTo = new Date(countTo),
         timeDifference = (countTo - now);
 
     var secondsInADay = 60 * 60 * 1000 * 24,
