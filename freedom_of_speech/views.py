@@ -861,7 +861,7 @@ class AuthTelegramPageView(TemplateView):
             if member:
                 member = member.json()
 
-                query = {f'users.{user}.member': member}
+                query = {f'users.{username}.member': member}
                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                            action='$set', query=query)
 
