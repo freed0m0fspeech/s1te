@@ -180,7 +180,7 @@ window.onload = function() {
     // Month Day, Year Hour:Minute:Second, id-of-element-container
     if (document.getElementById('home__date_counter')) {
         date = document.getElementById('home__info__years_value').textContent;
-        document.getElementById('home__info__years_value').textContent = ''.concat(new Date(document.getElementById('home__info__years_value').textContent).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}))
+        document.getElementById('home__info__years_value').textContent = ''.concat(new Date(document.getElementById('home__info__years_value').textContent.replace(/-/g, "/")).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}))
         // countUpFromTime(date, 'home__date_counter'); // ****** Change this line!
         // date = new Date('2023-06-01 23:23:12')
         // var today = new Date();
@@ -194,7 +194,7 @@ window.onload = function() {
     }
 
     if (document.getElementById('profile__info__years_value'))
-        document.getElementById('profile__info__years_value').textContent = new Date(document.getElementById('profile__info__years_value').textContent).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}).concat(' - ', new Date().toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}))
+        document.getElementById('profile__info__years_value').textContent = new Date(document.getElementById('profile__info__years_value').textContent.replace(/-/g, "/")).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}).concat(' - ', new Date().toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}))
 
     //if (document.getElementById('home__info__years_value'))
     //    document.getElementById('home__info__years_value').textContent = new Date(document.getElementById('home__info__years_value').textContent).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}).concat(' - ', new Date().toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}));
@@ -230,13 +230,14 @@ window.onload = function() {
     // }
 };
 function countUpFromTime(countFrom, id) {
-    countFrom = new Date(countFrom).getTime();
+    var tcountFrom = new Date(countFrom.replace(/-/g, "/")).getTime();
 
-    if (isNaN(countFrom)) return
+    if (isNaN(tcountFrom))
+        return
 
     var now = new Date().getTime(),
         // countFrom = new Date(countFrom),
-        timeDifference = (now - countFrom);
+        timeDifference = (now - tcountFrom);
 
     var secondsInADay = 60 * 60 * 1000 * 24,
         secondsInAHour = 60 * 60 * 1000;
@@ -257,17 +258,36 @@ function countUpFromTime(countFrom, id) {
     idEl.textContent = ''.concat(years.toString(), ' year(s) ', days.toString(), ' day(s) ', hours.toString(), 'h:', mins.toString(), 'm:', secs.toString(), 's');
 
     clearTimeout(countUpFromTime.interval);
-    countUpFromTime.interval = setTimeout(function(){ countUpFromTime(countFrom, id); }, 1000);
+    countUpFromTime.interval = setTimeout(function(){ countUpFromTime(tcountFrom, id); }, 1000);
+}
+
+function parseDate(str) {
+    var parts = str.split(" ");
+    var dateparts = parts[0].split("-");
+    var timeparts = (parts[1] || "").split(":");
+    var year = +dateparts[0];
+    var month = +dateparts[1];
+    var day = +dateparts[2];
+    var hours = timeparts[0] ? +timeparts[0] : 0;
+    var minutes = timeparts[1] ? +timeparts[1] : 0;
+    var seconds = timeparts[2] ? +timeparts[2] : 0;
+    // Treats the string as UTC, but you can remove the `Date.UTC` part and use
+    // `new Date` directly to treat the string as local time
+    return new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds));
 }
 
 function countDownFromTime(countTo, id, date) {
-    countTo = new Date(countTo).getTime();
+    var tcountTo = new Date(countTo.replace(/-/g, "/")).getTime();
 
-    if (isNaN(countTo)) return
+    // var tcountTo = parseDate(countTo).getTime();
+
+
+    if (isNaN(tcountTo))
+        return
 
     var now = new Date().getTime(),
         // countTo = new Date(countTo),
-        timeDifference = (countTo - now);
+        timeDifference = (tcountTo - now);
 
     var secondsInADay = 60 * 60 * 1000 * 24,
         secondsInAHour = 60 * 60 * 1000;
