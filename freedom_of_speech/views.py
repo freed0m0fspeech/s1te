@@ -860,6 +860,11 @@ class AuthTelegramPageView(TemplateView):
                                   data=data, headers={'Origin': origin})
             if member:
                 member = member.json()
+
+                query = {f'users.{user}.member': member}
+                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                           action='$set', query=query)
+
                 member_parameters = member.get('member_parameters', {})
                 if member_parameters:
                     role = member_parameters.get('custom_title', '')
