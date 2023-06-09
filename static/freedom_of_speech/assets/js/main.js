@@ -234,7 +234,7 @@ function countUpFromTime(countFrom, id) {
 
     if (isNaN(countFrom)) return
 
-    var now = new Date(),
+    var now = new Date().getTime(),
         // countFrom = new Date(countFrom),
         timeDifference = (now - countFrom);
 
@@ -265,7 +265,7 @@ function countDownFromTime(countTo, id, date) {
 
     if (isNaN(countTo)) return
 
-    var now = new Date(),
+    var now = new Date().getTime(),
         // countTo = new Date(countTo),
         timeDifference = (countTo - now);
 
