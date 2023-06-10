@@ -71,5 +71,5 @@ RUN pip install -r requirements.txt
 
 # copy project
 COPY . /s1te/
-CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "personal_site.wsgi:application"]
+CMD ["gunicorn", "--bind", ":8000", "--workers", "1", "personal_site.wsgi:application"]
 #CMD python3 main.py

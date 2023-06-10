@@ -1500,6 +1500,8 @@ class VoteExtraordinaryPageView(TemplateView):
 
             sched.add_job(scheduled_start_voting, 'date', run_date=datetime.now(tz=utc), id='scheduled_start_voting')
 
+            sched.print_jobs()
+
             return HttpResponse()
         else:
             # Only administrator can start extraordinary vote
