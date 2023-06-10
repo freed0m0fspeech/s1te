@@ -34,6 +34,7 @@ def start():
     # sched.add_job(scheduled_telegram_synching, 'date', run_date=datetime.now(tz=utc), id='scheduled_telegram_synching')
 
     sched.add_job(scheduled_telegram_synching, 'interval', hours=4, id='scheduled_telegram_synching')
+    sched.get_job('scheduled_telegram_synching').modify(next_run_time=datetime.now(tz=utc))
 
     # schduler.add_job(test, 'date', run_date=datetime.now(tz=utc), args=['1', '2'])
 
