@@ -230,12 +230,12 @@ def scheduled_end_voting():
 
 
 def scheduled_telegram_synching(start=0, stop=200, step=1):
-    from .updater import sched
+    # from .updater import sched
 
-    sync_time = datetime.now(tz=utc) + timedelta(hours=4)
-    sync_time = sync_time.strftime('%Y-%m-%d %H:%M:%S')
+    # sync_time = datetime.now(tz=utc) + timedelta(hours=4)
+    # sync_time = sync_time.strftime('%Y-%m-%d %H:%M:%S')
 
-    sched.add_job(scheduled_telegram_synching, 'date', run_date=sync_time, id='scheduled_telegram_synching')
+    # sched.add_job(scheduled_telegram_synching, 'date', run_date=sync_time, id='scheduled_telegram_synching')
     # print('Scheduled Telegram Synching Running')
     try:
         chat = 'freed0m0fspeech'
@@ -274,6 +274,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
             telegram = tuser.get('telegram', {})
 
             if telegram:
+                chat = 'freed0m0fspeech'
                 telegram_username = telegram.get('username', '')
 
                 member = requests.get(
@@ -281,12 +282,12 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                     data=data, headers={'Origin': origin})
                 # sync_count += 1
 
-                print(member)
+                # print(member)
 
                 if member:
                     member = member.json()
 
-                    print(member)
+                    # print(member)
 
                     query = {f'users.{user}.member': member}
                     mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',

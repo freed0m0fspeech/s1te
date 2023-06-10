@@ -31,7 +31,9 @@ def start():
     if end_vote:
         sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting')
 
-    sched.add_job(scheduled_telegram_synching, 'date', run_date=datetime.now(tz=utc), id='scheduled_telegram_synching')
+    # sched.add_job(scheduled_telegram_synching, 'date', run_date=datetime.now(tz=utc), id='scheduled_telegram_synching')
+
+    sched.add_job(scheduled_telegram_synching, 'interval', hours=4, id='scheduled_telegram_synching')
 
     # schduler.add_job(test, 'date', run_date=datetime.now(tz=utc), args=['1', '2'])
 
