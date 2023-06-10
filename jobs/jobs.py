@@ -25,7 +25,7 @@ def scheduled_start_voting():
             # Not start vote without candidates
 
             start_vote = datetime.now(tz=utc) + relativedelta(months=3)
-            start_vote = start_vote.strftime('%Y-%d-%m 00:00:00 UTC')
+            start_vote = start_vote.strftime('%Y-%m-%d 00:00:00')
 
             query = {'start_vote': f'{start_vote}'}
 
@@ -50,10 +50,10 @@ def scheduled_start_voting():
             return
 
         end_vote = datetime.now(tz=utc) + timedelta(days=1)
-        end_vote = end_vote.strftime('%Y-%d-%m 00:00:00 UTC')
+        end_vote = end_vote.strftime('%Y-%m-%d 00:00:00')
 
         start_vote = datetime.now(tz=utc) + relativedelta(months=3)
-        start_vote = start_vote.strftime('%Y-%d-%m 00:00:00 UTC')
+        start_vote = start_vote.strftime('%Y-%m-%d 00:00:00')
 
         query = {'end_vote': f'{end_vote}', 'start_vote': f'{start_vote}'}
 
@@ -231,6 +231,11 @@ def scheduled_end_voting():
 
 def scheduled_telegram_synching(start=0, stop=200, step=1):
     from .updater import sched
+
+    sync_time = datetime.now(tz=utc) + timedelta(hours=4)
+    sync_time = sync_time.strftime('%Y-%m-%d %H:%M:%S')
+
+    sched.add_job(scheduled_telegram_synching, 'date', run_date=sync_time, id='scheduled_telegram_synching')
     # print('Scheduled Telegram Synching Running')
     try:
         chat = 'freed0m0fspeech'
@@ -274,7 +279,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                 member = requests.get(
                     f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{telegram_username}",
                     data=data, headers={'Origin': origin})
-                # sync_count += 1
+                sync_count += 1
 
                 if member:
                     member = member.json()
@@ -313,9 +318,10 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                 # if sync_count == stop:
                 #     return
 
+                print(f'Synched {sync_count}')
                 time.sleep(60)
-
-        sched.print_jobs()
 
     except:
         pass
+
+    sched.print_jobs()
