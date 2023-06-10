@@ -1,6 +1,10 @@
 from datetime import datetime, timedelta
+
+from apscheduler.executors.pool import ThreadPoolExecutor
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from .jobs import scheduled_start_voting, scheduled_end_voting, scheduled_telegram_synching
+
 from pytz import utc
 from dotenv import load_dotenv
 
@@ -8,7 +12,12 @@ load_dotenv()
 
 from utils import mongoDataBase
 
+# executors = {
+#     'default': ThreadPoolExecutor(1)
+# }
+
 sched = BackgroundScheduler(timezone=utc)
+
 
 def start():
     query = {'_id': 0, 'start_vote': 1, 'end_vote': 1}

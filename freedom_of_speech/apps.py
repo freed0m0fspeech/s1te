@@ -6,5 +6,4 @@ class FreedomOfSpeechConfig(AppConfig):
     name = "freedom_of_speech"
 
     def ready(self):
-        from jobs import updater
-        updater.start()
+        pass

@@ -230,6 +230,7 @@ def scheduled_end_voting():
 
 
 def scheduled_telegram_synching(start=0, stop=200, step=1):
+    from .updater import sched
     # print('Scheduled Telegram Synching Running')
     try:
         chat = 'freed0m0fspeech'
@@ -260,6 +261,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
         sync_count = 0
         for user in users:
             tuser = users.get(user, '')
+            # print(tuser)
 
             # password = user.get('password', '')
             # sessionid = user.get('sessionid', '')
@@ -272,7 +274,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                 member = requests.get(
                     f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{telegram_username}",
                     data=data, headers={'Origin': origin})
-                sync_count += 1
+                # sync_count += 1
 
                 if member:
                     member = member.json()
@@ -308,10 +310,12 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                     #                                            collection_name='freedom_of_speech',
                     #                                            action='$set', query=query)
 
-                if sync_count == stop:
-                    return
+                # if sync_count == stop:
+                #     return
 
                 time.sleep(60)
+
+        sched.print_jobs()
 
     except:
         pass
