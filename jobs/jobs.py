@@ -50,7 +50,7 @@ def scheduled_start_voting():
             return
 
         end_vote = datetime.now(tz=utc) + timedelta(days=1)
-        end_vote = end_vote.strftime('%Y-%m-%d 00:00:00')
+        end_vote = end_vote.strftime('%Y-%m-%d %H:%M:%S')
 
         start_vote = datetime.now(tz=utc) + relativedelta(months=3)
         start_vote = start_vote.strftime('%Y-%m-%d 00:00:00')
