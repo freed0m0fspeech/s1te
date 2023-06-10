@@ -2,18 +2,30 @@ from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from .jobs import scheduled_start_voting, scheduled_end_voting, scheduled_telegram_synching
 from pytz import utc
+from dotenv import load_dotenv
 
+load_dotenv()
+
+from utils import mongoDataBase
+
+sched = BackgroundScheduler(timezone=utc)
 
 def start():
-    schduler = BackgroundScheduler(timezone=utc)
+    query = {'_id': 0, 'start_vote': 1, 'end_vote': 1}
+    document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
-    # schduler.add_job(scheduled_test, 'interval', seconds=5)
-    schduler.add_job(scheduled_start_voting, 'cron', month='1, 4, 7, 10', day='last')
-    schduler.add_job(scheduled_end_voting, 'cron', month='2, 5, 8, 11', day='1')
-    schduler.add_job(scheduled_telegram_synching, 'interval', days=1)
-    # schduler.add_job(scheduled_start_voting, 'cron', second='15')
-    # schduler.add_job(scheduled_end_voting, 'cron', minute='1')
+    start_vote = document.get('start_vote', '')
+    if start_vote:
+        sched.add_job(scheduled_start_voting, 'date', run_date=start_vote, id='scheduled_start_voting')
 
-    schduler.start()
+    end_vote = document.get('end_vote', '')
+    if end_vote:
+        sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting')
 
-    # schduler.print_jobs()
+    sched.add_job(scheduled_telegram_synching, 'interval', hours=4, id='scheduled_telegram_synching')
+
+    # schduler.add_job(test, 'date', run_date=datetime.now(tz=utc), args=['1', '2'])
+
+    sched.start()
+
+    sched.print_jobs()

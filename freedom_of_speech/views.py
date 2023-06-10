@@ -10,6 +10,8 @@ import requests
 # import OpenSSL
 
 from math import sqrt
+
+from apscheduler.jobstores.base import JobLookupError
 from bson import json_util
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -964,6 +966,10 @@ class ProfilePageView(TemplateView):
             if users:
                 user = users.get(username, '')
                 if user:
+                    permissions = user.get('permissions', {'administrator': False, 'moderator': False})
+                    context['administrator'] = permissions.get('administrator', False)
+                    context['moderator'] = permissions.get('administrator', permissions.get('moderator', False))
+
                     context['username'] = username
                     context['candidate'] = document.get('candidates', {}).get(username, {})
                     telegram = user.get('telegram', '')
@@ -1151,6 +1157,7 @@ class VoteParliamentPageView(TemplateView):
             HttpResponse(status=403)
 
         return HttpResponse(409)
+
 
 class VoteJudgePageView(TemplateView):
     async def get(self, request, *args, **kwargs):
@@ -1436,3 +1443,64 @@ class VoteCandidatePageView(TemplateView):
         response = HttpResponse(role)
 
         return response
+
+
+class VoteExtraordinaryPageView(TemplateView):
+    async def get(self, request, *args, **kwargs):
+        return HttpResponse(status=404)
+
+    async def post(self, request, *args, **kwargs):
+        data = request.POST
+
+        if not data:
+            return HttpResponse(status=422)
+
+        cockies = request.COOKIES
+
+        query = {'_id': 0, 'users': 1}
+        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+                                              query=query)
+
+        users = document.get('users', '')
+        context = {
+
+        }
+        username = ''
+        if not cockies:
+            return HttpResponse(status=422)
+        else:
+            context['authorized'] = False
+            sessionid = cockies.get('sessionid', '')
+            if not username:
+                username = cockies.get('username', '')
+
+            if 'sessionid' and 'username' in cockies:
+                # users = document.get('users', {})
+
+                if users.get(username, ''):
+                    if users[username].get('sessionid', ''):
+                        if sessionid == users[username]['sessionid']:
+                            # user = users[username]
+                            context['authorized'] = True
+            else:
+                return HttpResponse(status=422)
+
+        if not context.get('authorized', False) and username:
+            return HttpResponse(status=422)
+
+        if users.get(username, {}).get('permissions', {}).get('administrator', False):
+            from jobs.updater import sched
+            from jobs.jobs import scheduled_start_voting
+
+            try:
+                sched.remove_job('scheduled_start_voting')
+            except JobLookupError:
+                # job not found
+                pass
+
+            sched.add_job(scheduled_start_voting, 'date', run_date=datetime.now(tz=utc), id='scheduled_start_voting')
+
+            return HttpResponse()
+        else:
+            # Only administrator can start extraordinary vote
+            return HttpResponse(status=422)

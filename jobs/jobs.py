@@ -1,11 +1,11 @@
-import datetime
+import itertools
 import json
 import os
 import random
 import sys
 import time
-
 import requests
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv
 from pytz import utc
@@ -14,29 +14,58 @@ load_dotenv()
 
 from utils import mongoDataBase
 
-
 def scheduled_start_voting():
+    from .updater import sched
     # print('Scheduled Start Voting Running')
     try:
         query = {'_id': 0, 'candidates': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
-        if not document.get('candidates', {}):
+        if 'president' not in document.get('candidates', {}) or 'parliament' not in document.get('candidates', {}):
             # Not start vote without candidates
+
+            start_vote = datetime.now(tz=utc) + relativedelta(months=3)
+            start_vote = start_vote.strftime('%Y-%d-%m 00:00:00 UTC')
+
+            query = {'start_vote': f'{start_vote}'}
+
+            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                       action='$set', query=query)
+
+            text = f"**Недостаточно кандидатов на выборы [Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech | Выборы были перенесены**"
+
+            chat = 'freed0m0fspeech'
+            origin = os.getenv('HOSTNAME', '')
+
+            data = {
+                "text": text,
+                'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+            }
+
+            data = json.dumps(data)
+
+            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat}", data=data,
+                          headers={'Origin': origin})
+
             return
 
-        end_vote = datetime.datetime.now(tz=utc) + datetime.timedelta(days=1)
-        end_vote = end_vote.strftime("%Y-%m-%d %H:%M:%S")
+        end_vote = datetime.now(tz=utc) + timedelta(days=1)
+        end_vote = end_vote.strftime('%Y-%d-%m 00:00:00 UTC')
 
-        start_vote = datetime.datetime.now(tz=utc) + relativedelta(months=3)
-        start_vote = start_vote.strftime("%Y-%m-%d %H:%M:%S")
+        start_vote = datetime.now(tz=utc) + relativedelta(months=3)
+        start_vote = start_vote.strftime('%Y-%d-%m 00:00:00 UTC')
 
         query = {'end_vote': f'{end_vote}', 'start_vote': f'{start_vote}'}
 
         mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                    action='$set', query=query)
 
-        text = f"**В данный момент на [официальном сайте]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) проходят выборы Правительства Freedom of speech**"
+        sched.add_job(scheduled_end_voting, 'date', run_date=end_vote)
+        sched.add_job(scheduled_start_voting, 'date', run_date=start_vote)
+
+        sched.print_jobs()
+
+        text = f"**В данный момент на [официальном сайте]({os.getenv('HOSTNAME', '')}freedom_of_speech) проходят [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
 
         chat = 'freed0m0fspeech'
         origin = os.getenv('HOSTNAME', '')
@@ -200,7 +229,7 @@ def scheduled_end_voting():
         pass
 
 
-def scheduled_telegram_synching():
+def scheduled_telegram_synching(start=0, stop=200, step=1):
     # print('Scheduled Telegram Synching Running')
     try:
         chat = 'freed0m0fspeech'
@@ -226,6 +255,9 @@ def scheduled_telegram_synching():
 
         users = document.get('users', '')
 
+        # Sync data for start, stop, step inverval (60 seconds delay) (default 200 users)
+        # for user in itertools.islice(users, start, stop, step):
+        sync_count = 0
         for user in users:
             tuser = users.get(user, '')
 
@@ -240,6 +272,8 @@ def scheduled_telegram_synching():
                 member = requests.get(
                     f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{telegram_username}",
                     data=data, headers={'Origin': origin})
+                sync_count += 1
+
                 if member:
                     member = member.json()
 
@@ -247,33 +281,37 @@ def scheduled_telegram_synching():
                     mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                action='$set', query=query)
 
-                    member_parameters = member.get('member_parameters', {})
-                    if member_parameters:
-                        role = member_parameters.get('custom_title', '')
-                        if role:
-                            role = role.lower()
+                    # member_parameters = member.get('member_parameters', {})
+                    # if member_parameters:
+                    #     role = member_parameters.get('custom_title', '')
+                    #     if role:
+                    #         role = role.lower()
+                    #
+                    #         if role == 'судья':
+                    #             if document.get('judge', '') != user:
+                    #                 query = {f"judge": user}
+                    #                 mongoDataBase.update_field(database_name='site',
+                    #                                            collection_name='freedom_of_speech',
+                    #                                            action='$set', query=query)
+                    #
+                    #         if role == 'президент':
+                    #             if document.get('president', '') != user:
+                    #                 query = {f"president": user}
+                    #                 mongoDataBase.update_field(database_name='site',
+                    #                                            collection_name='freedom_of_speech',
+                    #                                            action='$set', query=query)
+                    #
+                    #         if role == 'парламент':
+                    #             if document.get('parliament', '') != user:
+                    #                 query = {f"parliament": user}
+                    #                 mongoDataBase.update_field(database_name='site',
+                    #                                            collection_name='freedom_of_speech',
+                    #                                            action='$set', query=query)
 
-                            if role == 'судья':
-                                if document.get('judge', '') != user:
-                                    query = {f"judge": user}
-                                    mongoDataBase.update_field(database_name='site',
-                                                               collection_name='freedom_of_speech',
-                                                               action='$set', query=query)
+                if sync_count == stop:
+                    return
 
-                            if role == 'президент':
-                                if document.get('president', '') != user:
-                                    query = {f"president": user}
-                                    mongoDataBase.update_field(database_name='site',
-                                                               collection_name='freedom_of_speech',
-                                                               action='$set', query=query)
+                time.sleep(60)
 
-                            if role == 'парламент':
-                                if document.get('parliament', '') != user:
-                                    query = {f"parliament": user}
-                                    mongoDataBase.update_field(database_name='site',
-                                                               collection_name='freedom_of_speech',
-                                                               action='$set', query=query)
-
-                    time.sleep(60)
     except:
         pass

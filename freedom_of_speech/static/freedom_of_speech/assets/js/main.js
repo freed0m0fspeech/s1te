@@ -281,7 +281,6 @@ function countDownFromTime(countTo, id, date) {
 
     // var tcountTo = parseDate(countTo).getTime();
 
-
     if (isNaN(tcountTo))
         return
 
@@ -1109,5 +1108,37 @@ $('#government__votes > li').on('click', function (e){
         });
     }else {
         console.log('Cancel vote')
+    }
+});
+
+$('#vote_button').on('click', function (e){
+    const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+    let confirm_text
+
+    confirm_text = 'Начать внеочередные выборы?'
+
+    if(confirm(confirm_text)){
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader('X-CSRFToken', csrf_token);
+            }
+        });
+
+        $.ajax({
+            type: 'post',
+            url: '/freedom_of_speech/vote/extraordinary/',
+            data: {
+
+            },
+            success: function(data, status, jqXHR) {
+
+            },
+            error(xhr,status,error){
+                if (xhr.status === 422)
+                    console.log('422')
+            },
+        });
+    }else {
+        console.log('Cancel extraordinary')
     }
 });

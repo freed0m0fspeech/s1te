@@ -1037,13 +1037,17 @@ input:-webkit-autofill:active{
 }
 
 .government__votes li{
-    padding: 0.5rem 0.5em;
-    margin: 0.5rem 0;
+    padding: 0.5rem 0.5rem;
+    margin: 0.5rem 0.5rem;
     border-radius: 0.5em;
     cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: center;
+    min-height: 33px;
+    min-width: 176px;
+    max-width: 176px;
+    max-height: 33px;
 }
 
 .government__votes li:hover{
@@ -1066,6 +1070,8 @@ input:-webkit-autofill:active{
 
 .government__stand{
     max-height: 0;
+    /*width: 200px;*/
+    justify-self: center;
 }
 
 /*=============== CONSTITUTION ===============*/

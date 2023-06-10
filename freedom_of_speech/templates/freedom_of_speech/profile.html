@@ -44,7 +44,7 @@
 
                     <li class="nav__item">
                         <a href="#vote" class="nav__link">
-                            <i class="ri-user-line"></i> Выборы
+                            <i class="ri-government-line"></i> Выборы
                         </a>
                     </li>
 
@@ -208,6 +208,14 @@
                 <span class="section__subtitle">Баллотироваться на выборы в Правительство</span>
 
                 <div class="entry__container container grid section__border">
+                    {% if administrator %}
+                        <div class="entry__form">
+                            <button class="entry__button" id="vote_button">
+                                Внеочередные выборы <i class="ri-government-line"></i>
+                            </button>
+                        </div>
+                    {% endif %}
+
                     <div class="government__stand">
                         <div class="government__vote" id="government__vote">
                             <a href="" class="government__vote-selected" id="government__vote-selected">
