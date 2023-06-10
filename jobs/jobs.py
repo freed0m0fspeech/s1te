@@ -263,7 +263,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
 
         # Sync data for start, stop, step inverval (60 seconds delay) (default 200 users)
         # for user in itertools.islice(users, start, stop, step):
-        sync_count = 0
+        # sync_count = 0
         for user in users:
             tuser = users.get(user, '')
             # print(tuser)
@@ -279,10 +279,14 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                 member = requests.get(
                     f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{telegram_username}",
                     data=data, headers={'Origin': origin})
-                sync_count += 1
+                # sync_count += 1
+
+                print(member)
 
                 if member:
                     member = member.json()
+
+                    print(member)
 
                     query = {f'users.{user}.member': member}
                     mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
@@ -318,7 +322,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                 # if sync_count == stop:
                 #     return
 
-                print(f'Synched {sync_count}')
+                # print(f'Synched {sync_count}')
                 time.sleep(60)
 
     except:
