@@ -38,9 +38,6 @@ from pymongo import (
 )
 
 
-# load_dotenv()
-
-
 class HomePageView(TemplateView):
     async def get(self, request, *args, **kwargs):
         cockies = request.COOKIES
