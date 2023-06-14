@@ -1588,9 +1588,11 @@ class VoteReferendumPageView(TemplateView):
         #     # Data synched with telegram is older than 1 day
         #     return HttpResponse(status=409)
 
-        opinion = data.get('opinion', '')
+        opinion = data.get('opinion', False)
 
-        if not opinion:
+        if opinion == 'true':
+            opinion = True
+        else:
             opinion = False
 
         query = {f'referendum.votes.{username}': opinion}
