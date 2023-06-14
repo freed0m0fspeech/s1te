@@ -8,7 +8,7 @@ from .jobs import scheduled_start_voting, scheduled_end_voting, scheduled_telegr
 from pytz import utc
 from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 from utils import mongoDataBase
 
