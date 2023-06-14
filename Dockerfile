@@ -54,9 +54,8 @@
 #EXPOSE 8000
 
 # pull official base image
-FROM ubuntu:20.04
+FROM ubuntu:20.10.12
 #FROM ubuntu:20.10.12
-RUN apt-get update && apt-get install --no-install-recommends -y python3.9 python3-pip
 
 # set work directory
 WORKDIR /usr/src/app
@@ -64,6 +63,8 @@ WORKDIR /usr/src/app
 # create the app directory - and switch to it
 RUN mkdir -p /app
 WORKDIR /app
+
+RUN apt-get update && apt-get install --no-install-recommends -y python3.9 python3-pip
 
 # install dependencies
 COPY requirements.txt /app/

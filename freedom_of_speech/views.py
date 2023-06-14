@@ -150,6 +150,7 @@ class HomePageView(TemplateView):
         context['parliament'] = parliament
         context['constitution'] = constitution
         context['members_count'] = members_count
+        context['date_updated'] = document.get('chat', {}).get('date', '')
         context['username'] = username
         context['laws'] = laws
         context['tlaws'] = tlaws
@@ -937,7 +938,7 @@ class ProfilePageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'candidates': 1}
+        query = {'_id': 0, 'users': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                               query=query)
 
@@ -971,7 +972,7 @@ class ProfilePageView(TemplateView):
                     context['moderator'] = permissions.get('administrator', permissions.get('moderator', False))
 
                     context['username'] = username
-                    context['candidate'] = document.get('candidates', {}).get(username, {})
+                    # context['candidate'] = document.get('candidates', {}).get(username, {})
                     telegram = user.get('telegram', '')
                     if telegram:
                         telegram_username = telegram.get('username', '')
@@ -989,6 +990,7 @@ class ProfilePageView(TemplateView):
                             context['xp_have'] = member.get('xp_have', '')
                             context['xp_need'] = member.get('xp_need', '')
                             context['hours_in_voice_channel'] = member.get('hours_in_voice_channel', '')
+                            context['date_updated'] = user.get('date', '')
                             if member_parameters:
                                 context['role'] = member_parameters.get('custom_title', 'Участник')
                                 if not context['role']:
@@ -1062,6 +1064,10 @@ class VotePresidentPageView(TemplateView):
         else:
             return HttpResponse(status=422)
 
+        if president not in document.get('candidates', {}):
+            # Voting for not candidate
+            return HttpResponse(status=409)
+
         if not document.get('votes', {}).get('president', {}).get(username):
             if not users.get(username, {}).get('telegram', {}):
                 # Users without telegram account can't vote
@@ -1101,7 +1107,7 @@ class VoteParliamentPageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'votes': 1}
+        query = {'_id': 0, 'users': 1, 'votes': 1, 'candidates': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                               query=query)
 
@@ -1133,6 +1139,10 @@ class VoteParliamentPageView(TemplateView):
             parliament = data.get('candidate', '')
         else:
             return HttpResponse(status=422)
+
+        if parliament not in document.get('candidates', {}):
+            # Voting for not candidate
+            return HttpResponse(status=409)
 
         if not document.get('votes', {}).get('parliament', {}).get(username):
             if not users.get(username, {}).get('telegram', {}):
@@ -1476,7 +1486,7 @@ class VoteReferendumPageView(TemplateView):
         query = {'_id': 0, 'users': 1, 'end_vote': 1, 'president': 1, 'parliament': 1, 'judge': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
-        users = document.get('users', '')
+        users = document.get('users', {})
         context = {
 
         }
@@ -1512,14 +1522,14 @@ class VoteReferendumPageView(TemplateView):
         judge = document.get('judge', {}).get('judge', '')
 
         # Count of government now
-        government_count = 0
+        government = []
 
         if president:
-            government_count += 1
+            government.append(president)
         if parliament:
-            government_count += 1
+            government.append(parliament)
         if judge:
-            government_count += 1
+            government.append(judge)
 
         if president == username:
             # President can't vote for referendum
@@ -1533,14 +1543,23 @@ class VoteReferendumPageView(TemplateView):
             # Judge can't vote for referendum
             return HttpResponse(status=409)
 
+        if not users.get(username, {}).get('member', {}):
+            # Not member of group
+            return HttpResponse(status=409)
+
+        synch_date = users.get(username, {}).get('date', '')
+
+        if not synch_date:
+            # Date of synch is not known
+            return HttpResponse(status=409)
+
+        if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(synch_date,'%Y-%m-%d %H:%M:%S')).days >= 1:
+            # Data synched with telegram is older than 1 day
+            return HttpResponse(status=409)
+
         opinion = data.get('opinion', '')
 
         if not opinion:
-            opinion = False
-
-        if opinion == 'Поддерживаю':
-            opinion = True
-        else:
             opinion = False
 
         query = {f'referendum.votes.{username}': opinion}
@@ -1557,13 +1576,13 @@ class VoteReferendumPageView(TemplateView):
             if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(referendum_date, '%Y-%m-%d %H:%M:%S')).days < 30:
                 return HttpResponse(opinion)
 
-        referendum_usernames = [username for username, opinion in document.get('referendum', {}).get('votes', {}).items() if opinion]
+        referendum_usernames = [username for username, opinion in document.get('referendum', {}).get('votes', {}).items() if opinion and username not in government]
 
         members_count = document.get('chat', {}).get('chat_parameters', {}).get('members_count', '')
 
         if members_count:
             # Count of referendum_true values
-            if (100 * float(len(referendum_usernames))/float(members_count - government_count)) >= 75:
+            if (100 * float(len(referendum_usernames))/float(members_count - len(government))) >= 75:
                 # Make sure that data of members correct (check real data from telegram bot API)
                 chat = 'freed0m0fspeech'
                 # Careful data value not from request to server
@@ -1581,7 +1600,7 @@ class VoteReferendumPageView(TemplateView):
 
                     if members_count:
                         # Count of referendum_true values
-                        if (100 * float(len(referendum_usernames)) / float(members_count - government_count)) >= 75:
+                        if (100 * float(len(referendum_usernames)) / float(members_count - len(government))) >= 75:
                             from jobs.updater import sched
                             from jobs.jobs import scheduled_start_voting
 

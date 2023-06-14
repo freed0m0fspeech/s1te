@@ -100,6 +100,12 @@
                     <!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-waves.svg' %}" alt="profile waves" class="profile__shape-waves">-->
                     <!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-circle.svg' %}" alt="profile circle" class="profile__shape-circle">-->
                 </div>
+
+                {% if date_updated %}
+                    <div class="date__updated" id="date__updated">
+                        {{date_updated}}
+                    </div>
+                {% endif %}
             {%if authorized %}
                 <ul class="profile__community">
                     <a href="#" target="_blank" class="profile__community-link profile__community-link__{{telegram_link_status}}" id="auth-telegram_button">

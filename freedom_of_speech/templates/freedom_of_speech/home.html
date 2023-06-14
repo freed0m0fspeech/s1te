@@ -17,6 +17,12 @@
           <img src="{% static 'freedom_of_speech/assets/img/freedom_of_speech-logo-light.gif' %}" alt="home perfil">
         </div>
       {% endif %}
+
+      {% if date_updated %}
+        <div class="date__updated" id="date__updated">
+          {{date_updated}}
+        </div>
+      {% endif %}
 <!--      <div class="home__blob grid">-->
 <!--        <div class="home__perfil">-->
 <!--        <video src="{% static 'freedom_of_speech/assets/video/freedom_of_speech-logo.mp4' %}" autoplay loop muted></video>-->

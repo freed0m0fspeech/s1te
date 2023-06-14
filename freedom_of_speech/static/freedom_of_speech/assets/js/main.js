@@ -190,6 +190,10 @@ window.onload = function() {
         countDownFromTime(date, 'home__date_counter');
     }
 
+    if (document.getElementById('date__updated')){
+        document.getElementById('date__updated').textContent = 'Обновлено '.concat(new Date(document.getElementById('date__updated').textContent.replace(/-/g, "/")).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}))
+    }
+
     if (document.getElementById('profile__date_counter')) {
         date = document.getElementById('profile__info__years_value').textContent;
         countUpFromTime(date, 'profile__date_counter');
@@ -1101,10 +1105,13 @@ $('#government__votes').on('click', function (e){
 
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
     let opinion = $(e.target).text();
-    let confirm_text
-    let government__votes = e.target
 
-    confirm_text = opinion.concat('?')
+    let confirm_text;
+    let government__votes = e.target;
+
+    confirm_text = opinion.concat('?');
+
+    opinion = opinion === 'Поддерживаю';
 
     if(confirm(confirm_text)){
         $.ajaxSetup({

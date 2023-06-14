@@ -581,6 +581,9 @@ input:-webkit-autofill:active{
     grid-template-columns: repeat(auto-fit, 1rem);
     grid-auto-flow: column;
     align-items: center;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
 
     column-gap: 1.25rem;
 }
@@ -606,6 +609,19 @@ input:-webkit-autofill:active{
     font-weight: 400;
     color: var(--text-color-light);
     margin-bottom: 1rem;
+}
+
+.date__updated{
+    font-family: var(--body-font);
+    font-size: var(--smaller-font-size);
+    font-weight: 400;
+    color: var(--text-color-light);
+    margin-bottom: 1rem;
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
 }
 
 .home__info-description,
