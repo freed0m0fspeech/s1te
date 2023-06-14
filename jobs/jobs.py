@@ -263,7 +263,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
             date = datetime.now(tz=utc)
             date = date.strftime('%Y-%m-%d %H:%M:%S')
 
-            query = {'chat': chat, 'chat.date': date}
+            query = {'chat.chat_parameters': chat.get('chat_parameters', {}), 'chat.date': date}
             mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                        action='$set', query=query)
 
