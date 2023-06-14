@@ -261,7 +261,7 @@ function countUpFromTime(countFrom, id) {
     // idEl.getElementsByClassName('hours')[0].innerHTML = hours;
     // idEl.getElementsByClassName('minutes')[0].innerHTML = mins;
     // idEl.getElementsByClassName('seconds')[0].innerHTML = secs;
-    idEl.textContent = ''.concat(years.toString(), ' year(s) ', days.toString(), ' day(s) ', hours.toString(), 'h:', mins.toString(), 'm:', secs.toString(), 's');
+    idEl.textContent = ''.concat(years.toString(), ' г ', days.toString(), ' д ', hours.toString(), 'ч:', mins.toString(), 'м:', secs.toString(), 'с');
 
     clearTimeout(countUpFromTime.interval);
     countUpFromTime.interval = setTimeout(function(){ countUpFromTime(countFrom, id); }, 1000);
@@ -310,7 +310,7 @@ function countDownFromTime(countTo, id, date) {
     // idEl.getElementsByClassName('hours')[0].innerHTML = hours;
     // idEl.getElementsByClassName('minutes')[0].innerHTML = mins;
     // idEl.getElementsByClassName('seconds')[0].innerHTML = secs;
-    idEl.textContent = ''.concat(days.toString(), ' day(s) ', hours.toString(), 'h:', mins.toString(), 'm:', secs.toString(), 's');
+    idEl.textContent = ''.concat(days.toString(), ' д ', hours.toString(), 'ч:', mins.toString(), 'м:', secs.toString(), 'с');
 
     clearTimeout(countDownFromTime.interval);
     countDownFromTime.interval = setTimeout(function(){ countDownFromTime(countTo, id); }, 1000);
@@ -990,7 +990,7 @@ $('#government__votes_president').on('click', function (e){
                 if (xhr.status === 404)
                     alert('Только пользователи которые привязали Telegram могут голосовать')
                 if (xhr.status === 409)
-                    alert('Только пользователи свобода которых больше 30 дней могут голосовать')
+                    alert('Только пользователи свобода которых больше 30 дней могут голосовать (обновление данных должно быть не более 1 дня назад)')
             },
         });
     }else {
@@ -1036,6 +1036,8 @@ $('#government__votes_parliament').on('click', function (e){
                     alert('Только авторизованные пользователи могут голосовать')
                 if (xhr.status === 404)
                     alert('Только пользователи которые привязали Telegram могут голосовать')
+                if (xhr.status === 409)
+                    alert('Только пользователи свобода которых больше 30 дней могут голосовать (обновление данных должно быть не более 1 дня назад)')
             },
         });
     }else {

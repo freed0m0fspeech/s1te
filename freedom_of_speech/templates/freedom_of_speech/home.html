@@ -20,7 +20,7 @@
 
       {% if date_updated %}
         <div class="date__updated" id="date__updated">
-          {{date_updated}}
+          {{date_updated}} UTC
         </div>
       {% endif %}
 <!--      <div class="home__blob grid">-->
@@ -98,9 +98,9 @@
 
         <p class="home__info-number" id="home__info__years_value">
           {% if end_vote %}
-            {{end_vote}}
+            {{end_vote}} UTC
           {% else %}
-            {{start_vote}}
+            {{start_vote}} UTC
           {% endif %}
 <!--          Feb 3, 2017-->
 <!--          2017-2023-->
