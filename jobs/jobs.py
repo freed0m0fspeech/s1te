@@ -295,12 +295,10 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                     data=data, headers={'Origin': origin})
                 # sync_count += 1
 
-                # print(member)
-
                 if member:
                     member = member.json()
 
-                    # print(member)
+                    print(member)
 
                     date = datetime.now(tz=utc)
                     date = date.strftime('%Y-%m-%d %H:%M:%S')
