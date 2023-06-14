@@ -66,7 +66,7 @@ RUN mkdir -p /app
 WORKDIR /app
 
 # install dependencies
-COPY requirements.txt /s1te/
+COPY requirements.txt /app/
 RUN pip install -r requirements.txt
 
 # copy project
