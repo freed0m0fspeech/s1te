@@ -476,6 +476,8 @@ input:-webkit-autofill:active{
 /*    animation: popup infinite 1s;*/
 /*}*/
 
+/* KEYFRAMES */
+
 @keyframes popup {
     0% {
         transform: translateY(0rem);
@@ -501,6 +503,21 @@ input:-webkit-autofill:active{
     100%{
         /*border-color: hsl(328, 100%, 54%);*/
         color: hsl(328, 100%, 54%);
+    }
+}
+
+@keyframes deeppink-deepskyblue-border {
+    0%{
+        border-color: hsl(328, 100%, 54%);
+        /*color: hsl(328, 100%, 54%);*/
+    }
+    50%{
+        border-color: hsl(171, 100%, 50%);
+        /*color: hsl(171, 100%, 50%);*/
+    }
+    100%{
+        border-color: hsl(328, 100%, 54%);
+        /*color: hsl(328, 100%, 54%);*/
     }
 }
 
@@ -930,6 +947,7 @@ input:-webkit-autofill:active{
 .government__container{
     row-gap: 2.5rem;
     justify-content: center;
+    padding-bottom: 3rem;
 }
 
 .government__card{
@@ -940,6 +958,7 @@ input:-webkit-autofill:active{
     text-align: center;
     padding: 3.5rem 1rem;
     border-radius: 7.25rem;
+    /*cursor: pointer;*/
     /*transition: background .4s; !* for dark mode animation *!*/
 }
 
@@ -973,6 +992,11 @@ input:-webkit-autofill:active{
     z-index: -1;
     transition: opacity .6s;
     opacity: 0;
+}
+
+.government__border-selected{
+    animation: deeppink-deepskyblue-border infinite 3s;
+    opacity: 1;
 }
 
 .government__card:hover > i{
@@ -1034,6 +1058,7 @@ input:-webkit-autofill:active{
     background: var(--container-color);
     color: var(--text-color-light);
     margin-top: 5px;
+    justify-self: center;
 }
 
 .government__votes li{
@@ -1044,10 +1069,10 @@ input:-webkit-autofill:active{
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: center;
-    min-height: 33px;
-    min-width: 176px;
-    max-width: 176px;
-    max-height: 33px;
+    /*min-height: 33px;*/
+    /*min-width: 176px;*/
+    /*max-width: 176px;*/
+    /*max-height: 33px;*/
 }
 
 .government__votes li:hover{
@@ -1056,7 +1081,7 @@ input:-webkit-autofill:active{
 }
 
 .government__votes-active{
-
+    color: var(--title-color);
 }
 
 .government__votes-selected{
@@ -1069,6 +1094,7 @@ input:-webkit-autofill:active{
 }
 
 .government__stand{
+    display: grid;
     max-height: 0;
     /*width: 200px;*/
     justify-self: center;

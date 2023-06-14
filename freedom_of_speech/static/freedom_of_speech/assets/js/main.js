@@ -6,7 +6,8 @@ const navMenu = document.getElementById('nav-menu'),
 /*===== MENU SHOW =====*/
 /* Validate if constant exists */
 if(navToggle){
-    navToggle.addEventListener('click', () =>{
+    navToggle.addEventListener('click', (e) =>{
+        e.stopPropagation()
         navMenu.classList.add('show-menu')
     })
 }
@@ -14,7 +15,8 @@ if(navToggle){
 /*===== MENU HIDDEN =====*/
 /* Validate if constant exists */
 if(navClose){
-    navClose.addEventListener('click', () =>{
+    navClose.addEventListener('click', (e) =>{
+        e.stopPropagation()
         navMenu.classList.remove('show-menu')
     })
 }
@@ -258,7 +260,7 @@ function countUpFromTime(countFrom, id) {
     idEl.textContent = ''.concat(years.toString(), ' year(s) ', days.toString(), ' day(s) ', hours.toString(), 'h:', mins.toString(), 'm:', secs.toString(), 's');
 
     clearTimeout(countUpFromTime.interval);
-    countUpFromTime.interval = setTimeout(function(){ countUpFromTime(tcountFrom, id); }, 1000);
+    countUpFromTime.interval = setTimeout(function(){ countUpFromTime(countFrom, id); }, 1000);
 }
 
 function parseDate(str) {
@@ -920,30 +922,39 @@ $('#auth-telegram_button').on('click', function(e) {
 
 $('#government__vote').on('click', function(e) {
     e.preventDefault();
+    e.stopPropagation();
 
     $('#government__votes').toggleClass('government__votes-open')
 });
 $('#government__vote_president').on('click', function(e) {
     e.preventDefault();
+    e.stopPropagation();
 
     $('#government__votes_president').toggleClass('government__votes-open')
 });
 
 $('#government__vote_parliament').on('click', function(e) {
     e.preventDefault();
+    e.stopPropagation();
 
     $('#government__votes_parliament').toggleClass('government__votes-open')
 });
 
 $('#government__vote_judge').on('click', function(e) {
     e.preventDefault();
+    e.stopPropagation();
 
     $('#government__votes_judge').toggleClass('government__votes-open')
 });
 
-$('#government__votes_president > li').on('click', function (e){
+$('#government__votes_president').on('click', function (e){
+    e.stopPropagation();
+
+    if (e.target.tagName.toLowerCase() === 'ul')
+        return
+
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
-    let candidate = $(this).text();
+    let candidate = $(e.target).text();
 
     if(confirm('Проголосовать за кандидата '.concat(candidate, '?'))){
         $.ajaxSetup({
@@ -963,9 +974,11 @@ $('#government__votes_president > li').on('click', function (e){
 
                 $('#government__vote_president').off('click')
                 $('#government__vote_president-selected').prop('href', "/freedom_of_speech/profile/".concat(candidate, '/')).text(candidate)
-                $('#government__votes_president').toggleClass('government__votes-open')
+                $('#government__votes_president').removeClass('government__votes-open')
             },
             error(xhr,status,error){
+                $('#government__votes_president').removeClass('government__votes-open')
+
                 if (xhr.status === 403)
                     console.log(403)
                 if (xhr.status === 422)
@@ -981,9 +994,14 @@ $('#government__votes_president > li').on('click', function (e){
     }
 });
 
-$('#government__votes_parliament > li').on('click', function (e){
+$('#government__votes_parliament').on('click', function (e){
+    e.stopPropagation();
+
+    if (e.target.tagName.toLowerCase() === 'ul')
+        return
+
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
-    let candidate = $(this).text();
+    let candidate = $(e.target).text();
 
     if(confirm('Проголосовать за кандидата '.concat(candidate, '?'))){
         $.ajaxSetup({
@@ -1003,9 +1021,11 @@ $('#government__votes_parliament > li').on('click', function (e){
 
                 $('#government__vote_parliament').off('click')
                 $('#government__vote_parliament-selected').prop("href", "/freedom_of_speech/profile/".concat(candidate, '/')).text(candidate)
-                $('#government__votes_parliament').toggleClass('government__votes-open')
+                $('#government__votes_parliament').removeClass('government__votes-open')
             },
             error(xhr,status,error){
+                $('#government__votes_parliament').removeClass('government__votes-open')
+
                 if (xhr.status === 403)
                     console.log(403)
                 if (xhr.status === 422)
@@ -1019,13 +1039,18 @@ $('#government__votes_parliament > li').on('click', function (e){
     }
 });
 
-$('#government__votes_judge > li').on('click', function (e){
+$('#government__votes_judge').on('click', function (e){
+    e.stopPropagation();
+
+    if (e.target.tagName.toLowerCase() === 'ul')
+        return
+
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
-    let candidate = $(this).text();
+    let candidate = $(e.target).text();
 
     let confirm_text
 
-    if (candidate === '')
+    if (candidate === '—')
         confirm_text = 'Снять кандидата?'
     else
         confirm_text = 'Проголосовать за кандидата '.concat(candidate, '?')
@@ -1048,9 +1073,11 @@ $('#government__votes_judge > li').on('click', function (e){
 
                 // $('#government__vote_judge').off('click')
                 $('#government__vote_judge-selected').prop("href", "/freedom_of_speech/profile/".concat(candidate, '/')).text(candidate)
-                $('#government__votes_judge').toggleClass('government__votes-open')
+                $('#government__votes_judge').removeClass('government__votes-open')
             },
             error(xhr,status,error){
+                $('#government__votes_judge').removeClass('government__votes-open')
+
                 if (xhr.status === 422)
                     console.log('422')
                 if (xhr.status === 404)
@@ -1066,15 +1093,79 @@ $('#government__votes_judge > li').on('click', function (e){
     }
 });
 
-$('#government__votes > li').on('click', function (e){
-    const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
-    let role = $(this).text();
-    let confirm_text
+$('#government__votes').on('click', function (e){
+    e.stopPropagation()
 
-    if (role === '')
+    if (e.target.tagName.toLowerCase() === 'ul')
+        return
+
+    const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+    let opinion = $(e.target).text();
+    let confirm_text
+    let government__votes = e.target
+
+    confirm_text = opinion.concat('?')
+
+    if(confirm(confirm_text)){
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader('X-CSRFToken', csrf_token);
+            }
+        });
+
+        $.ajax({
+            type: 'post',
+            url: '/freedom_of_speech/vote/referendum/',
+            data: {
+                opinion: opinion,
+            },
+            success: function(data, status, jqXHR) {
+                $('#government__votes').removeClass('government__votes-open')
+                $('#government__votes .government__votes-active').removeClass('government__votes-active')
+                $(government__votes).addClass('government__votes-active')
+            },
+            error(xhr,status,error){
+                $('#government__votes').removeClass('government__votes-open')
+
+                if (xhr.status === 422)
+                    console.log('422')
+                if (xhr.status === 409)
+                    alert('В данный момент Вы не можете голосовать за референдум')
+            },
+        });
+    }else {
+        console.log('Cancel vote')
+    }
+});
+
+$('.government__card').on('click', function (e){
+    // if (e.target.tagName.toLowerCase() in {'a': '', 'ul': '', 'li': ''})
+    //     return
+    e.stopPropagation()
+
+    if (e.target.tagName.toLowerCase() === 'a')
+        return
+
+    const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+    let role = $(this).children('h2.government__title').text().replace(/[\n\t\r ]/g, '');
+    let confirm_text
+    let government__card = this
+
+    // if already candidate
+    if ($(this).find('.government__border').hasClass('government__border-selected')) {
         confirm_text = 'Снять свою кандидатуру?'
-    else
+
+        role = ''
+    } else {
         confirm_text = 'Баллотироваться на '.concat(role, '?')
+
+        if (role === 'Президент')
+            role = 'president'
+        else if (role === 'Парламент')
+            role = 'parliament'
+        else if (role === 'Судья')
+            role = 'judge'
+    }
 
     if(confirm(confirm_text)){
         $.ajaxSetup({
@@ -1091,19 +1182,16 @@ $('#government__votes > li').on('click', function (e){
             },
             success: function(data, status, jqXHR) {
                 role = data
+                $('.government__border').removeClass('government__border-selected')
 
-                if (role)
-                    $('#government__vote-selected').html(role.concat(' <i class="ri-arrow-down-circle-line"></i>'))
-                else
-                    $('#government__vote-selected').html('Баллотироваться <i class="ri-arrow-down-circle-line"></i>')
-
-                $('#government__votes').toggleClass('government__votes-open')
+                if(role)
+                    $(government__card).find('.government__border').addClass('government__border-selected')
             },
             error(xhr,status,error){
                 if (xhr.status === 422)
                     console.log('422')
                 if (xhr.status === 409)
-                    alert('Вы не можете баллотироваться во время выборов')
+                    alert('В данный момент Вы не можете баллотироваться')
             },
         });
     }else {
@@ -1111,34 +1199,44 @@ $('#government__votes > li').on('click', function (e){
     }
 });
 
-$('#vote_button').on('click', function (e){
-    const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
-    let confirm_text
+$(document).on('click', function (e){
+    // Close all popup menus
+    $('#government__votes_president').removeClass('government__votes-open')
+    $('#government__votes_parliament').removeClass('government__votes-open')
+    $('#government__votes_judge').removeClass('government__votes-open')
+    $('#government__votes').removeClass('government__votes-open')
 
-    confirm_text = 'Начать внеочередные выборы?'
-
-    if(confirm(confirm_text)){
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                xhr.setRequestHeader('X-CSRFToken', csrf_token);
-            }
-        });
-
-        $.ajax({
-            type: 'post',
-            url: '/freedom_of_speech/vote/extraordinary/',
-            data: {
-
-            },
-            success: function(data, status, jqXHR) {
-
-            },
-            error(xhr,status,error){
-                if (xhr.status === 422)
-                    console.log('422')
-            },
-        });
-    }else {
-        console.log('Cancel extraordinary')
-    }
+    $('#nav-menu').removeClass('show-menu')
 });
+
+// $('#vote_button').on('click', function (e){
+//     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+//     let confirm_text
+//
+//     confirm_text = 'Начать внеочередные выборы?'
+//
+//     if(confirm(confirm_text)){
+//         $.ajaxSetup({
+//             beforeSend: function(xhr, settings) {
+//                 xhr.setRequestHeader('X-CSRFToken', csrf_token);
+//             }
+//         });
+//
+//         $.ajax({
+//             type: 'post',
+//             url: '/freedom_of_speech/vote/extraordinary/',
+//             data: {
+//
+//             },
+//             success: function(data, status, jqXHR) {
+//
+//             },
+//             error(xhr,status,error){
+//                 if (xhr.status === 422)
+//                     console.log('422')
+//             },
+//         });
+//     }else {
+//         console.log('Cancel extraordinary')
+//     }
+// });

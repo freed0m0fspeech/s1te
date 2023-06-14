@@ -6,7 +6,8 @@ const navMenu = document.getElementById('nav-menu'),
 /*===== MENU SHOW =====*/
 /* Validate if constant exists */
 if(navToggle){
-    navToggle.addEventListener('click', () =>{
+    navToggle.addEventListener('click', (e) =>{
+        e.stopPropagation()
         navMenu.classList.add('show-menu')
     })
 }
@@ -14,7 +15,8 @@ if(navToggle){
 /*===== MENU HIDDEN =====*/
 /* Validate if constant exists */
 if(navClose){
-    navClose.addEventListener('click', () =>{
+    navClose.addEventListener('click', (e) =>{
+        e.stopPropagation()
         navMenu.classList.remove('show-menu')
     })
 }
@@ -218,3 +220,9 @@ function countUpFromTime(countFrom, id) {
     clearTimeout(countUpFromTime.interval);
     countUpFromTime.interval = setTimeout(function(){ countUpFromTime(countFrom, id); }, 1000);
 }
+
+$(document).on('click', function (e){
+    // Close all popup menus
+
+    $('#nav-menu').removeClass('show-menu')
+});

@@ -21,7 +21,10 @@ def scheduled_start_voting():
         query = {'_id': 0, 'candidates': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
-        if 'president' not in document.get('candidates', {}) or 'parliament' not in document.get('candidates', {}):
+        if (
+                'president' not in document.get('candidates', {}).values() or
+                'parliament' not in document.get('candidates', {}).values()
+        ):
             # Not start vote without candidates
 
             start_vote = datetime.now(tz=utc) + relativedelta(months=3)
@@ -192,7 +195,7 @@ def scheduled_end_voting():
                           data=data, headers={'Origin': origin})
 
         # Delete vote and votes information from database
-        query = {'end_vote': '', 'votes': '', 'candidates': ''}
+        query = {'end_vote': '', 'votes': '', 'candidates': '', 'referendum.votes': ''}
         mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                    action='$unset', query=query)
 
@@ -225,6 +228,13 @@ def scheduled_end_voting():
 
         requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat}", data=data,
                       headers={'Origin': origin})
+
+        referendum_date = datetime.now(tz=utc)
+        referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
+        # Set new referendum be valid only after 30 days after vote
+        query = {"referendum.date": referendum_date}
+        mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
+                                   query=query)
     except:
         pass
 
@@ -250,7 +260,10 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
         if chat:
             chat = chat.json()
 
-            query = {'chat': chat}
+            date = datetime.now(tz=utc)
+            date = date.strftime('%Y-%m-%d %H:%M:%S')
+
+            query = {'chat': chat, 'chat.date': date}
             mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                        action='$set', query=query)
 
@@ -289,7 +302,10 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
 
                     # print(member)
 
-                    query = {f'users.{user}.member': member}
+                    date = datetime.now(tz=utc)
+                    date = date.strftime('%Y-%m-%d %H:%M:%S')
+
+                    query = {f'users.{user}.member': member, f'users.{user}.date': date}
                     mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                action='$set', query=query)
 

@@ -50,7 +50,8 @@ class HomePageView(TemplateView):
         }
 
         query = {'_id': 0, 'constitution': 1, 'laws': 1, 'tlaws': 1, 'users': 1, 'testimonials': 1, 'president': 1,
-                 'parliament': 1, 'judge': 1, 'start_vote': 1, 'end_vote': 1, 'chat': 1, 'candidates': 1, 'votes': 1}
+                 'parliament': 1, 'judge': 1, 'start_vote': 1, 'end_vote': 1, 'chat': 1, 'candidates': 1, 'votes': 1,
+                 'referendum': 1}
 
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
@@ -65,7 +66,7 @@ class HomePageView(TemplateView):
         # Government in database is usernames of telegram accounts
         president = document.get('president', '')
         parliament = document.get('parliament', '')
-        judge = document.get('judge', {})
+        judge_info = document.get('judge', {})
 
         if not cockies:
             user = {}
@@ -140,13 +141,14 @@ class HomePageView(TemplateView):
                 members_count = chat_parameters.get('members_count', '')
 
         if context.get('is_president', ''):
-            context['judge'] = judge.get('president', '')
+            context['judge'] = judge_info.get('president', '')
         else:
             if context.get('is_parliament', ''):
-                context['judge'] = judge.get('parliament', '')
+                context['judge'] = judge_info.get('parliament', '')
             else:
-                context['judge'] = judge.get('judge', '')
+                context['judge'] = judge_info.get('judge', '')
 
+        context['referendum'] = document.get('referendum', {}).get('votes', {}).get(username, False)
         context['president'] = president
         context['parliament'] = parliament
         context['constitution'] = constitution
@@ -160,6 +162,7 @@ class HomePageView(TemplateView):
         context['start_vote'] = start_vote
         context['end_vote'] = end_vote
         context['candidates'] = document.get('candidates', {})
+        context['candidate'] = document.get('candidates', {}).get(username, {})
         context['users'] = document.get('users', {}).keys()
         context['parliament_voted'] = document.get('votes', {}).get('parliament', {}).get(username, '')
         context['president_voted'] = document.get('votes', {}).get('president', {}).get(username, '')
@@ -875,13 +878,13 @@ class AuthTelegramPageView(TemplateView):
 
                         if role == 'судья':
                             if document.get('judge', {}).get('judge', '') != username:
-                                query = {f"judge.judge": username}
+                                query = {f"judge.judge": username, f'referendum.votes.{username}': ''}
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$set', query=query)
 
                         if role == 'президент':
                             if document.get('president', '') != username:
-                                query = {f"president": username}
+                                query = {f"president": username, f'referendum.votes.{username}': ''}
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$set', query=query)
                             # users = document.get('users', '')
@@ -902,7 +905,7 @@ class AuthTelegramPageView(TemplateView):
 
                         if role == 'парламент':
                             if document.get('parliament', '') != username:
-                                query = {f"parliament": username}
+                                query = {f"parliament": username, f'referendum.votes.{username}': ''}
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$set', query=query)
                             # users = document.get('users', '')
@@ -999,7 +1002,9 @@ class ProfilePageView(TemplateView):
                                     date = json.loads(joined_date, object_hook=json_util.object_hook)
                                     if date:
                                         # date = datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S')
-                                        context['joined_date'] = date.strftime('%b %e, %Y')
+                                        # context['joined_date'] = date.strftime('%b %e, %Y')
+                                        # print(date.strftime('%Y-%m-%d %H:%M:%S'))
+                                        context['joined_date'] = date.strftime('%Y-%m-%d %H:%M:%S')
                     else:
                         context['telegram_link_status'] = False
                 else:
@@ -1224,7 +1229,7 @@ class VoteJudgePageView(TemplateView):
 
             if judge_info.get('parliament', '') == judge:
                 # Set new judge
-                query = {'judge.judge': judge, f'judge.{role}': judge}
+                query = {'judge.judge': judge, f'judge.{role}': judge, f'referendum.votes.{username}': ''}
 
                 text = f"**Изменения [Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech:\n\n**"
 
@@ -1284,7 +1289,7 @@ class VoteJudgePageView(TemplateView):
 
                 if judge_info.get('president', '') == judge:
                     # Set new judge
-                    query = {'judge.judge': judge, f'judge.{role}': judge}
+                    query = {'judge.judge': judge, f'judge.{role}': judge, f'referendum.votes.{username}': ''}
 
                     text = f"**Изменения [Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech:\n\n**"
 
@@ -1389,7 +1394,7 @@ class VoteCandidatePageView(TemplateView):
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                               query=query)
 
-        users = document.get('users', '')
+        users = document.get('users', {})
         context = {
 
         }
@@ -1426,26 +1431,40 @@ class VoteCandidatePageView(TemplateView):
             # Cannot stand during vote
             return HttpResponse(status=409)
 
-        if role == 'Президент':
-            query = {f'candidates.{username}': 'president'}
-            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                       query=query)
-        else:
-            if role == 'Парламент':
-                query = {f'candidates.{username}': 'parliament'}
-                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                           query=query)
-            else:
-                query = {f'candidates.{username}': ''}
-                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$unset',
-                                           query=query)
+        # Users with freedom less than 30 days can't stand
+        joined_date = users.get(username, {}).get('member', {}).get('member_parameters', {}).get('joined_date', '')
+        if joined_date:
+            date = json.loads(joined_date, object_hook=json_util.object_hook)
+            if date:
+                # timedelta in group
+                freedom = datetime.now() - date
+                if freedom.days >= 30:
+                    if role == 'president':
+                        query = {f'candidates.{username}': 'president'}
+                        mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
+                                                   query=query)
+                    else:
+                        if role == 'parliament':
+                            query = {f'candidates.{username}': 'parliament'}
+                            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
+                                                       query=query)
+                        else:
+                            if role == 'judge':
+                                query = {f'candidates.{username}': 'judge'}
+                                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
+                                                           query=query)
+                            else:
+                                query = {f'candidates.{username}': ''}
+                                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                           action='$unset', query=query)
 
-        response = HttpResponse(role)
+                    response = HttpResponse(role)
+                    return response
 
-        return response
+        return HttpResponse(status=409)
 
 
-class VoteExtraordinaryPageView(TemplateView):
+class VoteReferendumPageView(TemplateView):
     async def get(self, request, *args, **kwargs):
         return HttpResponse(status=404)
 
@@ -1457,9 +1476,8 @@ class VoteExtraordinaryPageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                              query=query)
+        query = {'_id': 0, 'users': 1, 'end_vote': 1, 'president': 1, 'parliament': 1, 'judge': 1}
+        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
         users = document.get('users', '')
         context = {
@@ -1488,21 +1506,104 @@ class VoteExtraordinaryPageView(TemplateView):
         if not context.get('authorized', False) and username:
             return HttpResponse(status=422)
 
-        if users.get(username, {}).get('permissions', {}).get('administrator', False):
-            from jobs.updater import sched
-            from jobs.jobs import scheduled_start_voting
+        if document.get('end_vote', ''):
+            # Cannot vote for referendum during vote
+            return HttpResponse(status=409)
 
-            try:
-                sched.remove_job('scheduled_start_voting')
-            except JobLookupError:
-                # job not found
-                pass
+        president = document.get('president', '')
+        parliament = document.get('parliament', '')
+        judge = document.get('judge', {}).get('judge', '')
 
-            sched.add_job(scheduled_start_voting, 'date', run_date=datetime.now(tz=utc), id='scheduled_start_voting')
+        # Count of government now
+        government_count = 0
 
-            sched.print_jobs()
+        if president:
+            government_count += 1
+        if parliament:
+            government_count += 1
+        if judge:
+            government_count += 1
 
-            return HttpResponse()
+        if president == username:
+            # President can't vote for referendum
+            return HttpResponse(status=409)
+
+        if parliament == username:
+            # Parliament can't vote for referendum
+            return HttpResponse(status=409)
+
+        if judge == username:
+            # Judge can't vote for referendum
+            return HttpResponse(status=409)
+
+        opinion = data.get('opinion', '')
+
+        if not opinion:
+            opinion = False
+
+        if opinion == 'Поддерживаю':
+            opinion = True
         else:
-            # Only administrator can start extraordinary vote
-            return HttpResponse(status=422)
+            opinion = False
+
+        query = {f'referendum.votes.{username}': opinion}
+        mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
+                                   query=query)
+
+        query = {'_id': 0, 'referendum': 1}
+        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        referendum_date = document.get('referendum', {}).get('date', '')
+
+        if referendum_date:
+            # timedelta in referendum must be more than 30 days
+            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(referendum_date, '%Y-%m-%d %H:%M:%S')).days < 30:
+                return HttpResponse(opinion)
+
+        referendum_usernames = [username for username, opinion in document.get('referendum', {}).get('votes', {}).items() if opinion]
+
+        members_count = document.get('chat', {}).get('chat_parameters', {}).get('members_count', '')
+
+        if members_count:
+            # Count of referendum_true values
+            if (100 * float(len(referendum_usernames))/float(members_count - government_count)) >= 75:
+                # Make sure that data of members correct (check real data from telegram bot API)
+                chat = 'freed0m0fspeech'
+                # Careful data value not from request to server
+                data = {
+                    'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+                }
+                data = json.dumps(data)
+                origin = os.getenv('HOSTNAME', '')
+                chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat}", data=data,
+                                    headers={'Origin': origin})
+
+                if chat:
+                    chat = chat.json()
+                    members_count = chat.get('chat_parameters', {}).get('members_count', '')
+
+                    if members_count:
+                        # Count of referendum_true values
+                        if (100 * float(len(referendum_usernames)) / float(members_count - government_count)) >= 75:
+                            from jobs.updater import sched
+                            from jobs.jobs import scheduled_start_voting
+
+                            try:
+                                sched.remove_job('scheduled_start_voting')
+                            except JobLookupError:
+                                # job not found
+                                pass
+
+                            sched.add_job(scheduled_start_voting, 'date', run_date=datetime.now(tz=utc),
+                                          id='scheduled_start_voting')
+
+                            referendum_date = datetime.now(tz=utc)
+                            referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
+
+                            query = {'referendum.votes': '', 'referendum.date': referendum_date}
+                            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                       action='$set', query=query)
+
+                            sched.print_jobs()
+
+        return HttpResponse(opinion)
