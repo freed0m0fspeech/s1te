@@ -82,8 +82,8 @@ def scheduled_start_voting():
 
         requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat}", data=data,
                       headers={'Origin': origin})
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
 
 def scheduled_end_voting():
@@ -235,8 +235,8 @@ def scheduled_end_voting():
         query = {"referendum.date": referendum_date}
         mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                    query=query)
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
 
 def scheduled_telegram_synching(start=0, stop=200, step=1):
@@ -298,8 +298,6 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                 if member:
                     member = member.json()
 
-                    print(member)
-
                     date = datetime.now(tz=utc)
                     date = date.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -340,7 +338,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                 # print(f'Synched {sync_count}')
                 time.sleep(60)
 
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
     sched.print_jobs()
