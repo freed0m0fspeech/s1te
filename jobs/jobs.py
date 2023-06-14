@@ -83,7 +83,8 @@ def scheduled_start_voting():
         requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat}", data=data,
                       headers={'Origin': origin})
     except Exception as e:
-        print(e)
+        pass
+        # print(e)
 
 
 def scheduled_end_voting():
@@ -236,7 +237,8 @@ def scheduled_end_voting():
         mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                    query=query)
     except Exception as e:
-        print(e)
+        pass
+        # print(e)
 
 
 def scheduled_telegram_synching(start=0, stop=200, step=1):
@@ -304,6 +306,17 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                     query = {f'users.{user}.member': member, f'users.{user}.date': date}
                     mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                action='$set', query=query)
+                else:
+                    if member.status_code == 422:
+                        # if not member or not user or not chat:
+                        #     return Response(status=422)
+
+                        date = datetime.now(tz=utc)
+                        date = date.strftime('%Y-%m-%d %H:%M:%S')
+
+                        query = {f'users.{user}.member': '', f'users.{user}.date': date}
+                        mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                   action='$set', query=query)
 
                     # member_parameters = member.get('member_parameters', {})
                     # if member_parameters:
@@ -339,6 +352,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                 time.sleep(60)
 
     except Exception as e:
-        print(e)
+        # print(e)
+        pass
 
     sched.print_jobs()

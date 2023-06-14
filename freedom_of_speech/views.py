@@ -831,7 +831,8 @@ class AuthTelegramPageView(TemplateView):
                             ):
                                 return HttpResponse(status=409)
                             else:
-                                query = {f'users.{username}.telegram': ''}
+                                query = {f'users.{username}.telegram': '', f'users.{username}.member': '',
+                                         f'users.{username}.date': ''}
 
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$unset', query=query)
@@ -1068,21 +1069,25 @@ class VotePresidentPageView(TemplateView):
             # Voting for not candidate
             return HttpResponse(status=409)
 
+        if not users.get(username, {}).get('member', {}):
+            # Not member of group
+            return HttpResponse(status=401)
+
         if not document.get('votes', {}).get('president', {}).get(username):
             if not users.get(username, {}).get('telegram', {}):
                 # Users without telegram account can't vote
                 return HttpResponse(status=404)
 
-            synch_date = users.get(username, {}).get('date', '')
-
-            if not synch_date:
-                # Date of synch is not known
-                return HttpResponse(status=409)
-
-            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(synch_date,
-                                                                              '%Y-%m-%d %H:%M:%S')).days >= 1:
-                # Data synched with telegram is older than 1 day
-                return HttpResponse(status=409)
+            # synch_date = users.get(username, {}).get('date', '')
+            #
+            # if not synch_date:
+            #     # Date of synch is not known
+            #     return HttpResponse(status=409)
+            #
+            # if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(synch_date,
+            #                                                                   '%Y-%m-%d %H:%M:%S')).days >= 1:
+            #     # Data synched with telegram is older than 1 day
+            #     return HttpResponse(status=409)
 
             # Users with freedom less than 30 days can't vote
             joined_date = users.get(username, {}).get('member', {}).get('member_parameters', {}).get('joined_date', '')
@@ -1155,21 +1160,25 @@ class VoteParliamentPageView(TemplateView):
             # Voting for not candidate
             return HttpResponse(status=409)
 
+        if not users.get(username, {}).get('member', {}):
+            # Not member of group
+            return HttpResponse(status=401)
+
         if not document.get('votes', {}).get('parliament', {}).get(username):
             if not users.get(username, {}).get('telegram', {}):
                 # Users without telegram account can't vote
                 return HttpResponse(status=404)
 
-            synch_date = users.get(username, {}).get('date', '')
-
-            if not synch_date:
-                # Date of synch is not known
-                return HttpResponse(status=409)
-
-            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(synch_date,
-                                                                              '%Y-%m-%d %H:%M:%S')).days >= 1:
-                # Data synched with telegram is older than 1 day
-                return HttpResponse(status=409)
+            # synch_date = users.get(username, {}).get('date', '')
+            #
+            # if not synch_date:
+            #     # Date of synch is not known
+            #     return HttpResponse(status=409)
+            #
+            # if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(synch_date,
+            #                                                                   '%Y-%m-%d %H:%M:%S')).days >= 1:
+            #     # Data synched with telegram is older than 1 day
+            #     return HttpResponse(status=409)
 
             # Users with freedom less than 30 days can't vote
             joined_date = users.get(username, {}).get('member', {}).get('member_parameters', {}).get('joined_date', '')
@@ -1569,15 +1578,15 @@ class VoteReferendumPageView(TemplateView):
             # Not member of group
             return HttpResponse(status=409)
 
-        synch_date = users.get(username, {}).get('date', '')
-
-        if not synch_date:
-            # Date of synch is not known
-            return HttpResponse(status=409)
-
-        if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(synch_date,'%Y-%m-%d %H:%M:%S')).days >= 1:
-            # Data synched with telegram is older than 1 day
-            return HttpResponse(status=409)
+        # synch_date = users.get(username, {}).get('date', '')
+        #
+        # if not synch_date:
+        #     # Date of synch is not known
+        #     return HttpResponse(status=409)
+        #
+        # if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(synch_date,'%Y-%m-%d %H:%M:%S')).days >= 1:
+        #     # Data synched with telegram is older than 1 day
+        #     return HttpResponse(status=409)
 
         opinion = data.get('opinion', '')
 
