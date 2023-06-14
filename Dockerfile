@@ -54,7 +54,7 @@
 #EXPOSE 8000
 
 # pull official base image
-FROM ubuntu:20.10.12
+FROM ubuntu:latest
 #FROM ubuntu:20.10.12
 
 # set work directory
