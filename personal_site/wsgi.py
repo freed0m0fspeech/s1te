@@ -13,6 +13,7 @@ from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "personal_site.settings")
 
+# TODO change
 from jobs import updater
 updater.start()
 
