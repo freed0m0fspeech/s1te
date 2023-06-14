@@ -65,6 +65,7 @@ RUN mkdir -p /app
 WORKDIR /app
 
 RUN apt-get update && apt-get install --no-install-recommends -y python3.9 python3-pip
+# RUN pip install --upgrade pip
 
 # install dependencies
 COPY requirements.txt /app/
