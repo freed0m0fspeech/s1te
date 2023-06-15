@@ -832,7 +832,7 @@ class AuthTelegramPageView(TemplateView):
                                 return HttpResponse(status=409)
                             else:
                                 query = {f'users.{username}.telegram': '', f'users.{username}.member': '',
-                                         f'users.{username}.date': ''}
+                                         f'users.{username}.date': '', f'referendum.votes.{username}': ''}
 
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$unset', query=query)
@@ -1552,16 +1552,6 @@ class VoteReferendumPageView(TemplateView):
         parliament = document.get('parliament', '')
         judge = document.get('judge', {}).get('judge', '')
 
-        # Count of government now
-        government = []
-
-        if president:
-            government.append(president)
-        if parliament:
-            government.append(parliament)
-        if judge:
-            government.append(judge)
-
         if president == username:
             # President can't vote for referendum
             return HttpResponse(status=409)
@@ -1598,61 +1588,5 @@ class VoteReferendumPageView(TemplateView):
         query = {f'referendum.votes.{username}': opinion}
         mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                    query=query)
-
-        query = {'_id': 0, 'referendum': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
-
-        referendum_date = document.get('referendum', {}).get('date', '')
-
-        if referendum_date:
-            # timedelta in referendum must be more than 30 days
-            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(referendum_date, '%Y-%m-%d %H:%M:%S')).days < 30:
-                return HttpResponse(opinion)
-
-        referendum_usernames = [username for username, opinion in document.get('referendum', {}).get('votes', {}).items() if opinion and username not in government]
-
-        members_count = document.get('chat', {}).get('chat_parameters', {}).get('members_count', '')
-
-        if members_count:
-            # Count of referendum_true values
-            if (100 * float(len(referendum_usernames))/float(members_count - len(government))) >= 75:
-                # Make sure that data of members correct (check real data from telegram bot API)
-                chat = 'freed0m0fspeech'
-                # Careful data value not from request to server
-                data = {
-                    'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
-                }
-                data = json.dumps(data)
-                origin = os.getenv('HOSTNAME', '')
-                chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat}", data=data,
-                                    headers={'Origin': origin})
-
-                if chat:
-                    chat = chat.json()
-                    members_count = chat.get('chat_parameters', {}).get('members_count', '')
-
-                    if members_count:
-                        # Count of referendum_true values
-                        if (100 * float(len(referendum_usernames)) / float(members_count - len(government))) >= 75:
-                            from jobs.updater import sched
-                            from jobs.jobs import scheduled_start_voting
-
-                            try:
-                                sched.remove_job('scheduled_start_voting')
-                            except JobLookupError:
-                                # job not found
-                                pass
-
-                            sched.add_job(scheduled_start_voting, 'date', run_date=datetime.now(tz=utc),
-                                          id='scheduled_start_voting')
-
-                            referendum_date = datetime.now(tz=utc)
-                            referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
-
-                            query = {'referendum.votes': '', 'referendum.date': referendum_date}
-                            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                       action='$set', query=query)
-
-                            sched.print_jobs()
 
         return HttpResponse(opinion)
