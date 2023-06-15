@@ -1588,6 +1588,11 @@ input:-webkit-autofill:active{
 .footer__community{
     display: grid;
     /*flex-wrap: wrap;*/
+    
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
 }
 
 .footer__list{
