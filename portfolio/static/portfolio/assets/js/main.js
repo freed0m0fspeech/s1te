@@ -175,17 +175,19 @@ window.addEventListener('scroll', scrollHeader)
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 const sr = ScrollReveal({
     origin: 'top',
-    distance: '60px',
-    duration: 2500,
-    delay: 400,
+    distance: '50px',
+    duration: 500,
+    // delay: 400,
+    // interval: 100,
     // reset: true /* Animations repeat */
 })
 
 sr.reveal(`.home__data, .projects__container, .testimonial__container, .footer__container`)
-sr.reveal(`.home__info div`, {delay:600, origin: 'bottom', interval: 100})
+sr.reveal(`.home__info:nth-child(odd) div`, {origin: 'left'})
+sr.reveal(`.home__info:nth-child(even) div`, {origin: 'right'})
 sr.reveal(`.skills__content:nth-child(odd), .contact__content:nth-child(odd)`, {origin: 'left'})
 sr.reveal(`.skills__content:nth-child(even), .contact__content:nth-child(even)`, {origin: 'right'})
-sr.reveal(`.qualification__content, .services__card`, {interval: 100})
+sr.reveal(`.qualification__content, .services__card`, {interval: 50})
 
 window.onload = function() {
     // Month Day, Year Hour:Minute:Second, id-of-element-container

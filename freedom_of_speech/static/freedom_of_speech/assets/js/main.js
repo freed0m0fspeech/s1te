@@ -135,17 +135,19 @@ window.addEventListener('scroll', scrollHeader)
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 const sr = ScrollReveal({
     origin: 'top',
-    distance: '60px',
-    duration: 2500,
-    delay: 400,
+    distance: '50px',
+    duration: 500,
+    // delay: 0,
+    // interval: 100,
     // reset: true /* Animations repeat */
 })
 
 sr.reveal(`.home__data, .constitution__container, .laws__container, .testimonial__container, .footer__container, .profile__data, .entry__container`)
-sr.reveal(`.home__info div, .profile__info div`, {delay:600, origin: 'bottom', interval: 100})
+sr.reveal(`.home__info:nth-child(odd) div, .profile__info:nth-child(odd) div`, {origin: 'left'})
+sr.reveal(`.home__info:nth-child(even) div, .profile__info:nth-child(even) div`, {origin: 'right'})
 sr.reveal(`.contact__content:nth-child(odd)`, {origin: 'left'})
 sr.reveal(`.contact__content:nth-child(even)`, {origin: 'right'})
-sr.reveal(`.government__card`, {interval: 100})
+sr.reveal(`.government__card`, {interval: 50})
 
 // let number = 69;
 
