@@ -102,8 +102,10 @@
                 </div>
 
                 {% if date_updated %}
-                    <div class="date__updated" id="date__updated">
-                        {{date_updated}} UTC
+                    <div class="date__updated">
+                        <p id="date__updated">
+                            {{date_updated}} UTC
+                        </p>
                     </div>
                 {% endif %}
             {%if authorized %}

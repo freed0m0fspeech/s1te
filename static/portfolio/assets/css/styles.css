@@ -631,6 +631,10 @@ input:-webkit-autofill:active{
     justify-items: center;
 }
 
+.date__updated p{
+    cursor: pointer;
+}
+
 .home__info-description,
 .home__info-number{
     font-family: var(--title-font);

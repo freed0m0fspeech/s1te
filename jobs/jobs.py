@@ -262,7 +262,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
         chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat}", data=data,
                             headers={'Origin': origin})
 
-        if chat:
+        if chat and chat.status_code == 200:
             chat = chat.json()
 
             date = datetime.now(tz=utc)
@@ -344,7 +344,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                     data=data, headers={'Origin': origin})
                 # sync_count += 1
 
-                if member:
+                if member and member.status_code == 200:
                     member = member.json()
 
                     date = datetime.now(tz=utc)
@@ -413,7 +413,7 @@ def scheduled_referendum_check():
         chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat}", data=data,
                             headers={'Origin': origin})
 
-        if chat:
+        if chat and chat.status_code == 200:
             chat = chat.json()
             members_count = chat.get('chat_parameters', {}).get('members_count', '')
 

@@ -862,30 +862,30 @@ class AuthTelegramPageView(TemplateView):
 
             member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{newtusername}",
                                   data=data, headers={'Origin': origin})
-            if member:
+            if member and member.status_code == 200:
                 member = member.json()
 
                 query = {f'users.{username}.member': member}
                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                            action='$set', query=query)
 
-                member_parameters = member.get('member_parameters', {})
-                if member_parameters:
-                    role = member_parameters.get('custom_title', '')
-                    if role:
-                        role = role.lower()
-
-                        if role == 'судья':
-                            if document.get('judge', {}).get('judge', '') != username:
-                                query = {f"judge.judge": username, f'referendum.votes.{username}': ''}
-                                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                           action='$set', query=query)
-
-                        if role == 'президент':
-                            if document.get('president', '') != username:
-                                query = {f"president": username, f'referendum.votes.{username}': ''}
-                                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                           action='$set', query=query)
+                # member_parameters = member.get('member_parameters', {})
+                # if member_parameters:
+                #     role = member_parameters.get('custom_title', '')
+                #     if role:
+                #         role = role.lower()
+                #
+                #         if role == 'судья':
+                #             if document.get('judge', {}).get('judge', '') != username:
+                #                 query = {f"judge.judge": username, f'referendum.votes.{username}': ''}
+                #                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                #                                            action='$set', query=query)
+                #
+                #         if role == 'президент':
+                #             if document.get('president', '') != username:
+                #                 query = {f"president": username, f'referendum.votes.{username}': ''}
+                #                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                #                                            action='$set', query=query)
                             # users = document.get('users', '')
                             # if users:
                             #     old_username = document.get('president', '')
@@ -902,11 +902,11 @@ class AuthTelegramPageView(TemplateView):
                             #     mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                             #                                action='$set', query=query)
 
-                        if role == 'парламент':
-                            if document.get('parliament', '') != username:
-                                query = {f"parliament": username, f'referendum.votes.{username}': ''}
-                                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                           action='$set', query=query)
+                        # if role == 'парламент':
+                        #     if document.get('parliament', '') != username:
+                        #         query = {f"parliament": username, f'referendum.votes.{username}': ''}
+                        #         mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                        #                                    action='$set', query=query)
                             # users = document.get('users', '')
                             # if users:
                             #     old_username = document.get('parliament', '')
@@ -1199,7 +1199,7 @@ class VoteParliamentPageView(TemplateView):
         else:
             HttpResponse(status=403)
 
-        return HttpResponse(409)
+        return HttpResponse(status=409)
 
 
 class VoteJudgePageView(TemplateView):
@@ -1246,6 +1246,14 @@ class VoteJudgePageView(TemplateView):
             judge = data.get('candidate', '')
         else:
             return HttpResponse(status=422)
+
+        if judge not in document.get('candidates', {}):
+            # Voting for not candidate
+            return HttpResponse(status=409)
+
+        if not users.get(judge, {}).get('member', {}):
+            # Not member of group
+            return HttpResponse(status=401)
 
         if judge:
             tjudge = users.get(judge, {}).get('telegram', {}).get('username', '')
@@ -1462,8 +1470,12 @@ class VoteCandidatePageView(TemplateView):
             return HttpResponse(status=422)
 
         if not users.get(username, {}).get('telegram', {}):
-            # Users without telegram account can't vote
+            # Users without telegram account can't stand
             return HttpResponse(status=404)
+
+        if not users.get(username, {}).get('member', {}):
+            # Not member of group
+            return HttpResponse(status=401)
 
         if document.get('end_vote', ''):
             # Cannot stand during vote
@@ -1590,3 +1602,123 @@ class VoteReferendumPageView(TemplateView):
                                    query=query)
 
         return HttpResponse(opinion)
+
+class UpdateChatPageView(TemplateView):
+    async def get(self, request, *args, **kwargs):
+        return HttpResponse(status=404)
+
+    async def post(self, request, *args, **kwargs):
+        data = request.POST
+
+        if not data:
+            return HttpResponse(status=422)
+
+        query = {'_id': 0, 'chat': 1}
+        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        last_update = document.get('chat', {}).get('date', '')
+
+        if last_update:
+            # timedelta in referendum must be more than 30 days
+            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update, '%Y-%m-%d %H:%M:%S')).seconds < 300:
+                # Too many requests
+                return HttpResponse(status=429)
+        else:
+            return HttpResponse(status=422)
+
+        chat = 'freed0m0fspeech'
+        data = {
+            'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+        }
+        data = json.dumps(data)
+        origin = os.getenv('HOSTNAME', '')
+        chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat}", data=data,
+                            headers={'Origin': origin})
+
+        if chat and chat.status_code == 200:
+            chat = chat.json()
+
+            date = datetime.now(tz=utc)
+            date = date.strftime('%Y-%m-%d %H:%M:%S')
+
+            query = {'chat.chat_parameters': chat.get('chat_parameters', {}), 'chat.date': date}
+            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                       action='$set', query=query)
+
+            return HttpResponse()
+        else:
+            return HttpResponse(status=422)
+
+
+class UpdateMemberPageView(TemplateView):
+    async def get(self, request, *args, **kwargs):
+        return HttpResponse(status=404)
+
+    async def post(self, request, *args, **kwargs):
+        data = request.POST
+
+        if not data:
+            return HttpResponse(status=422)
+
+        username = data.get('username', '')
+
+        if not username:
+            # No username to update member info
+            return HttpResponse(status=422)
+
+        query = {'_id': 0, 'users': 1}
+        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        user = document.get('users', {}).get(username, {})
+
+        last_update = user.get('date', '')
+
+        if last_update:
+            # timedelta in referendum must be more than 30 days
+            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update, '%Y-%m-%d %H:%M:%S')).seconds < 300:
+                # Too many requests
+                return HttpResponse(status=429)
+        else:
+            return HttpResponse(status=422)
+
+        telegram_username = user.get('telegram', {}).get('username', '')
+
+        if not telegram_username:
+            # No telegram username to update member info
+            return HttpResponse(status=422)
+
+        chat = 'freed0m0fspeech'
+        data = {
+            'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+        }
+        data = json.dumps(data)
+        origin = os.getenv('HOSTNAME', '')
+
+        member = requests.get(
+            f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{telegram_username}",
+            data=data, headers={'Origin': origin})
+
+        if member and member.status_code == 200:
+            member = member.json()
+
+            date = datetime.now(tz=utc)
+            date = date.strftime('%Y-%m-%d %H:%M:%S')
+
+            query = {f'users.{username}.member': member, f'users.{username}.date': date}
+            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                       action='$set', query=query)
+
+            return HttpResponse()
+        else:
+            if member.status_code == 422:
+                # if not member or not user or not chat:
+                #     return Response(status=422)
+
+                date = datetime.now(tz=utc)
+                date = date.strftime('%Y-%m-%d %H:%M:%S')
+
+                query = {f'users.{username}.member': '', f'users.{username}.date': date, f'referendum.votes.{username}': ''}
+                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                           action='$set', query=query)
+
+            return HttpResponse(status=422)

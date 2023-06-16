@@ -1085,8 +1085,6 @@ $('#government__votes_judge').on('click', function (e){
             success: function(data, status, jqXHR) {
                 candidate = data
 
-                console.log(candidate)
-
                 if (candidate === ''){
                     $('#government__vote_judge-selected').html('Выбери <i class="ri-arrow-down-circle-line"></i>')
                 }else
@@ -1103,7 +1101,11 @@ $('#government__votes_judge').on('click', function (e){
                     if (candidate === '')
                         alert('Судьи в данный момент нет')
                     else
-                        alert('Этот пользователь не может быть судьей')
+                        alert('Этот пользователь не может быть Судьей')
+                if (xhr.status === 409)
+                    alert('Этот пользователь не может быть Судьей')
+                if(xhr.status === 401)
+                    alert('Только участники Telegram группы "Freedom of speech" могут быть Судьей')
                 // contactMessage.text('Возникли проблемы с вашим запросом')
             },
         });
@@ -1214,12 +1216,58 @@ $('.government__card').on('click', function (e){
                     console.log('422')
                 if (xhr.status === 409)
                     alert('В данный момент Вы не можете баллотироваться')
+                if(xhr.status === 401)
+                    alert('Только участники Telegram группы "Freedom of speech" могут баллотироваться')
             },
         });
     }else {
         console.log('Cancel vote')
     }
 });
+
+$('#date__updated').on('click', function (e){
+    e.stopPropagation()
+
+    const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+    let target = ''
+    let username = ''
+    try {
+        username = window.location.href.split('freedom_of_speech/profile/')[1].replace('/', '')
+    }catch (e){
+        // console.log(e.message)
+    }
+
+    if ($(this).parent().parent().hasClass('home__data'))
+        target = 'chat'
+    else if ($(this).parent().parent().hasClass('profile__data'))
+        target = 'member'
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            xhr.setRequestHeader('X-CSRFToken', csrf_token);
+        }
+    });
+
+    $.ajax({
+        type: 'post',
+        url: `/freedom_of_speech/update/${target}/`,
+        data: {
+            username: username,
+        },
+        success: function(data, status, jqXHR) {
+            setTimeout(() => {
+                window.location.reload()
+            }, 0);
+        },
+        error(xhr,status,error){
+            if (xhr.status === 422)
+                alert('Произошла ошибка во время обновления данных')
+            if(xhr.status === 429)
+                alert('Обновлять данные можно только каждые 5 минут')
+        },
+    });
+});
+
 
 $(document).on('click', function (e){
     // Close all popup menus
