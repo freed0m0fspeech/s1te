@@ -1032,7 +1032,7 @@ class VotePresidentPageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'votes': 1}
+        query = {'_id': 0, 'users': 1, 'votes': 1, 'candidates': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                               query=query)
 
