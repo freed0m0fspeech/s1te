@@ -250,6 +250,9 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
     # sched.add_job(scheduled_telegram_synching, 'date', run_date=sync_time, id='scheduled_telegram_synching')
     # print('Scheduled Telegram Synching Running')
     try:
+        query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'referendum': 1}
+        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
         chat = 'freed0m0fspeech'
         data = {
             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -269,10 +272,54 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
             mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                        action='$set', query=query)
 
-            time.sleep(60)
+            # Check for referendum
+            referendum_date = document.get('referendum', {}).get('date', '')
 
-        query = {'_id': 0, 'users': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+            if referendum_date:
+                # timedelta in referendum must be more than 30 days
+                if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(referendum_date, '%Y-%m-%d %H:%M:%S')).days >= 30:
+                    president = document.get('president', '')
+                    parliament = document.get('parliament', '')
+                    judge = document.get('judge', {}).get('judge', '')
+
+                    # Count of government now
+                    government = []
+
+                    if president:
+                        government.append(president)
+                    if parliament:
+                        government.append(parliament)
+                    if judge:
+                        government.append(judge)
+
+                    referendum_usernames = [username for username, opinion in
+                                            document.get('referendum', {}).get('votes', {}).items() if
+                                            opinion and username not in government]
+
+
+                    members_count = chat.get('chat_parameters', {}).get('members_count', '')
+
+                    if members_count:
+                        # Count of referendum_true values
+                        if (100 * float(len(referendum_usernames)) / float(members_count - len(government))) >= 75:
+
+                            try:
+                                sched.remove_job('scheduled_start_voting')
+                            except JobLookupError:
+                                # job not found
+                                pass
+
+                            sched.add_job(scheduled_start_voting, 'date', run_date=datetime.now(tz=utc),
+                                          id='scheduled_start_voting')
+
+                            referendum_date = datetime.now(tz=utc)
+                            referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
+
+                            query = {'referendum.votes': '', 'referendum.date': referendum_date}
+                            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                       action='$set', query=query)
+
+        time.sleep(60)
 
         users = document.get('users', '')
 
@@ -318,38 +365,8 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                         mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                    action='$set', query=query)
 
-                    # member_parameters = member.get('member_parameters', {})
-                    # if member_parameters:
-                    #     role = member_parameters.get('custom_title', '')
-                    #     if role:
-                    #         role = role.lower()
-                    #
-                    #         if role == 'судья':
-                    #             if document.get('judge', '') != user:
-                    #                 query = {f"judge": user}
-                    #                 mongoDataBase.update_field(database_name='site',
-                    #                                            collection_name='freedom_of_speech',
-                    #                                            action='$set', query=query)
-                    #
-                    #         if role == 'президент':
-                    #             if document.get('president', '') != user:
-                    #                 query = {f"president": user}
-                    #                 mongoDataBase.update_field(database_name='site',
-                    #                                            collection_name='freedom_of_speech',
-                    #                                            action='$set', query=query)
-                    #
-                    #         if role == 'парламент':
-                    #             if document.get('parliament', '') != user:
-                    #                 query = {f"parliament": user}
-                    #                 mongoDataBase.update_field(database_name='site',
-                    #                                            collection_name='freedom_of_speech',
-                    #                                            action='$set', query=query)
-
-                # if sync_count == stop:
-                #     return
-
-                # print(f'Synched {sync_count}')
                 time.sleep(60)
+
 
     except Exception as e:
         print(e)
@@ -420,7 +437,6 @@ def scheduled_referendum_check():
                     mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                action='$set', query=query)
 
-                    sched.print_jobs()
     except Exception as e:
         print(e)
 

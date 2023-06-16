@@ -1034,7 +1034,7 @@ input:-webkit-autofill:active{
     text-align: center;
 }
 
-.government__vote a{
+.government__vote div, .government__vote a{
     cursor: pointer;
     color: var(--title-color);
     width: max-content;

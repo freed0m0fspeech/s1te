@@ -979,7 +979,7 @@ $('#government__votes_president').on('click', function (e){
                 candidate = data
 
                 $('#government__vote_president').off('click')
-                $('#government__vote_president-selected').prop('href', "/freedom_of_speech/profile/".concat(candidate, '/')).text(candidate)
+                $('#government__vote_president-selected').html(`<a href="/freedom_of_speech/profile/${candidate}/">${candidate}</a>`)
                 $('#government__votes_president').removeClass('government__votes-open')
             },
             error(xhr,status,error){
@@ -1028,7 +1028,7 @@ $('#government__votes_parliament').on('click', function (e){
                 candidate = data
 
                 $('#government__vote_parliament').off('click')
-                $('#government__vote_parliament-selected').prop("href", "/freedom_of_speech/profile/".concat(candidate, '/')).text(candidate)
+                $('#government__vote_parliament-selected').html(`<a href="/freedom_of_speech/profile/${candidate}/">${candidate}</a>`)
                 $('#government__votes_parliament').removeClass('government__votes-open')
             },
             error(xhr,status,error){
@@ -1062,8 +1062,10 @@ $('#government__votes_judge').on('click', function (e){
 
     let confirm_text
 
-    if (candidate === '—')
+    if (candidate === '—') {
         confirm_text = 'Снять кандидата?'
+        candidate = ''
+    }
     else
         confirm_text = 'Проголосовать за кандидата '.concat(candidate, '?')
 
@@ -1083,8 +1085,13 @@ $('#government__votes_judge').on('click', function (e){
             success: function(data, status, jqXHR) {
                 candidate = data
 
-                // $('#government__vote_judge').off('click')
-                $('#government__vote_judge-selected').prop("href", "/freedom_of_speech/profile/".concat(candidate, '/')).text(candidate)
+                console.log(candidate)
+
+                if (candidate === ''){
+                    $('#government__vote_judge-selected').html('Выбери <i class="ri-arrow-down-circle-line"></i>')
+                }else
+                    $('#government__vote_judge-selected').text(candidate)
+
                 $('#government__votes_judge').removeClass('government__votes-open')
             },
             error(xhr,status,error){

@@ -19,7 +19,7 @@
                     {% else %}
                         <div class="government__president">
                             <div class="government__vote" id="government__vote_president">
-                                <a href="" class="government__vote-selected" id="government__vote_president-selected">Проголосуй <i class="ri-arrow-down-circle-line"></i></a>
+                                <div class="government__vote-selected" id="government__vote_president-selected">Проголосуй <i class="ri-arrow-down-circle-line"></i></div>
             <!--                    <div class="government__caret"></div>-->
                             </div>
                             <ul class="government__votes" id="government__votes_president">
@@ -55,7 +55,7 @@
                     {% else %}
                         <div class="government__parliament">
                             <div class="government__vote" id="government__vote_parliament">
-                                <a href="" class="government__vote-selected" id="government__vote_parliament-selected">Проголосуй <i class="ri-arrow-down-circle-line"></i></a>
+                                <div class="government__vote-selected" id="government__vote_parliament-selected">Проголосуй <i class="ri-arrow-down-circle-line"></i></div>
                                 <!--                    <div class="government__caret"></div>-->
                             </div>
                             <ul class="government__votes" id="government__votes_parliament">
@@ -87,7 +87,7 @@
                     {% if is_president or is_parliament %}
                         <div class="government__judge">
                             <div class="government__vote" id="{% if is_parliament or is_president %}government__vote_judge{% endif %}">
-                                <a href="/freedom_of_speech/profile/{{judge}}/" id="government__vote_judge-selected">{{judge}} <i class="ri-arrow-down-circle-line"></i></a>
+                                <div id="government__vote_judge-selected">{{judge}} <i class="ri-arrow-down-circle-line"></i></div>
                             </div>
                             <ul class="government__votes" id="government__votes_judge">
                                 <li>—</li>
@@ -107,7 +107,7 @@
                     {% if is_president or is_parliament %}
                         <div class="government__judge">
                             <div class="government__vote" id="{% if is_parliament or is_president %}government__vote_judge{% endif %}">
-                                <a href="#government" id="government__vote_judge-selected">Выбери <i class="ri-arrow-down-circle-line"></i></a>
+                                <div id="government__vote_judge-selected">Выбери <i class="ri-arrow-down-circle-line"></i></div>
                                 <!--                    <div class="government__caret"></div>-->
                             </div>
                             <ul class="government__votes" id="government__votes_judge">
@@ -135,10 +135,10 @@
 
         <div class="government__stand">
             <div class="government__vote">
-                <a href="" class="government__vote-selected" id="government__vote">
+                <div class="government__vote-selected" id="government__vote">
                     Референдум
                     <i class="ri-arrow-down-circle-line"></i>
-                </a>
+                </div>
                 <!--                    <div class="government__caret"></div>-->
             </div>
             <ul class="government__votes" id="government__votes">

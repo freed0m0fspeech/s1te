@@ -34,9 +34,9 @@ def start():
         sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting')
 
     # Referendum check job (every day)
-    sched.add_job(scheduled_referendum_check, 'interval', days=1, id='scheduled_referendum_check')
+    # sched.add_job(scheduled_referendum_check, 'interval', days=1, id='scheduled_referendum_check')
 
-    # Telegram synch job (every 4 hours) (runs at start)
+    # Telegram synch job and referendum check (every 4 hours)
     sched.add_job(scheduled_telegram_synching, 'interval', hours=4, id='scheduled_telegram_synching')
 
     # sched.get_job('scheduled_telegram_synching').modify(next_run_time=datetime.now(tz=utc))
