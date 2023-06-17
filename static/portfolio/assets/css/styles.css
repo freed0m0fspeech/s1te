@@ -136,7 +136,7 @@ img {
     font-size: 1.25rem;
     color: var(--title-color);
     cursor: pointer;
-    transition: color .3s;
+    /*transition: color .3s;*/
 }
 
 /*========== Variables Dark theme ==========*/
@@ -378,7 +378,7 @@ input:-webkit-autofill:active{
     row-gap: .25rem;
     font-size: var(--small-font-size);
     color: var(--text-color-light);
-    transition: color .3s;
+    /*transition: color .3s;*/
 }
 
 .nav__link:hover{
@@ -590,7 +590,7 @@ input:-webkit-autofill:active{
 .home__community-link{
     font-size: 1.25rem;
     color: var(--text-color-light);
-    transition: color .3s;
+    /*transition: color .3s;*/
 }
 
 .home__community-link i{
@@ -629,6 +629,10 @@ input:-webkit-autofill:active{
     justify-content: center;
     align-items: center;
     justify-items: center;
+    /*display: flex;*/
+    /*align-content: center;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
 }
 
 .date__updated p{
@@ -736,7 +740,7 @@ input:-webkit-autofill:active{
 .profile__community-link{
     font-size: 1.5rem;
     color: var(--text-color-light);
-    transition: color .3s;
+    /*transition: color .3s;*/
 }
 
 .profile__community-link__True{

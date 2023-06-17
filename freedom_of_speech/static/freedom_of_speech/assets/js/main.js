@@ -263,7 +263,7 @@ function countUpFromTime(countFrom, id) {
     // idEl.getElementsByClassName('hours')[0].innerHTML = hours;
     // idEl.getElementsByClassName('minutes')[0].innerHTML = mins;
     // idEl.getElementsByClassName('seconds')[0].innerHTML = secs;
-    idEl.textContent = ''.concat(years.toString(), ' г ', days.toString(), ' д ', hours.toString(), 'ч:', mins.toString(), 'м:', secs.toString(), 'с');
+    idEl.textContent = ''.concat(years.toString(), 'г ', days.toString(), 'д ', hours.toString(), 'ч:', mins.toString(), 'м:', secs.toString(), 'с');
 
     clearTimeout(countUpFromTime.interval);
     countUpFromTime.interval = setTimeout(function(){ countUpFromTime(countFrom, id); }, 1000);
@@ -312,7 +312,7 @@ function countDownFromTime(countTo, id, date) {
     // idEl.getElementsByClassName('hours')[0].innerHTML = hours;
     // idEl.getElementsByClassName('minutes')[0].innerHTML = mins;
     // idEl.getElementsByClassName('seconds')[0].innerHTML = secs;
-    idEl.textContent = ''.concat(days.toString(), ' д ', hours.toString(), 'ч:', mins.toString(), 'м:', secs.toString(), 'с');
+    idEl.textContent = ''.concat(days.toString(), 'д ', hours.toString(), 'ч:', mins.toString(), 'м:', secs.toString(), 'с');
 
     clearTimeout(countDownFromTime.interval);
     countDownFromTime.interval = setTimeout(function(){ countDownFromTime(countTo, id); }, 1000);
@@ -1263,7 +1263,7 @@ $('#date__updated').on('click', function (e){
             if (xhr.status === 422)
                 alert('Произошла ошибка во время обновления данных')
             if(xhr.status === 429)
-                alert('Обновлять данные можно только каждые 5 минут')
+                alert('Обновлять данные можно только каждые 30 минут')
         },
     });
 });

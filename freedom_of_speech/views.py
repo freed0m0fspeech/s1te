@@ -799,7 +799,7 @@ class AuthTelegramPageView(TemplateView):
             username = cookies.get('username', '')
 
             if 'sessionid' and 'username' in cookies:
-                query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'candidates': 1}
+                query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'candidates': 1, 'chat': 1}
 
                 document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                                       query=query)
@@ -847,7 +847,7 @@ class AuthTelegramPageView(TemplateView):
             mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                        query=query)
 
-            chat = 'freed0m0fspeech'
+            chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
 
             # publicKeyReloaded = rsa.PublicKey.load_pkcs1(os.getenv('RSA_PUBLIC_KEY', '').encode('utf8'))
 
@@ -860,7 +860,7 @@ class AuthTelegramPageView(TemplateView):
             origin = os.getenv('HOSTNAME', '')
             # origin = rsa.encrypt(origin, publicKeyReloaded)
 
-            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{newtusername}",
+            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{newtusername}",
                                   data=data, headers={'Origin': origin})
             if member and member.status_code == 200:
                 member = member.json()
@@ -1214,7 +1214,7 @@ class VoteJudgePageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1}
+        query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'chat': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                               query=query)
 
@@ -1286,14 +1286,14 @@ class VoteJudgePageView(TemplateView):
                         text = f"{text}Судья [{judge_info.get('judge', '')}](t.me/{tjudge}) был(а) снят(а) со своего поста"
 
                         # Demote judge in chat
-                        chat = 'freed0m0fspeech'
+                        chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
                         origin = os.getenv('HOSTNAME', '')
                         data = {
                             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                             'action': 'demote_chat_member',
                         }
                         data = json.dumps(data)
-                        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat}/{tjudge}",
+                        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
                                       data=data, headers={'Origin': origin})
                     else:
                         return HttpResponse(status=404)
@@ -1304,7 +1304,7 @@ class VoteJudgePageView(TemplateView):
                         text = f"{text}Новый Судья: [{judge}](t.me/{tjudge})"
 
                         # Promote new judge (tjudge)
-                        chat = 'freed0m0fspeech'
+                        chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
                         origin = os.getenv('HOSTNAME', '')
                         data = {
                             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1312,20 +1312,20 @@ class VoteJudgePageView(TemplateView):
                             'parameters': {'custom_title': 'Cудья'},
                         }
                         data = json.dumps(data)
-                        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat}/{tjudge}",
+                        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
                                       data=data, headers={'Origin': origin})
 
                         ojudge = judge_info.get('judge', '')
                         if ojudge:
                             # Demote old judge
-                            chat = 'freed0m0fspeech'
+                            chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
                             origin = os.getenv('HOSTNAME', '')
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                                 'action': 'demote_chat_member',
                             }
                             data = json.dumps(data)
-                            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat}/{ojudge}",
+                            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{ojudge}",
                                           data=data, headers={'Origin': origin})
                     else:
                         return HttpResponse(status=404)
@@ -1345,14 +1345,14 @@ class VoteJudgePageView(TemplateView):
                         if tjudge:
                             text = f"{text}Судья [{judge_info.get('judge', '')}](t.me/{tjudge}) был(а) снят(а) со своего поста"
 
-                            chat = 'freed0m0fspeech'
+                            chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
                             origin = os.getenv('HOSTNAME', '')
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                                 'action': 'demote_chat_member',
                             }
                             data = json.dumps(data)
-                            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat}/{tjudge}",
+                            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
                                           data=data, headers={'Origin': origin})
                         else:
                             return HttpResponse(status=404)
@@ -1363,7 +1363,7 @@ class VoteJudgePageView(TemplateView):
                             text = f"{text}Новый Судья: [{judge}](t.me/{tjudge})"
 
                             # Promote new judge (tjudge)
-                            chat = 'freed0m0fspeech'
+                            chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
                             origin = os.getenv('HOSTNAME', '')
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1371,20 +1371,20 @@ class VoteJudgePageView(TemplateView):
                                 'parameters': {'custom_title': 'Cудья'},
                             }
                             data = json.dumps(data)
-                            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat}/{tjudge}",
+                            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
                                           data=data, headers={'Origin': origin})
 
                             ojudge = judge_info.get('judge', '')
                             if ojudge:
                                 # Demote old judge
-                                chat = 'freed0m0fspeech'
+                                chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
                                 origin = os.getenv('HOSTNAME', '')
                                 data = {
                                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                                     'action': 'demote_chat_member',
                                 }
                                 data = json.dumps(data)
-                                requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat}/{ojudge}",
+                                requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{ojudge}",
                                               data=data, headers={'Origin': origin})
                         else:
                             return HttpResponse(status=404)
@@ -1404,7 +1404,7 @@ class VoteJudgePageView(TemplateView):
             if not query:
                 query = {f'judge.{role}': judge}
             else:
-                chat = 'freed0m0fspeech'
+                chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
                 origin = os.getenv('HOSTNAME', '')
                 data = {
                     "text": text,
@@ -1413,7 +1413,7 @@ class VoteJudgePageView(TemplateView):
 
                 data = json.dumps(data)
 
-                requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat}", data=data,
+                requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat_username}", data=data,
                               headers={'Origin': origin})
 
             mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
@@ -1619,20 +1619,20 @@ class UpdateChatPageView(TemplateView):
         last_update = document.get('chat', {}).get('date', '')
 
         if last_update:
-            # timedelta in referendum must be more than 30 days
-            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update, '%Y-%m-%d %H:%M:%S')).seconds < 300:
+            # update only every 30 minutes
+            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update, '%Y-%m-%d %H:%M:%S')).seconds < 1800:
                 # Too many requests
                 return HttpResponse(status=429)
         else:
             return HttpResponse(status=422)
 
-        chat = 'freed0m0fspeech'
+        chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
         data = {
             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
         }
         data = json.dumps(data)
         origin = os.getenv('HOSTNAME', '')
-        chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat}", data=data,
+        chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat_username}", data=data,
                             headers={'Origin': origin})
 
         if chat and chat.status_code == 200:
@@ -1666,7 +1666,7 @@ class UpdateMemberPageView(TemplateView):
             # No username to update member info
             return HttpResponse(status=422)
 
-        query = {'_id': 0, 'users': 1}
+        query = {'_id': 0, 'users': 1, 'chat': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
         user = document.get('users', {}).get(username, {})
@@ -1674,8 +1674,8 @@ class UpdateMemberPageView(TemplateView):
         last_update = user.get('date', '')
 
         if last_update:
-            # timedelta in referendum must be more than 30 days
-            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update, '%Y-%m-%d %H:%M:%S')).seconds < 300:
+            # update only every 30 minutes
+            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update, '%Y-%m-%d %H:%M:%S')).seconds < 1800:
                 # Too many requests
                 return HttpResponse(status=429)
         else:
@@ -1687,7 +1687,7 @@ class UpdateMemberPageView(TemplateView):
             # No telegram username to update member info
             return HttpResponse(status=422)
 
-        chat = 'freed0m0fspeech'
+        chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
         data = {
             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
         }
@@ -1695,7 +1695,7 @@ class UpdateMemberPageView(TemplateView):
         origin = os.getenv('HOSTNAME', '')
 
         member = requests.get(
-            f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat}/{telegram_username}",
+            f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{telegram_username}",
             data=data, headers={'Origin': origin})
 
         if member and member.status_code == 200:
