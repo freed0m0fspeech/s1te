@@ -358,6 +358,12 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                     chat_usernae = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
                     telegram_username = telegram.get('username', '')
 
+                    data = {
+                        'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+                    }
+                    data = json.dumps(data)
+                    origin = os.getenv('HOSTNAME', '')
+
                     member = requests.get(
                         f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_usernae}/{telegram_username}",
                         data=data, headers={'Origin': origin})
