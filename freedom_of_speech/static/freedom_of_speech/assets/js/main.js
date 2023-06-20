@@ -142,7 +142,8 @@ const sr = ScrollReveal({
     // reset: true /* Animations repeat */
 })
 
-sr.reveal(`.home__data, .constitution__container, .laws__container, .testimonial__container, .footer__container, .profile__data, .entry__container`)
+sr.reveal(`.home__data, .constitution__content, .laws__content, .testimonial__container, .profile__data, .entry__content`, {origin: 'top'})
+sr.reveal(`.footer__container`, {origin: 'bottom'})
 sr.reveal(`.home__info:nth-child(odd) div, .profile__info:nth-child(odd) div`, {origin: 'left'})
 sr.reveal(`.home__info:nth-child(even) div, .profile__info:nth-child(even) div`, {origin: 'right'})
 sr.reveal(`.contact__content:nth-child(odd)`, {origin: 'left'})
