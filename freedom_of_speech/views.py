@@ -939,7 +939,7 @@ class ProfilePageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1}
+        query = {'_id': 0, 'users': 1, 'candidates': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                               query=query)
 
@@ -995,7 +995,11 @@ class ProfilePageView(TemplateView):
                             if member_parameters:
                                 context['role'] = member_parameters.get('custom_title', 'Участник')
                                 if not context['role']:
-                                    context['role'] = 'Участник'
+                                    candidate = document.get('candidates', {}).get(username, '')
+                                    if candidate:
+                                        context['role'] = 'Кандидат'
+                                    else:
+                                        context['role'] = 'Участник'
 
                                 joined_date = member_parameters.get('joined_date', '')
                                 if joined_date:
@@ -1007,6 +1011,7 @@ class ProfilePageView(TemplateView):
                                         context['joined_date'] = date.strftime('%Y-%m-%d %H:%M:%S')
                     else:
                         context['telegram_link_status'] = False
+                        context['role'] = 'Аноним'
                 else:
                     return HttpResponse(status=404)
             else:
