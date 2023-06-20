@@ -13,12 +13,12 @@
 
                 {% if end_vote %}
                     {% if president_voted %}
-                        <div class="government__vote">
+                        <div class="government__vote-default">
                             <a href="/freedom_of_speech/profile/{{president_voted}}/">{{president_voted}}</a>
                         </div>
                     {% else %}
                         <div class="government__president">
-                            <div class="government__vote" id="government__vote_president">
+                            <div class="government__vote-animation" id="government__vote_president">
                                 <div class="government__vote-selected" id="government__vote_president-selected">Проголосуй <i class="ri-arrow-down-circle-line"></i></div>
             <!--                    <div class="government__caret"></div>-->
                             </div>
@@ -49,12 +49,12 @@
 
                 {% if end_vote %}
                     {% if parliament_voted %}
-                        <div class="government__vote">
+                        <div class="government__vote-default">
                             <a href="/freedom_of_speech/profile/{{parliament_voted}}/">{{parliament_voted}}</a>
                         </div>
                     {% else %}
                         <div class="government__parliament">
-                            <div class="government__vote" id="government__vote_parliament">
+                            <div class="government__vote-animation" id="government__vote_parliament">
                                 <div class="government__vote-selected" id="government__vote_parliament-selected">Проголосуй <i class="ri-arrow-down-circle-line"></i></div>
                                 <!--                    <div class="government__caret"></div>-->
                             </div>
@@ -86,8 +86,8 @@
                 {% if judge %}
                     {% if is_president or is_parliament %}
                         <div class="government__judge">
-                            <div class="government__vote" id="{% if is_parliament or is_president %}government__vote_judge{% endif %}">
-                                <div id="government__vote_judge-selected">{{judge}} <i class="ri-arrow-down-circle-line"></i></div>
+                            <div class="government__vote-default" id="{% if is_parliament or is_president %}government__vote_judge{% endif %}">
+                                <div id="government__vote_judge-selected" class="government__vote-selected">{{judge}} <i class="ri-arrow-down-circle-line"></i></div>
                             </div>
                             <ul class="government__votes" id="government__votes_judge">
                                 <li>—</li>
@@ -106,8 +106,8 @@
                 {% else %}
                     {% if is_president or is_parliament %}
                         <div class="government__judge">
-                            <div class="government__vote" id="{% if is_parliament or is_president %}government__vote_judge{% endif %}">
-                                <div id="government__vote_judge-selected">Выбери <i class="ri-arrow-down-circle-line"></i></div>
+                            <div class="government__vote-animation" id="{% if is_parliament or is_president %}government__vote_judge{% endif %}">
+                                <div id="government__vote_judge-selected" class="government__vote-selected">Выбери <i class="ri-arrow-down-circle-line"></i></div>
                                 <!--                    <div class="government__caret"></div>-->
                             </div>
                             <ul class="government__votes" id="government__votes_judge">
@@ -134,7 +134,7 @@
 
 
         <div class="government__stand">
-            <div class="government__vote">
+            <div class="government__vote-default">
                 <div class="government__vote-selected" id="government__vote">
                     Референдум
                     <i class="ri-arrow-down-circle-line"></i>

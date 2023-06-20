@@ -1219,7 +1219,7 @@ class VoteJudgePageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'chat': 1}
+        query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'chat': 1, 'candidates': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                               query=query)
 
@@ -1252,11 +1252,11 @@ class VoteJudgePageView(TemplateView):
         else:
             return HttpResponse(status=422)
 
-        if judge not in document.get('candidates', {}):
+        if judge not in document.get('candidates', {}) and judge:
             # Voting for not candidate
             return HttpResponse(status=409)
 
-        if not users.get(judge, {}).get('member', {}):
+        if not users.get(judge, {}).get('member', {}) and judge:
             # Not member of group
             return HttpResponse(status=401)
 
