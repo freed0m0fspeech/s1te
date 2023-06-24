@@ -1038,11 +1038,11 @@ input:-webkit-autofill:active{
     opacity: 1;
 }
 
-.government__vote{
+.government__vote-animation{
     text-align: center;
 }
 
-.government__vote div, .government__vote a{
+.government__vote-animation div, .government__vote-animation a{
     cursor: pointer;
     color: var(--title-color);
     width: max-content;
@@ -1056,8 +1056,37 @@ input:-webkit-autofill:active{
     animation: deeppink-deepskyblue infinite 3s;
 }
 
-.government__vote:hover i{
+.government__vote-default{
+    text-align: center;
+    /*display: grid;*/
+    /*justify-items: center;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    /*animation: deeppink-deepskyblue infinite 3s;*/
+}
+
+.government__vote-default div, .government__vote-default a{
+    cursor: pointer;
+    color: var(--title-color);
+    width: max-content;
+    display: inline-flex;
+    align-items: center;
+    column-gap: 0.5rem;
+}
+
+.government__vote-animation i{
     font-size: 1rem;
+    /*transition: transform .3s;*/
+    /*animation: popup infinite 1s;*/
+}
+
+.government__vote-default i{
+    font-size: 1rem;
+    /*transition: transform .3s;*/
+    /*animation: popup infinite 1s;*/
+}
+
+.government__vote-selected:hover i{
     transition: transform .3s;
     animation: popup infinite 1s;
 }
@@ -1113,10 +1142,6 @@ input:-webkit-autofill:active{
 
 .government__votes-active{
     color: var(--title-color);
-}
-
-.government__votes-selected{
-
 }
 
 .government__votes-open{
@@ -1376,6 +1401,10 @@ input:-webkit-autofill:active{
 
     overflow: hidden;
     text-overflow: ellipsis;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
 }
 
 .testimonial__name{
@@ -1545,7 +1574,9 @@ input:-webkit-autofill:active{
 
 .contact__form-area textarea{
     resize: none;
-    overflow: hidden; /* not show scroll in text area*/
+    /*overflow: hidden; !* not show scroll in text area*!*/
+    overflow: scroll;
+    overflow-x: hidden;
 }
 
 .contact__form .contact__button{
@@ -1879,6 +1910,14 @@ input:-webkit-autofill:active{
 
 .government__votes::-webkit-scrollbar-thumb:hover{
     background-color: hsl(328, 100%, 54%); /* Scrollbar-thumb color pink - hsl(328, 100%, 54%);*/
+}
+
+.contact__form-input::-webkit-scrollbar {
+    background-color: hsl(0, 0%, 0%, 0%);
+}
+
+.contact__form-input::-webkit-scrollbar-thumb{
+    background-color: hsl(0, 0%, 0%, 0%);
 }
 
 /*=============== SCROLL UP ===============*/
