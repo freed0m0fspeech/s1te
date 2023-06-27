@@ -2,48 +2,23 @@
 <section class="testimonial section" id="testimonial">
 
     <!--==================== TESTIMONIAL ====================-->
-    <h2 class="section__title">Testimonial</h2>
-    <span class="section__subtitle">My client saying</span>
+    <h2 class="section__title">Testimonials</h2>
+    <span class="section__subtitle">About me saying</span>
 
     <div class="container section__border">
         <div class="testimonial__container swiper">
             <div class="swiper-wrapper">
-                <!--==================== TESTIMONIAL 1 ====================-->
-                <div class="testimonial__content swiper-slide">
-                    <p class="testimonial__description">
-                        "Oh I'm sorry..."
-                    </p>
-
-                    <div>
-                        <h3 class="testimonial__name">Billy Herrington</h3>
-                        <span class="testimonial__subtitle">Client</span>
+                {% for testimonial in testimonials %}
+                    <div class="testimonial__content swiper-slide">
+                        <p class="testimonial__description">
+                            {{testimonial.text}}
+                        </p>
+                        <div>
+                            <h3 class="testimonial__name">{{testimonial.name}}</h3>
+                            <span class="testimonial__subtitle">{{testimonial.role}}</span>
+                        </div>
                     </div>
-                </div>
-
-                <!--==================== TESTIMONIAL 2 ====================-->
-                <div class="testimonial__content swiper-slide">
-                    <p class="testimonial__description">
-                        "Fucking slaves, get your ass back here! Fuck♂you!"
-                    </p>
-
-                    <div>
-                        <h3 class="testimonial__name">Van Darkholme</h3>
-                        <span class="testimonial__subtitle">Client</span>
-                    </div>
-                </div>
-
-                <!--==================== TESTIMONIAL 3 ====================-->
-                <div class="testimonial__content swiper-slide">
-                    <p class="testimonial__description">
-                        "AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
-                    </p>
-
-                    <div>
-                        <h3 class="testimonial__name">Erik Michaels</h3>
-                        <span class="testimonial__subtitle">Client</span>
-                    </div>
-                </div>
-
+                {% endfor %}
             </div>
 
             <!-- Swiper arrows -->
@@ -57,5 +32,5 @@
         </div>
     </div>
 
-    <img src="{% static 'portfolio/assets/svg/shape-waves.svg' %}" alt="testimonial image" class="testimonial__img">
+<!--    <img src="{% static 'portfolio/assets/svg/shape-waves.svg' %}" alt="testimonial image" class="testimonial__img">-->
 </section>

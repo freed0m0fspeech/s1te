@@ -1557,7 +1557,7 @@ input:-webkit-autofill:active{
 
 .contact__form-tag{
     position: absolute;
-    top: -.75rem;
+    top: -1.75rem;
     left: 1.25rem;
     z-index: 10;
     background-color: var(--body-color);

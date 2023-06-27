@@ -101,7 +101,7 @@ const sendEmail = (e) =>{
         contactProject.value = ''
     }
 }
-contactForm.addEventListener('submit', sendEmail)
+// contactForm.addEventListener('submit', sendEmail)
 
 /*=============== SCROLL SECTIONS ACTIVE LINK ===============*/
 const sections = document.querySelectorAll('section[id]')
@@ -182,7 +182,8 @@ const sr = ScrollReveal({
     // reset: true /* Animations repeat */
 })
 
-sr.reveal(`.home__data, .projects__container, .testimonial__container, .footer__container`)
+sr.reveal(`.home__data, .projects__container, .testimonial__container`, {origin: 'top'})
+sr.reveal(`.footer__container`, {origin: 'bottom'})
 sr.reveal(`.home__info:nth-child(odd) div`, {origin: 'left'})
 sr.reveal(`.home__info:nth-child(even) div`, {origin: 'right'})
 sr.reveal(`.skills__content:nth-child(odd), .contact__content:nth-child(odd)`, {origin: 'left'})
@@ -196,10 +197,15 @@ window.onload = function() {
     document.getElementById('footer__copy__years_value').textContent = ''.concat('© Copyright 2017-', new Date().getFullYear(), ', @. All rights reserved');
 };
 function countUpFromTime(countFrom, id) {
-    countFrom = new Date(countFrom).getTime();
+    var tcountFrom = new Date(countFrom.replace(/-/g, "/")).getTime();
+
+    if (isNaN(tcountFrom))
+        return
+
+
     var now = new Date(),
-        countFrom = new Date(countFrom),
-        timeDifference = (now - countFrom);
+        // countFrom = new Date(countFrom),
+        timeDifference = (now - tcountFrom);
 
     var secondsInADay = 60 * 60 * 1000 * 24,
         secondsInAHour = 60 * 60 * 1000;
@@ -222,6 +228,114 @@ function countUpFromTime(countFrom, id) {
     clearTimeout(countUpFromTime.interval);
     countUpFromTime.interval = setTimeout(function(){ countUpFromTime(countFrom, id); }, 1000);
 }
+
+$('#contact_button').on('click', function(e) {
+    e.preventDefault();
+
+    const contactMessage = $('#contact-message')
+    const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+    // const name = $('#contact-name').val();
+    // const role = $('#contact-role').val();
+    const testimonial = $('#contact-testimonial');
+    const name = $('#contact-name');
+    const role = $('#contact-role')
+
+    // Check if the field has a value
+
+    if (name.val() === ''){
+        // Add or remove color
+        contactMessage.removeClass('color-green')
+        contactMessage.addClass('color-red')
+
+        // Show message
+        contactMessage.text('Write your name');
+
+        setTimeout(() => {
+            contactMessage.text('')
+        }, 5000);
+
+        return
+    }
+
+    if (role.val() === ''){
+        // Add or remove color
+        contactMessage.removeClass('color-green')
+        contactMessage.addClass('color-red')
+
+        // Show message
+        contactMessage.text('Write your role');
+
+        setTimeout(() => {
+            contactMessage.text('')
+        }, 5000);
+
+        return
+    }
+
+    if(testimonial.val() === ''){
+        // Add or remove color
+        contactMessage.removeClass('color-green')
+        contactMessage.addClass('color-red')
+
+        // Show message
+        contactMessage.text('Write your testimonial');
+
+        setTimeout(() => {
+            contactMessage.text('')
+        }, 5000);
+
+        return
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            xhr.setRequestHeader('X-CSRFToken', csrf_token);
+        }
+    });
+
+    $.ajax({
+        type: 'post',
+        url: '/portfolio/add/testimonial/',
+        data: {
+            name: name.val(),
+            role: role.val(),
+            testimonial: testimonial.val(),
+        },
+        success: function(data, status, jqXHR) {
+            // Show message and add color
+            contactMessage.removeClass('color-red')
+            contactMessage.addClass('color-green')
+            contactMessage.text('Testimonial was sent successfully')
+            // contactMessage.classList.add('color-blue');
+            // contactMessage.textContent = 'Testimonial was sent successfully';
+
+            // Remove message after five seconds
+            setTimeout(() => {
+                // contactMessage.text('')
+
+                // window.location.replace("/freedom_of_speech/")
+                window.location.reload()
+            }, 1000);
+            // location.reload();
+            // $('#constitution_text_span').text(data);
+            // console.log(data);
+        },
+        error(xhr,status,error){
+            contactMessage.removeClass('color-green')
+            contactMessage.addClass('color-red')
+
+            if (xhr.status === 422)
+                contactMessage.text('Something went wrong')
+
+            setTimeout(() => {
+                contactMessage.text('')
+            }, 5000);
+        },
+    });
+
+    // To clear the input fields
+    testimonial.val('')
+});
 
 $(document).on('click', function (e){
     // Close all popup menus

@@ -8,43 +8,19 @@
     <div class="container section__border">
         <div class="testimonial__container swiper">
             <div class="swiper-wrapper">
-                <!--==================== TESTIMONIAL 1 ====================-->
-<!--                <div class="testimonial__content swiper-slide">-->
-<!--                    <p class="testimonial__description">-->
-<!--                        "Oh I'm sorry..."-->
-<!--                    </p>-->
+                {% for testimonial in testimonials %}
+                    <div class="testimonial__content swiper-slide">
+                        <p class="testimonial__description">
+                            {{testimonial.text}}
+                        </p>
+                        <div>
+                            <h3 class="testimonial__name">{{testimonial.username}}</h3>
+                            <span class="testimonial__subtitle">{{testimonial.role}}</span>
+                        </div>
+                    </div>
+                {% endfor %}
 
-<!--                    <div>-->
-<!--                        <h3 class="testimonial__name">Billy Herrington</h3>-->
-<!--                        <span class="testimonial__subtitle">Member</span>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-                <!--==================== TESTIMONIAL 2 ====================-->
-<!--                <div class="testimonial__content swiper-slide">-->
-<!--                    <p class="testimonial__description">-->
-<!--                        "Fucking slaves, get your ass back here! Fuck♂you!"-->
-<!--                    </p>-->
-
-<!--                    <div>-->
-<!--                        <h3 class="testimonial__name">Van Darkholme</h3>-->
-<!--                        <span class="testimonial__subtitle">Member</span>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-                <!--==================== TESTIMONIAL 3 ====================-->
-<!--                <div class="testimonial__content swiper-slide">-->
-<!--                    <p class="testimonial__description">-->
-<!--                        "AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"-->
-<!--                    </p>-->
-
-<!--                    <div>-->
-<!--                        <h3 class="testimonial__name">Erik Michaels</h3>-->
-<!--                        <span class="testimonial__subtitle">Member</span>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-                {{testimonials_html | safe}}
+<!--                {{testimonials_html | safe}}-->
 
             </div>
 

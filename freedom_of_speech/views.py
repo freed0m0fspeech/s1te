@@ -103,26 +103,26 @@ class HomePageView(TemplateView):
         except ValueError:
             pass
 
-        testimonials_html = ""
-        for testimonial in testimonials:
-            testimonial_text = testimonial.get('text', '')
-            testimonial_username = testimonial.get('username', '')
-            testimonial_role = testimonial.get('role', '')
-
-            div = "<div class='testimonial__content swiper-slide'>"
-            p = "<p class='testimonial__description'>"
-            # Testimonial
-            p_end = "</p>"
-            h3 = "<div><h3 class='testimonial__name'>"
-            # Username
-            h3_end = "</h3>"
-            span = "<span class='testimonial__subtitle'>"
-            # Role
-            span_end = "</span></div>"
-            div_end = "</div>"
-
-            testimonials_html += f"{div}{p}\"{testimonial_text}\"{p_end}{h3}{testimonial_username}{h3_end}{span}" \
-                                 f"{testimonial_role}{span_end}{div_end}"
+        # testimonials_html = ""
+        # for testimonial in testimonials:
+        #     testimonial_text = testimonial.get('text', '')
+        #     testimonial_username = testimonial.get('username', '')
+        #     testimonial_role = testimonial.get('role', '')
+        #
+        #     div = "<div class='testimonial__content swiper-slide'>"
+        #     p = "<p class='testimonial__description'>"
+        #     # Testimonial
+        #     p_end = "</p>"
+        #     h3 = "<div><h3 class='testimonial__name'>"
+        #     # Username
+        #     h3_end = "</h3>"
+        #     span = "<span class='testimonial__subtitle'>"
+        #     # Role
+        #     span_end = "</span></div>"
+        #     div_end = "</div>"
+        #
+        #     testimonials_html += f"{div}{p}\"{testimonial_text}\"{p_end}{h3}{testimonial_username}{h3_end}{span}" \
+        #                          f"{testimonial_role}{span_end}{div_end}"
 
         if user:
             permissions = user.get('permissions', {'administrator': False, 'moderator': False})
@@ -156,7 +156,7 @@ class HomePageView(TemplateView):
         context['tlaws'] = tlaws
         context['administrator'] = permissions.get('administrator', False)
         context['moderator'] = permissions.get('administrator', permissions.get('moderator', False))
-        context['testimonials_html'] = testimonials_html
+        context['testimonials'] = testimonials
         context['start_vote'] = start_vote
         context['end_vote'] = end_vote
         context['candidates'] = document.get('candidates', {})
