@@ -22,10 +22,9 @@ class HomePageView(TemplateView):
         else:
             testimonials = document.get('testimonials', [])
 
-        try:
-            testimonials = random.sample(testimonials, 10)
-        except ValueError:
-            pass
+        testimonials_count = len(testimonials)
+        max_testimonials = 10
+        testimonials = random.sample(testimonials, min(testimonials_count, max_testimonials))
 
         context['testimonials'] = testimonials
 
