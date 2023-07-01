@@ -237,40 +237,40 @@ $('#contact_button').on('click', function(e) {
     // const name = $('#contact-name').val();
     // const role = $('#contact-role').val();
     const testimonial = $('#contact-testimonial');
-    const name = $('#contact-name');
-    const role = $('#contact-role')
+    // const name = $('#contact-name');
+    // const role = $('#contact-role')
 
     // Check if the field has a value
 
-    if (name.val() === ''){
-        // Add or remove color
-        contactMessage.removeClass('color-green')
-        contactMessage.addClass('color-red')
-
-        // Show message
-        contactMessage.text('Write your name');
-
-        setTimeout(() => {
-            contactMessage.text('')
-        }, 5000);
-
-        return
-    }
-
-    if (role.val() === ''){
-        // Add or remove color
-        contactMessage.removeClass('color-green')
-        contactMessage.addClass('color-red')
-
-        // Show message
-        contactMessage.text('Write your role');
-
-        setTimeout(() => {
-            contactMessage.text('')
-        }, 5000);
-
-        return
-    }
+    // if (name.val() === ''){
+    //     // Add or remove color
+    //     contactMessage.removeClass('color-green')
+    //     contactMessage.addClass('color-red')
+    //
+    //     // Show message
+    //     contactMessage.text('Write your name');
+    //
+    //     setTimeout(() => {
+    //         contactMessage.text('')
+    //     }, 5000);
+    //
+    //     return
+    // }
+    //
+    // if (role.val() === ''){
+    //     // Add or remove color
+    //     contactMessage.removeClass('color-green')
+    //     contactMessage.addClass('color-red')
+    //
+    //     // Show message
+    //     contactMessage.text('Write your role');
+    //
+    //     setTimeout(() => {
+    //         contactMessage.text('')
+    //     }, 5000);
+    //
+    //     return
+    // }
 
     if(testimonial.val() === ''){
         // Add or remove color
@@ -297,8 +297,8 @@ $('#contact_button').on('click', function(e) {
         type: 'post',
         url: '/portfolio/add/testimonial/',
         data: {
-            name: name.val(),
-            role: role.val(),
+            // name: name.val(),
+            // role: role.val(),
             testimonial: testimonial.val(),
         },
         success: function(data, status, jqXHR) {

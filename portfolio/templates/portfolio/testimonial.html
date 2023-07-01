@@ -3,7 +3,7 @@
 
     <!--==================== TESTIMONIAL ====================-->
     <h2 class="section__title">Testimonials</h2>
-    <span class="section__subtitle">About me saying</span>
+    <span class="section__subtitle">What people saying</span>
 
     <div class="container section__border">
         <div class="testimonial__container swiper">
@@ -11,12 +11,12 @@
                 {% for testimonial in testimonials %}
                     <div class="testimonial__content swiper-slide">
                         <p class="testimonial__description">
-                            {{testimonial.text}}
+                            "{{testimonial.text}}"
                         </p>
-                        <div>
-                            <h3 class="testimonial__name">{{testimonial.name}}</h3>
-                            <span class="testimonial__subtitle">{{testimonial.role}}</span>
-                        </div>
+<!--                        <div>-->
+<!--                            <h3 class="testimonial__name">{{testimonial.name}}</h3>-->
+<!--                            <span class="testimonial__subtitle">{{testimonial.role}}</span>-->
+<!--                        </div>-->
                     </div>
                 {% endfor %}
             </div>

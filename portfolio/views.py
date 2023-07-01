@@ -43,13 +43,13 @@ class AddTestimonialPageView(TemplateView):
             return HttpResponse(status=422)
 
         testimonial = data.get('testimonial', '')
-        name = data.get('name', '')
-        role = data.get('role', '')
+        # name = data.get('name', '')
+        # role = data.get('role', '')
 
-        if not testimonial or not name or not role:
+        if not testimonial:
             return HttpResponse(status=422)
 
-        query = {'testimonials': {'text': testimonial, 'name': name, 'role': role}}
+        query = {'testimonials': {'text': testimonial}}
 
         mongoDataBase.update_field(database_name='site', collection_name='portfolio', action='$push',
                                    query=query)

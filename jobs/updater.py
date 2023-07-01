@@ -23,6 +23,9 @@ def start():
     query = {'_id': 0, 'start_vote': 1, 'end_vote': 1}
     document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
+    if not document:
+        document = {}
+
     # Start vote job (on start_vote date in db)
     start_vote = document.get('start_vote', '')
     if start_vote:
