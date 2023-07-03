@@ -6,7 +6,6 @@ import sys
 import time
 import requests
 from datetime import datetime, timedelta
-
 from apscheduler.jobstores.base import JobLookupError
 from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv

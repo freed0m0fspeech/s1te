@@ -54,8 +54,9 @@
 #EXPOSE 8000
 
 # pull official base image
-FROM ubuntu:latest
+#FROM ubuntu:latest
 #FROM ubuntu:20.10.12
+FROM python:3.9.6-alpine
 
 # set work directory
 WORKDIR /usr/src/app
@@ -68,10 +69,17 @@ RUN apt-get update && apt-get install --no-install-recommends -y python3.9 pytho
 # RUN pip install --upgrade pip
 
 # install dependencies
-COPY requirements.txt /app/
-RUN pip install -r requirements.txt
+COPY requirements.txt /tmp/requirements.txt
+# RUN pip install -r requirements.txt
+RUN set -ex && \
+    pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt && \
+    rm -rf /root/.cache/
+
 
 # copy project
 COPY . /app/
-CMD ["gunicorn", "--bind", ":8000", "--workers", "1", "personal_site.wsgi:application"]
+# expose port 8000
+EXPOSE 8000
+CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "personal_site.wsgi:application"]
 #CMD python3 main.py
