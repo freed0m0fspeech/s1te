@@ -101,7 +101,7 @@
                     <!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-circle.svg' %}" alt="profile circle" class="profile__shape-circle">-->
                 </div>
 
-                {% if date_updated %}
+                {% if date_updated and telegram_link_status%}
                     <div class="date__updated">
                         <p id="date__updated">{{date_updated}} UTC</p>
                     </div>
