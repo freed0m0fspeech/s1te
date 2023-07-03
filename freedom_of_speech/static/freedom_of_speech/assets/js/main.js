@@ -1264,8 +1264,8 @@ $('#date__updated').on('click', function (e){
             }, 0);
         },
         error(xhr,status,error){
-            // if(xhr.status === 404)
-            //     alert('Пользователь не является участником группы')
+            if(xhr.status === 404)
+                alert('Пользователь не является участником группы')
             if (xhr.status === 422)
                 alert('Произошла ошибка во время обновления данных')
             if(xhr.status === 429)

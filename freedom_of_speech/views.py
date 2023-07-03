@@ -1674,7 +1674,7 @@ class UpdateMemberPageView(TemplateView):
 
         if not username:
             # No username to update member info
-            return HttpResponse(status=404)
+            return HttpResponse(status=422)
 
         query = {'_id': 0, 'users': 1, 'chat': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
@@ -1689,13 +1689,13 @@ class UpdateMemberPageView(TemplateView):
                 # Too many requests
                 return HttpResponse(status=429)
         else:
-            return HttpResponse(status=404)
+            return HttpResponse(status=422)
 
         telegram_username = user.get('telegram', {}).get('username', '')
 
         if not telegram_username:
             # No telegram username to update member info
-            return HttpResponse(status=404)
+            return HttpResponse(status=422)
 
         chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
         data = {
@@ -1731,4 +1731,4 @@ class UpdateMemberPageView(TemplateView):
                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                            action='$set', query=query)
 
-            return HttpResponse(status=404)
+            return HttpResponse()
