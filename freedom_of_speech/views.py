@@ -23,7 +23,7 @@ from pytz import utc
 # from .forms import HomeForm
 # from django.contrib.auth.models import User
 from utils import mongoDataBase
-from .utils import *
+from freedom_of_speech.utils import is_url_image
 from datetime import datetime, timedelta
 from django_telegram_login.authentication import (
     verify_telegram_authentication

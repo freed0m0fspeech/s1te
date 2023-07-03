@@ -10,10 +10,10 @@ https://docs.djangoproject.com/en/4.1/howto/deployment/wsgi/
 import os
 
 from django.core.wsgi import get_wsgi_application
-# from jobs import updater
+from jobs.updater import start
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "personal_site.settings")
 
-# updater.start()
+start()
 
 application = get_wsgi_application()
