@@ -85,7 +85,7 @@
 <!--==================== MAIN ====================-->
 <main class="main">
     <section class="profile section" id="profile">
-        <div class="{% if telegram_link_status %} profile__container {% endif %} {% if authorized %} section__border {% endif %} container grid">
+        <div class="{% if member_status %} profile__container {% endif %} {% if authorized %} section__border {% endif %} container grid">
             <div class="profile__data grid">
                 <h1 class="profile__title">
                     Страница профиля <br>
@@ -122,7 +122,7 @@
             {% endif %}
             </div>
 
-            {% if telegram_link_status %}
+            {% if member_status %}
                 <!--==================== PROFILE INFO 1 ====================-->
                 <div class="profile__info">
                     <div>
@@ -131,9 +131,15 @@
                         </h3>
 
                         <p class="profile__info-description">
-                            {{telegram_first_name}} {{telegram_last_name}} <br><br>
-                            Уровень: {{lvl}} <br>
-                            Опыт: {{xp_have}} | {{xp_need}} <br>
+                            {% if telegram_first_name %}
+                                {{telegram_first_name}} {{telegram_last_name}} <br><br>
+                            {% endif %}
+                            {% if lvl %}
+                                Уровень: {{lvl}} <br>
+                            {% endif %}
+                            {% if xp_have and xp_need %}
+                                Опыт: {{xp_have}} | {{xp_need}} <br>
+                            {% endif %}
                         </p>
                     </div>
 
@@ -157,7 +163,9 @@
                         </h3>
 
                         <p class="profile__info-description">
-                            {{role}}
+                            {% if role %}
+                                {{role}}
+                            {% endif %}
                         </p>
                     </div>
                 </div>
@@ -169,17 +177,11 @@
                         </h3>
 
                         {% if joined_date %}
-                        <p class="profile__info-number" id="profile__info__years_value">
-                            {{joined_date}} UTC
-                            <!--          2017-2023-->
-                        <div class="profile__info-description" id="profile__date_counter"></div>
-                        </p>
-                        {% else %}
-                        <p class="profile__info-number">
-                            ∞
-                            <!--          2017-2023-->
-                        <div class="profile__info-description"></div>
-                        </p>
+                            <p class="profile__info-number" id="profile__info__years_value">
+                                {{joined_date}} UTC
+                                <!--          2017-2023-->
+                                <div class="profile__info-description" id="profile__date_counter"></div>
+                            </p>
                         {% endif %}
                     </div>
 
@@ -189,7 +191,9 @@
                         </h3>
 
                         <p class="profile__info-number">
-                            {{messages_count}}
+                            {% if messages_count %}
+                                {{messages_count}}
+                            {% endif %}
                             <!--          <div class="animated_number profile__info-number"></div>-->
                         </p>
                     </div>
@@ -200,7 +204,9 @@
                         </h3>
 
                         <p class="profile__info-number">
-                            {{hours_in_voice_channel}}h <br>
+                            {% if hours_in_voice_channel %}
+                                {{hours_in_voice_channel}}h <br>
+                            {% endif %}
                         </p>
                     </div>
                 </div>

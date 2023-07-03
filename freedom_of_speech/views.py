@@ -979,7 +979,11 @@ class ProfilePageView(TemplateView):
                         context['telegram_username'] = telegram_username
                         context['telegram_first_name'] = telegram.get('first_name', '')
                         context['telegram_last_name'] = telegram.get('last_name', '')
-                        context['telegram_photo_url'] = telegram.get('photo_url', '')
+
+                        telegram_photo_url = telegram.get('photo_url', '')
+                        if is_url_image(telegram_photo_url):
+                            context['telegram_photo_url'] = telegram_photo_url
+
                         context['telegram_link_status'] = True
 
                         member = user.get('member', {})
@@ -990,7 +994,7 @@ class ProfilePageView(TemplateView):
                             context['xp_have'] = member.get('xp_have', '')
                             context['xp_need'] = member.get('xp_need', '')
                             context['hours_in_voice_channel'] = member.get('hours_in_voice_channel', '')
-                            context['date_updated'] = user.get('date', '')
+                            context['member_status'] = True
                             if member_parameters:
                                 context['role'] = member_parameters.get('custom_title', 'Участник')
                                 if not context['role']:
@@ -1008,6 +1012,8 @@ class ProfilePageView(TemplateView):
                                         # context['joined_date'] = date.strftime('%b %e, %Y')
                                         # print(date.strftime('%Y-%m-%d %H:%M:%S'))
                                         context['joined_date'] = date.strftime('%Y-%m-%d %H:%M:%S')
+
+                        context['date_updated'] = user.get('date', '')
                     else:
                         context['telegram_link_status'] = False
                         context['role'] = 'Аноним'

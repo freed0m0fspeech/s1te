@@ -248,7 +248,7 @@ body.dark-theme {
 .section__border {
     border-bottom: 1px solid var(--title-color);
     /*padding-bottom: 3.5rem;*/
-    padding-bottom: 6rem;
+    padding-bottom: 6.5rem;
 }
 
 .section__title,
@@ -347,7 +347,7 @@ input:-webkit-autofill:active{
 
 @media screen and (max-width: 1023px){
     .profile__container{
-        padding-bottom: 6rem;
+        padding-bottom: 6.5rem;
     }
 
     .nav__menu{
@@ -2237,7 +2237,7 @@ input:-webkit-autofill:active{
 
 @media screen and (min-width: 1200px){
     .section__border{
-        padding-bottom: 6rem;
+        padding-bottom: 6.5rem;
     }
 
     .section__subtitle{
@@ -2478,7 +2478,7 @@ input:-webkit-autofill:active{
     }
 
     .testimonial__container .swiper-slide{
-        margin-bottom: 6rem;
+        margin-bottom: 6.5rem;
     }
 
     .testimonial__description{
