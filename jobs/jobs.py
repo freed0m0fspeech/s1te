@@ -355,7 +355,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                 telegram = tuser.get('telegram', {})
 
                 if telegram:
-                    chat_usernae = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
+                    chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
                     telegram_username = telegram.get('username', '')
 
                     data = {
@@ -365,7 +365,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                     origin = os.getenv('HOSTNAME', '')
 
                     member = requests.get(
-                        f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_usernae}/{telegram_username}",
+                        f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{telegram_username}",
                         data=data, headers={'Origin': origin})
                     # sync_count += 1
 
@@ -386,9 +386,10 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                             date = datetime.now(tz=utc)
                             date = date.strftime('%Y-%m-%d %H:%M:%S')
 
-                            query = {f'users.{user}.member': '', f'users.{user}.date': date, f'referendum.votes.{user}': ''}
-                            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                       action='$set', query=query)
+                            if tuser.get('member', ''):
+                                query = {f'users.{user}.member': '', f'users.{user}.date': date, f'referendum.votes.{user}': ''}
+                                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                           action='$set', query=query)
 
                     time.sleep(60)
 
