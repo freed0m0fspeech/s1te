@@ -81,5 +81,5 @@ RUN set -ex && \
 COPY . /app/
 # expose port 8000
 EXPOSE 8000
-CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "personal_site.wsgi:application"]
+CMD ["gunicorn", "--bind", ":8000", "--workers", "1", "personal_site.wsgi:application"]
 #CMD python3 main.py

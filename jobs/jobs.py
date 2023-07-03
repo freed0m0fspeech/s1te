@@ -11,12 +11,12 @@ from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv
 from pytz import utc
 
-load_dotenv()
+# load_dotenv()
 
 from utils import mongoDataBase
 
 def scheduled_start_voting():
-    from .updater import sched
+    from updater import sched
     # print('Scheduled Start Voting Running')
     try:
         query = {'_id': 0, 'candidates': 1, 'chat': 1}
@@ -241,7 +241,7 @@ def scheduled_end_voting():
 
 
 def scheduled_telegram_synching(start=0, stop=200, step=1):
-    from .updater import sched
+    from updater import sched
 
     # sync_time = datetime.now(tz=utc) + timedelta(hours=4)
     # sync_time = sync_time.strftime('%Y-%m-%d %H:%M:%S')
@@ -399,7 +399,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
     sched.print_jobs()
 
 def scheduled_referendum_check():
-    from .updater import sched
+    from updater import sched
 
     try:
         query = {'_id': 0, 'referendum': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'chat': 1}

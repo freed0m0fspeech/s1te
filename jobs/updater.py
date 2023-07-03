@@ -1,14 +1,12 @@
 from datetime import datetime, timedelta
-
 from apscheduler.executors.pool import ThreadPoolExecutor
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-# from .jobs import scheduled_start_voting, scheduled_end_voting, scheduled_telegram_synching, scheduled_referendum_check
-
+from jobs import scheduled_start_voting, scheduled_end_voting, scheduled_telegram_synching, scheduled_referendum_check
 from pytz import utc
 from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 from utils import mongoDataBase
 
