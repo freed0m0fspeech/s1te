@@ -1,27 +1,27 @@
-import asyncio
+# import asyncio
 import datetime
 import json
 import os
 import random
 import secrets
-import rsa
-import requests
+# import rsa
+# import requests
 # import uuid
 # import OpenSSL
 
-from math import sqrt
+# from math import sqrt
 
-from apscheduler.jobstores.base import JobLookupError
+# from apscheduler.jobstores.base import JobLookupError
 from bson import json_util
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.template import loader
+# from django.template import loader
 from django.views.generic import TemplateView
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from pytz import utc
 
-from .forms import HomeForm
-from django.contrib.auth.models import User
+# from .forms import HomeForm
+# from django.contrib.auth.models import User
 from utils import mongoDataBase
 from .utils import *
 from datetime import datetime, timedelta
@@ -32,10 +32,10 @@ from django_telegram_login.errors import (
     NotTelegramDataError,
     TelegramDataIsOutdatedError,
 )
-from pymongo import (
-    errors,
-    ReturnDocument
-)
+# from pymongo import (
+#     errors,
+#     ReturnDocument
+# )
 
 
 class HomePageView(TemplateView):

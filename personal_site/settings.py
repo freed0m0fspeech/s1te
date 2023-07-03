@@ -15,7 +15,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# load_dotenv()
+load_dotenv()
 
 # configParser = configparser.ConfigParser()
 # configParser.read('config.ini')
@@ -113,10 +113,10 @@ WSGI_APPLICATION = "personal_site.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    #"default": {
+    # "default": {
     #    "ENGINE": "django.db.backends.sqlite3",
     #    "NAME": BASE_DIR / "db.sqlite3",
-    #}
+    # }
     # 'default': {
     #    'ENGINE': 'djongo',
     #    'NAME': 's1te',
@@ -166,14 +166,14 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = '/static/'
-#MEDIA_URL = '/img/'
+# MEDIA_URL = '/img/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'freedom_of_speech/static',
     BASE_DIR / 'portfolio/static',
 ]
 
-#MEDIA_ROOT = BASE_DIR / 'static/assets/img'
+# MEDIA_ROOT = BASE_DIR / 'static/assets/img'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

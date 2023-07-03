@@ -1,22 +1,23 @@
-import itertools
+# import itertools
 import json
 import os
 import random
-import sys
+# import sys
 import time
 import requests
 from datetime import datetime, timedelta
 from apscheduler.jobstores.base import JobLookupError
 from dateutil.relativedelta import relativedelta
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from pytz import utc
 
 # load_dotenv()
 
 from utils import mongoDataBase
 
+
 def scheduled_start_voting():
-    from .updater import sched
+    from jobs.updater import sched
     # print('Scheduled Start Voting Running')
     try:
         query = {'_id': 0, 'candidates': 1, 'chat': 1}
@@ -241,7 +242,7 @@ def scheduled_end_voting():
 
 
 def scheduled_telegram_synching(start=0, stop=200, step=1):
-    from .updater import sched
+    from jobs.updater import sched
 
     # sync_time = datetime.now(tz=utc) + timedelta(hours=4)
     # sync_time = sync_time.strftime('%Y-%m-%d %H:%M:%S')
@@ -255,7 +256,8 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
         last_update = document.get('chat', {}).get('date', '')
 
         if last_update:
-            last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update,'%Y-%m-%d %H:%M:%S')).seconds
+            last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update,
+                                                                                                 '%Y-%m-%d %H:%M:%S')).seconds
         else:
             last_update_seconds = 14400
 
@@ -285,7 +287,8 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
 
                 if referendum_date:
                     # timedelta in referendum must be more than 30 days
-                    if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(referendum_date, '%Y-%m-%d %H:%M:%S')).days >= 30:
+                    if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(referendum_date,
+                                                                                      '%Y-%m-%d %H:%M:%S')).days >= 30:
                         president = document.get('president', '')
                         parliament = document.get('parliament', '')
                         judge = document.get('judge', {}).get('judge', '')
@@ -303,7 +306,6 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                         referendum_usernames = [username for username, opinion in
                                                 document.get('referendum', {}).get('votes', {}).items() if
                                                 opinion and username not in government]
-
 
                         members_count = chat.get('chat_parameters', {}).get('members_count', '')
 
@@ -345,7 +347,8 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
             last_update = tuser.get('date', '')
 
             if last_update:
-                last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update,'%Y-%m-%d %H:%M:%S')).seconds
+                last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update,
+                                                                                                     '%Y-%m-%d %H:%M:%S')).seconds
             else:
                 last_update_seconds = 14400
 
@@ -386,7 +389,8 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                             date = date.strftime('%Y-%m-%d %H:%M:%S')
 
                             if tuser.get('member', ''):
-                                query = {f'users.{user}.member': '', f'users.{user}.date': date, f'referendum.votes.{user}': ''}
+                                query = {f'users.{user}.member': '', f'users.{user}.date': date,
+                                         f'referendum.votes.{user}': ''}
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$set', query=query)
 
@@ -398,8 +402,9 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
 
     sched.print_jobs()
 
+
 def scheduled_referendum_check():
-    from .updater import sched
+    from jobs.updater import sched
 
     try:
         query = {'_id': 0, 'referendum': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'chat': 1}
@@ -409,7 +414,8 @@ def scheduled_referendum_check():
 
         if referendum_date:
             # timedelta in referendum must be more than 30 days
-            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(referendum_date, '%Y-%m-%d %H:%M:%S')).days < 30:
+            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(referendum_date,
+                                                                              '%Y-%m-%d %H:%M:%S')).days < 30:
                 return
 
         president = document.get('president', '')
@@ -426,7 +432,9 @@ def scheduled_referendum_check():
         if judge:
             government.append(judge)
 
-        referendum_usernames = [username for username, opinion in document.get('referendum', {}).get('votes', {}).items() if opinion and username not in government]
+        referendum_usernames = [username for username, opinion in
+                                document.get('referendum', {}).get('votes', {}).items() if
+                                opinion and username not in government]
 
         chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
         # Careful data value not from request to server
