@@ -5,7 +5,7 @@ import os
 import random
 import secrets
 # import rsa
-# import requests
+import requests
 # import uuid
 # import OpenSSL
 
@@ -25,7 +25,7 @@ from utils import mongoDataBase
 from freedom_of_speech.utils import is_url_image
 from datetime import (
     datetime,
-    timedelta
+    timedelta,
 )
 from django_telegram_login.authentication import (
     verify_telegram_authentication
@@ -476,8 +476,6 @@ class EditLawsPageView(TemplateView):
 
             response = HttpResponse(laws)
 
-            url = "https://telegram-bot-freed0m0fspeech.fly.dev/send/freed0m0fspeech"
-
             laws_old = document.get('laws', '')
 
             added_lines = ''
@@ -525,7 +523,8 @@ class EditLawsPageView(TemplateView):
                 origin = os.getenv('HOSTNAME', '')
                 # origin = rsa.encrypt(origin, publicKeyReloaded)
 
-                tresponse = requests.post(url, data=data, headers={'Origin': origin})
+                tresponse = requests.post("https://telegram-bot-freed0m0fspeech.fly.dev/send/freed0m0fspeech",
+                                          data=data, headers={'Origin': origin})
 
             return response
         else:
@@ -588,8 +587,6 @@ class EditConstitutionPageView(TemplateView):
 
             response = HttpResponse(constitution)
 
-            url = "https://telegram-bot-freed0m0fspeech.fly.dev/send/freed0m0fspeech"
-
             constitution_old = document.get('constitution', '')
 
             added_lines = ''
@@ -637,7 +634,8 @@ class EditConstitutionPageView(TemplateView):
                 origin = os.getenv('HOSTNAME', '')
                 # origin = rsa.encrypt(origin, publicKeyReloaded)
 
-                tresponse = requests.post(url, data=data, headers={'Origin': origin})
+                tresponse = requests.post("https://telegram-bot-freed0m0fspeech.fly.dev/send/freed0m0fspeech",
+                                          data=data, headers={'Origin': origin})
 
                 return response
 
