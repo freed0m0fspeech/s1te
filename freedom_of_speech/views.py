@@ -1724,11 +1724,12 @@ class UpdateMemberPageView(TemplateView):
                 # if not member or not user or not chat:
                 #     return Response(status=422)
 
-                date = datetime.now(tz=utc)
-                date = date.strftime('%Y-%m-%d %H:%M:%S')
+                # date = datetime.now(tz=utc)
+                # date = date.strftime('%Y-%m-%d %H:%M:%S')
 
-                query = {f'users.{username}.member': '', f'users.{username}.date': date, f'referendum.votes.{username}': ''}
+                query = {f'users.{username}.member': '', f'users.{username}.date': '',
+                         f'referendum.votes.{username}': ''}
                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                           action='$set', query=query)
+                                           action='$unset', query=query)
 
             return HttpResponse()

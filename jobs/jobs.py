@@ -385,14 +385,14 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                             # if not member or not user or not chat:
                             #     return Response(status=422)
 
-                            date = datetime.now(tz=utc)
-                            date = date.strftime('%Y-%m-%d %H:%M:%S')
+                            # date = datetime.now(tz=utc)
+                            # date = date.strftime('%Y-%m-%d %H:%M:%S')
 
                             if tuser.get('member', ''):
-                                query = {f'users.{user}.member': '', f'users.{user}.date': date,
+                                query = {f'users.{user}.member': '', f'users.{user}.date': '',
                                          f'referendum.votes.{user}': ''}
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                           action='$set', query=query)
+                                                           action='$unset', query=query)
 
                     time.sleep(60)
 
