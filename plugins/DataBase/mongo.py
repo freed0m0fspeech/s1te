@@ -34,12 +34,16 @@ class MongoDataBase:
         try:
             # The ping command is cheap and does not require auth.
             mdb_client.admin.command('ping')
-        except errors.ConnectionFailure:
-            print("MongoDataBase server not available")
-            return None
-        except errors.OperationFailure:
-            print("MongoDataBasee authentication failed")
-            return None
+            print("You successfully connected to MongoDB!")
+        except Exception as e:
+            print(e)
+            # return None
+        # except errors.ConnectionFailure:
+        #     print("MongoDataBase server not available")
+        #     return None
+        # except errors.OperationFailure:
+        #     print("MongoDataBasee authentication failed")
+        #     return None
 
         return mdb_client
 
