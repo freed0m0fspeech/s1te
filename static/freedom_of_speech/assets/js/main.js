@@ -203,7 +203,8 @@ window.onload = function() {
     }
 
     if (document.getElementById('profile__info__years_value'))
-        document.getElementById('profile__info__years_value').textContent = new Date(document.getElementById('profile__info__years_value').textContent.replace(/-/g, "/")).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}).concat(' - ', new Date().toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}))
+        document.getElementById('profile__info__years_value').textContent = new Date(document.getElementById('profile__info__years_value').textContent.replace(/-/g, "/")).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'})
+            //.concat(' - ', new Date().toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}))
 
     //if (document.getElementById('home__info__years_value'))
     //    document.getElementById('home__info__years_value').textContent = new Date(document.getElementById('home__info__years_value').textContent).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}).concat(' - ', new Date().toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}));

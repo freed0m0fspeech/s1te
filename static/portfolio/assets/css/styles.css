@@ -248,7 +248,7 @@ body.dark-theme {
 .section__border {
     border-bottom: 1px solid var(--title-color);
     /*padding-bottom: 3.5rem;*/
-    padding-bottom: 6.5rem;
+    padding-bottom: 6rem;
 }
 
 .section__title,
@@ -347,7 +347,7 @@ input:-webkit-autofill:active{
 
 @media screen and (max-width: 1023px){
     .profile__container{
-        padding-bottom: 6.5rem;
+        padding-bottom: 6rem;
     }
 
     .nav__menu{
@@ -441,7 +441,8 @@ input:-webkit-autofill:active{
 }
 
 .home__blob img{
-    border-radius: 50%;
+    /*border-radius: 50%;*/
+    clip-path: circle();
 }
 
 .voting img{
@@ -534,7 +535,8 @@ input:-webkit-autofill:active{
 }
 
 .home__blob video{
-    border-radius: 50%;
+    /*border-radius: 50%;*/
+    clip-path: circle();
 }
 
 .home__perfil{
@@ -686,7 +688,8 @@ input:-webkit-autofill:active{
 }
 
 .profile__blob img{
-    border-radius: 50%;
+    /*border-radius: 50%;*/
+    clip-path: circle();
 }
 
 .profile__perfil{
@@ -2237,7 +2240,7 @@ input:-webkit-autofill:active{
 
 @media screen and (min-width: 1200px){
     .section__border{
-        padding-bottom: 6.5rem;
+        padding-bottom: 6rem;
     }
 
     .section__subtitle{
@@ -2333,7 +2336,7 @@ input:-webkit-autofill:active{
     }
 
     .profile__data{
-        row-gap: 2.5rem;
+        row-gap: 3rem;
     }
 
     .profile__community{
@@ -2452,7 +2455,7 @@ input:-webkit-autofill:active{
     }
 
     .projects__container .swiper-slide{
-        margin-bottom: 6.5rem;
+        margin-bottom: 6rem;
     }
 
     .projects__img{
@@ -2478,7 +2481,7 @@ input:-webkit-autofill:active{
     }
 
     .testimonial__container .swiper-slide{
-        margin-bottom: 6.5rem;
+        margin-bottom: 6rem;
     }
 
     .testimonial__description{
