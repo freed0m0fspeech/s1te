@@ -4,8 +4,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 # from django.template import loader
 from django.views.generic import TemplateView
-from utils import mongoDataBase
+from utils import dataBases
 
+mongoDataBase = dataBases.mongodb_client
 
 class HomePageView(TemplateView):
     async def get(self, request, *args, **kwargs):
@@ -50,7 +51,9 @@ class AddTestimonialPageView(TemplateView):
 
         query = {'testimonials': {'text': testimonial}}
 
-        mongoDataBase.update_field(database_name='site', collection_name='portfolio', action='$push',
-                                   query=query)
+        mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='portfolio', action='$push', query=query)
+
+        if mongoUpdate is None:
+            return HttpResponse(status=500)
 
         return HttpResponse(status=200)

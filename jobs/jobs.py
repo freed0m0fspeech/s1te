@@ -13,15 +13,27 @@ from pytz import utc
 
 load_dotenv()
 
-from utils import mongoDataBase
+from utils import dataBases
+
+mongoDataBase = dataBases.mongodb_client
 
 
 def scheduled_start_voting():
     from jobs.updater import sched
     # print('Scheduled Start Voting Running')
     try:
+        if not mongoDataBase.check_connection():
+            start_vote = datetime.now(tz=utc) + timedelta(hours=1)
+            start_vote = start_vote.strftime('%Y-%m-%d %H:%M:%S')
+
+            sched.get_job('scheduled_start_voting').modify(next_run_time=start_vote)
+            return
+
         query = {'_id': 0, 'candidates': 1, 'chat': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        if not document:
+            return
 
         if (
                 'president' not in document.get('candidates', {}).values() or
@@ -89,11 +101,22 @@ def scheduled_start_voting():
 
 
 def scheduled_end_voting():
+    from jobs.updater import sched
     # print('Scheduled End Voting Running')
     try:
+        if not mongoDataBase.check_connection():
+            end_vote = datetime.now(tz=utc) + timedelta(hours=1)
+            end_vote = end_vote.strftime('%Y-%m-%d %H:%M:%S')
+
+            sched.get_job('scheduled_end_voting').modify(next_run_time=end_vote)
+            return
+
         query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'start_vote': 1, 'end_vote': 1,
                  'votes': 1, 'candidates': 1, 'chat': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        if not document:
+            return
 
         # Find the most votes candidates (president, parliament)
         votes = document.get('votes', {})
@@ -250,8 +273,14 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
     # sched.add_job(scheduled_telegram_synching, 'date', run_date=sync_time, id='scheduled_telegram_synching')
     # print('Scheduled Telegram Synching Running')
     try:
+        if not mongoDataBase.check_connection():
+            return
+
         query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'referendum': 1, 'chat': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        if not document:
+            return
 
         last_update = document.get('chat', {}).get('date', '')
 
@@ -391,84 +420,26 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                             if tuser.get('member', ''):
                                 query = {f'users.{user}.member': '', f'users.{user}.date': '',
                                          f'referendum.votes.{user}': ''}
+
+                                president = document.get('president', '')
+                                parliament = document.get('parliament', '')
+                                judge = document.get('judge', {}).get('judge', '')
+
+                                # Unset president, parliament, judge in DataBase
+                                if user == president:
+                                    query['president'] = ''
+                                else:
+                                    if user == parliament:
+                                        query['parliament'] = ''
+                                    else:
+                                        if user == judge:
+                                            query['judge'] = ''
+
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$unset', query=query)
 
                     time.sleep(60)
 
-
-    except Exception as e:
-        print(e)
-
-    sched.print_jobs()
-
-
-def scheduled_referendum_check():
-    from jobs.updater import sched
-
-    try:
-        query = {'_id': 0, 'referendum': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'chat': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
-
-        referendum_date = document.get('referendum', {}).get('date', '')
-
-        if referendum_date:
-            # timedelta in referendum must be more than 30 days
-            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(referendum_date,
-                                                                              '%Y-%m-%d %H:%M:%S')).days < 30:
-                return
-
-        president = document.get('president', '')
-        parliament = document.get('parliament', '')
-        judge = document.get('judge', {}).get('judge', '')
-
-        # Count of government now
-        government = []
-
-        if president:
-            government.append(president)
-        if parliament:
-            government.append(parliament)
-        if judge:
-            government.append(judge)
-
-        referendum_usernames = [username for username, opinion in
-                                document.get('referendum', {}).get('votes', {}).items() if
-                                opinion and username not in government]
-
-        chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
-        # Careful data value not from request to server
-        data = {
-            'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
-        }
-        data = json.dumps(data)
-        origin = os.getenv('HOSTNAME', '')
-        chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat_username}", data=data,
-                            headers={'Origin': origin})
-
-        if chat and chat.status_code == 200:
-            chat = chat.json()
-            members_count = chat.get('chat_parameters', {}).get('members_count', '')
-
-            if members_count:
-                # Count of referendum_true values
-                if (100 * float(len(referendum_usernames)) / float(members_count - len(government))) >= 75:
-
-                    try:
-                        sched.remove_job('scheduled_start_voting')
-                    except JobLookupError:
-                        # job not found
-                        pass
-
-                    sched.add_job(scheduled_start_voting, 'date', run_date=datetime.now(tz=utc),
-                                  id='scheduled_start_voting')
-
-                    referendum_date = datetime.now(tz=utc)
-                    referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
-
-                    query = {'referendum.votes': '', 'referendum.date': referendum_date}
-                    mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                               action='$set', query=query)
 
     except Exception as e:
         print(e)
