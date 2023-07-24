@@ -44,7 +44,8 @@ class MongoDataBase:
             self.client = mdb_client
             return True
         except Exception as e:
-            print(e)
+            # print(e)
+            self.client = None
             return False
             # return None
         # except errors.ConnectionFailure:
@@ -135,9 +136,6 @@ class MongoDataBase:
         `$bit` Performs bitwise AND, OR, and XOR updates of integer values.
         """
 
-        if not self.check_connection():
-            return None
-
         try:
             database = self.client.get_database(database_name)
             collection = database.get_collection(collection_name)
@@ -169,8 +167,6 @@ class MongoDataBase:
         :param upsert: Optonal upsert value to upsert document if it does not exist
         :return: typing.Optaional[dict]
         """
-        if not self.check_connection():
-            return None
 
         try:
             database = self.client.get_database(database_name)
@@ -194,8 +190,6 @@ class MongoDataBase:
         :param query: Query
         :return: typing.Optional[dict]
         """
-        if not self.check_connection():
-            return {}
 
         try:
             database = self.client.get_database(database_name)
@@ -218,9 +212,6 @@ class MongoDataBase:
         :param query: Query
         :return: typing.Optional[pymongo.cursor.Cursor]
         """
-
-        if not self.check_connection():
-            return None
 
         try:
             database = self.client.get_database(database_name)
@@ -247,8 +238,6 @@ class MongoDataBase:
         :param upsert: Optonal upsert value to upsert document if it does not exist
         :return: typing.Optaional[dict]
         """
-        if not self.check_connection():
-            return None
 
         try:
             database = self.client.get_database(database_name)
@@ -269,8 +258,6 @@ class MongoDataBase:
         :param filter: Optional filter
         :return: typing.Optaional[dict]
         """
-        if not self.check_connection():
-            return None
 
         try:
             database = self.client.get_database(database_name)
