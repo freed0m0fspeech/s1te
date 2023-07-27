@@ -56,7 +56,7 @@
 # pull official base image
 #FROM ubuntu:latest
 #FROM ubuntu:20.10.12
-FROM python:3.9.6-alpine
+FROM python:3.9.6
 
 # set work directory
 WORKDIR /usr/src/app
