@@ -12,9 +12,23 @@ Additional info about ``s1te`` file, you can find `here <https://github.com/pr0s
 ---------------
 
 Information:
-  * info -
+  * /portfolio - Personal portfolio project
+  * /freedom_of_speech - Personal project with additional functionality (database + telegram API + scheduler) 
 
 ---------------
 
-Additional information:
-  * info -
+Functionality:
+  * /portfolio:
+
+    - Testimonials save to DataBase
+
+  * /freedom_of_speech:
+
+    - Registration/Authorization
+    - Scheduled tasks (telegram sync, votes)
+    - Vote system
+    - Saving information to DataBase
+    - Testimonials save to DataBase
+    - Change site text and save changes to DataBase
+    - Telegram linking
+    - Profile page features
