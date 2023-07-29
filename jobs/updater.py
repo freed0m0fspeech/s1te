@@ -48,7 +48,7 @@ def start():
     # Start vote job (on start_vote date in db)
     start_vote = document.get('start_vote', '')
     if not start_vote:
-        start_vote = datetime.now(tz=utc) + timedelta(hours=1)
+        start_vote = datetime.now(tz=utc)
         start_vote = start_vote.strftime('%Y-%m-%d %H:%M:%S')
 
     sched.add_job(scheduled_start_voting, 'date', run_date=start_vote, id='scheduled_start_voting',
@@ -57,7 +57,7 @@ def start():
     # End vote job (on end_vote date in db)
     end_vote = document.get('end_vote', '')
     if not end_vote:
-        end_vote = datetime.now(tz=utc) + timedelta(hours=1)
+        end_vote = datetime.now(tz=utc) + timedelta(minutes=15)
         end_vote = end_vote.strftime('%Y-%m-%d %H:%M:%S')
 
     sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting',
