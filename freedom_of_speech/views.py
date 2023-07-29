@@ -538,7 +538,7 @@ class EditLawsPageView(TemplateView):
                 # origin = rsa.encrypt(origin, publicKeyReloaded)
 
                 tresponse = requests.post("https://telegram-bot-freed0m0fspeech.fly.dev/send/freed0m0fspeech",
-                                          data=data, headers={'Origin': origin})
+                                          data=data, headers={'Origin': origin, 'Host': origin})
 
             return response
         else:
@@ -653,7 +653,7 @@ class EditConstitutionPageView(TemplateView):
                 # origin = rsa.encrypt(origin, publicKeyReloaded)
 
                 tresponse = requests.post("https://telegram-bot-freed0m0fspeech.fly.dev/send/freed0m0fspeech",
-                                          data=data, headers={'Origin': origin})
+                                          data=data, headers={'Origin': origin, 'Host': origin})
 
                 return response
 
@@ -888,7 +888,7 @@ class AuthTelegramPageView(TemplateView):
             # origin = rsa.encrypt(origin, publicKeyReloaded)
 
             member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{newtusername}",
-                                  data=data, headers={'Origin': origin})
+                                  data=data, headers={'Origin': origin, 'Host': origin})
             if member and member.status_code == 200:
                 member = member.json()
 
@@ -1339,7 +1339,7 @@ class VoteJudgePageView(TemplateView):
                         }
                         data = json.dumps(data)
                         requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
-                                      data=data, headers={'Origin': origin})
+                                      data=data, headers={'Origin': origin, 'Host': origin})
                     else:
                         return HttpResponse(status=404)
                 else:
@@ -1358,7 +1358,7 @@ class VoteJudgePageView(TemplateView):
                         }
                         data = json.dumps(data)
                         requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
-                                      data=data, headers={'Origin': origin})
+                                      data=data, headers={'Origin': origin, 'Host': origin})
 
                         ojudge = judge_info.get('judge', '')
                         if ojudge:
@@ -1372,7 +1372,7 @@ class VoteJudgePageView(TemplateView):
                             data = json.dumps(data)
                             requests.post(
                                 f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{ojudge}",
-                                data=data, headers={'Origin': origin})
+                                data=data, headers={'Origin': origin, 'Host': origin})
                     else:
                         return HttpResponse(status=404)
         else:
@@ -1400,7 +1400,7 @@ class VoteJudgePageView(TemplateView):
                             data = json.dumps(data)
                             requests.post(
                                 f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
-                                data=data, headers={'Origin': origin})
+                                data=data, headers={'Origin': origin, 'Host': origin})
                         else:
                             return HttpResponse(status=404)
                     else:
@@ -1420,7 +1420,7 @@ class VoteJudgePageView(TemplateView):
                             data = json.dumps(data)
                             requests.post(
                                 f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
-                                data=data, headers={'Origin': origin})
+                                data=data, headers={'Origin': origin, 'Host': origin})
 
                             ojudge = judge_info.get('judge', '')
                             if ojudge:
@@ -1434,7 +1434,7 @@ class VoteJudgePageView(TemplateView):
                                 data = json.dumps(data)
                                 requests.post(
                                     f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{ojudge}",
-                                    data=data, headers={'Origin': origin})
+                                    data=data, headers={'Origin': origin, 'Host': origin})
                         else:
                             return HttpResponse(status=404)
             else:
@@ -1464,7 +1464,7 @@ class VoteJudgePageView(TemplateView):
                 data = json.dumps(data)
 
                 requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat_username}", data=data,
-                              headers={'Origin': origin})
+                              headers={'Origin': origin, 'Host': origin})
 
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                        query=query) is None:
@@ -1694,7 +1694,7 @@ class UpdateChatPageView(TemplateView):
         data = json.dumps(data)
         origin = os.getenv('HOSTNAME', '')
         chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat_username}", data=data,
-                            headers={'Origin': origin})
+                            headers={'Origin': origin, 'Host': origin})
 
         if chat and chat.status_code == 200:
             chat = chat.json()
@@ -1759,7 +1759,7 @@ class UpdateMemberPageView(TemplateView):
 
         member = requests.get(
             f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{telegram_username}",
-            data=data, headers={'Origin': origin})
+            data=data, headers={'Origin': origin, 'Host': origin})
 
         if member and member.status_code == 200:
             member = member.json()

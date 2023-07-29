@@ -482,6 +482,8 @@ $('#signin-button').on('click', function(e) {
             entryMessage.addClass('color-red')
             if (xhr.status === 401)
                 entryMessage.text('Неверные данные')
+            else
+                entryMessage.text(error)
 
             setTimeout(() => {
                 entryMessage.text('')
@@ -559,12 +561,12 @@ $('#signup-button').on('click', function(e) {
 
             if (xhr.status === 409)
                 entryMessage.text('Такой пользователь уже зарегистрирован')
-
-            if (xhr.status === 500)
+            else if (xhr.status === 500)
                 entryMessage.text('Возникли проблемы во время регистрации')
-
-            if (xhr.status === 422)
+            else if (xhr.status === 422)
                 entryMessage.text('Возникли проблемы с вашим запросом')
+            else
+                entryMessage.text(error)
 
             setTimeout(() => {
                 entryMessage.text('')
@@ -628,12 +630,12 @@ $('#username-change_button').on('click', function(e) {
 
             if (xhr.status === 401)
                 entryMessage.text('Неверные данные')
-
-            if (xhr.status === 409)
+            else if (xhr.status === 409)
                 entryMessage.text('Такой пользователь уже зарегистрирован')
-
-            if (xhr.status === 422)
+            else if (xhr.status === 422)
                 entryMessage.text('Возникли проблемы с вашим запросом')
+            else
+                entryMessage.text(error)
 
             setTimeout(() => {
                 entryMessage.text('')
@@ -695,9 +697,10 @@ $('#password-change_button').on('click', function(e) {
             //     entryMessage.text('Username already registered')
             if (xhr.status === 401)
                 entryMessage.text('Неверные данные')
-
-            if (xhr.status === 422)
+            else if (xhr.status === 422)
                 entryMessage.text('Возникли проблемы с вашим запросом')
+            else
+                entryMessage.text(error)
 
             setTimeout(() => {
                 entryMessage.text('')
@@ -728,7 +731,7 @@ $('#signout-button').on('click', function(e) {
             }, 1000);
         },
         error(xhr,status,error){
-            // Some error
+            alert(error)
         }
     });
 });
@@ -836,6 +839,8 @@ $('#contact_button').on('click', function(e) {
 
                 if (xhr.status === 422)
                     contactMessage.text('Возникли проблемы с вашим запросом')
+                else
+                    contactMessage.text(error)
 
                 setTimeout(() => {
                     contactMessage.text('')
@@ -900,6 +905,8 @@ $('#auth-telegram_button').on('click', function(e) {
             error(xhr,status,error){
                 if (xhr.status === 409)
                     alert('Твоя роль не позволяет отвязать Telegram')
+                else
+                    alert(error)
                 // Some error
             },
         });
@@ -987,16 +994,16 @@ $('#government__votes_president').on('click', function (e){
             error(xhr,status,error){
                 $('#government__votes_president').removeClass('government__votes-open')
 
-                if (xhr.status === 403)
-                    console.log(403)
                 if (xhr.status === 422)
                     alert('Только авторизованные пользователи могут голосовать')
-                if (xhr.status === 404)
+                else if (xhr.status === 404)
                     alert('Только пользователи которые привязали Telegram могут голосовать')
-                if (xhr.status === 409)
+                else if (xhr.status === 409)
                     alert('Только пользователи свобода которых больше 30 дней могут голосовать')
-                if(xhr.status === 401)
+                else if(xhr.status === 401)
                     alert('Только участники Telegram группы "Freedom of speech" могут голосовать')
+                else
+                    alert(error)
             },
         });
     }else {
@@ -1036,16 +1043,16 @@ $('#government__votes_parliament').on('click', function (e){
             error(xhr,status,error){
                 $('#government__votes_parliament').removeClass('government__votes-open')
 
-                if (xhr.status === 403)
-                    console.log(403)
                 if (xhr.status === 422)
                     alert('Только авторизованные пользователи могут голосовать')
-                if (xhr.status === 404)
+                else if (xhr.status === 404)
                     alert('Только пользователи которые привязали Telegram могут голосовать')
-                if (xhr.status === 409)
+                else if (xhr.status === 409)
                     alert('Только пользователи свобода которых больше 30 дней могут голосовать')
-                if(xhr.status === 401)
+                else if(xhr.status === 401)
                     alert('Только участники Telegram группы "Freedom of speech" могут голосовать')
+                else
+                    alert(error)
             },
         });
     }else {
@@ -1100,17 +1107,17 @@ $('#government__votes_judge').on('click', function (e){
             error(xhr,status,error){
                 $('#government__votes_judge').removeClass('government__votes-open')
 
-                if (xhr.status === 422)
-                    console.log('422')
                 if (xhr.status === 404)
                     if (candidate === '')
                         alert('Судьи в данный момент нет')
                     else
                         alert('Этот пользователь не может быть Судьей')
-                if (xhr.status === 409)
+                else if (xhr.status === 409)
                     alert('Этот пользователь не может быть Судьей')
-                if(xhr.status === 401)
+                else if(xhr.status === 401)
                     alert('Только участники Telegram группы "Freedom of speech" могут быть Судьей')
+                else
+                    alert(error)
                 // contactMessage.text('Возникли проблемы с вашим запросом')
             },
         });
@@ -1156,10 +1163,12 @@ $('#government__votes').on('click', function (e){
             error(xhr,status,error){
                 $('#government__votes').removeClass('government__votes-open')
 
-                if (xhr.status === 422)
-                    console.log('422')
                 if (xhr.status === 409)
                     alert('В данный момент Вы не можете голосовать за референдум')
+                else if (xhr.status === 422)
+                    alert('Только авторизованные пользователи могут голосовать за референдум')
+                else
+                    alert(error)
             },
         });
     }else {
@@ -1217,12 +1226,14 @@ $('.government__card').on('click', function (e){
                     $(government__card).find('.government__border').addClass('government__border-selected')
             },
             error(xhr,status,error){
-                if (xhr.status === 422)
-                    console.log('422')
                 if (xhr.status === 409)
                     alert('В данный момент Вы не можете баллотироваться')
-                if(xhr.status === 401)
+                else if(xhr.status === 401)
                     alert('Только участники Telegram группы "Freedom of speech" могут баллотироваться')
+                else if(xhr.status === 422)
+                    alert('Только авторизованные пользователи могут баллотироваться')
+                else
+                    alert(error)
             },
         });
     }else {
@@ -1269,8 +1280,10 @@ $('#date__updated').on('click', function (e){
             //     alert('Пользователь не является участником группы')
             if (xhr.status === 422)
                 alert('Произошла ошибка во время обновления данных')
-            if(xhr.status === 429)
+            else if(xhr.status === 429)
                 alert('Обновлять данные можно только каждые 30 минут')
+            else
+                alert(error)
         },
     });
 });

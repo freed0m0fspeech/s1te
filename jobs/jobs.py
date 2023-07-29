@@ -62,7 +62,7 @@ def scheduled_start_voting():
             data = json.dumps(data)
 
             requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat_username}", data=data,
-                          headers={'Origin': origin})
+                          headers={'Origin': origin, 'Host': origin})
 
             return
 
@@ -93,7 +93,7 @@ def scheduled_start_voting():
         data = json.dumps(data)
 
         requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat_username}", data=data,
-                      headers={'Origin': origin})
+                      headers={'Origin': origin, 'Host': origin})
     except Exception as e:
         print(e)
 
@@ -189,7 +189,7 @@ def scheduled_end_voting():
             data = json.dumps(data)
             old_president = document.get('president', '')
             requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{old_president}",
-                          data=data, headers={'Origin': origin})
+                          data=data, headers={'Origin': origin, 'Host': origin})
             # Promote new president
             data = {
                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -198,7 +198,7 @@ def scheduled_end_voting():
             }
             data = json.dumps(data)
             requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{president}",
-                          data=data, headers={'Origin': origin})
+                          data=data, headers={'Origin': origin, 'Host': origin})
 
         if parliament != document.get('parliament', ''):
             # Demote old parliament
@@ -209,7 +209,7 @@ def scheduled_end_voting():
             data = json.dumps(data)
             old_parliament = document.get('parliament', '')
             requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{old_parliament}",
-                          data=data, headers={'Origin': origin})
+                          data=data, headers={'Origin': origin, 'Host': origin})
             # Promote new parliament
             data = {
                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -219,7 +219,7 @@ def scheduled_end_voting():
             data = json.dumps(data)
 
             requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{parliament}",
-                          data=data, headers={'Origin': origin})
+                          data=data, headers={'Origin': origin, 'Host': origin})
 
         # Delete vote and votes information from database
         query = {'end_vote': '', 'votes': '', 'candidates': '', 'referendum.votes': ''}
@@ -254,7 +254,7 @@ def scheduled_end_voting():
         data = json.dumps(data)
 
         requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat_username}", data=data,
-                      headers={'Origin': origin})
+                      headers={'Origin': origin, 'Host': origin})
 
         referendum_date = datetime.now(tz=utc)
         referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
@@ -301,7 +301,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
             data = json.dumps(data)
             origin = os.getenv('HOSTNAME', '')
             chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat_username}", data=data,
-                                headers={'Origin': origin})
+                                headers={'Origin': origin, 'Host': origin})
 
             if chat and chat.status_code == 200:
                 chat = chat.json()
@@ -399,7 +399,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
 
                     member = requests.get(
                         f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{telegram_username}",
-                        data=data, headers={'Origin': origin})
+                        data=data, headers={'Origin': origin, 'Host': origin})
                     # sync_count += 1
 
                     if member and member.status_code == 200:
