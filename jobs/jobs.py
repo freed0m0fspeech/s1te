@@ -80,8 +80,6 @@ def scheduled_start_voting():
         sched.add_job(scheduled_end_voting, 'date', run_date=end_vote)
         sched.add_job(scheduled_start_voting, 'date', run_date=start_vote)
 
-        sched.print_jobs()
-
         text = f"**В данный момент на [официальном сайте]({os.getenv('HOSTNAME', '')}freedom_of_speech) проходят [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
 
         chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
@@ -99,6 +97,7 @@ def scheduled_start_voting():
     except Exception as e:
         print(e)
 
+    sched.print_jobs()
 
 def scheduled_end_voting():
     from jobs.updater import sched
@@ -109,6 +108,9 @@ def scheduled_end_voting():
             end_vote = end_vote.strftime('%Y-%m-%d %H:%M:%S')
 
             sched.get_job('scheduled_end_voting').modify(next_run_time=end_vote)
+
+            sched.print_jobs()
+
             return
 
         query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'start_vote': 1, 'end_vote': 1,
@@ -441,6 +443,37 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                     time.sleep(60)
 
 
+    except Exception as e:
+        print(e)
+
+    sched.print_jobs()
+
+
+def scheduled_voting():
+    from jobs.updater import sched
+
+    try:
+        if not mongoDataBase.check_connection():
+            date = datetime.now(tz=utc) + timedelta(minutes=15)
+            date = date.strftime('%Y-%m-%d %H:%M:%S')
+
+            sched.get_job('scheduled_voting').modify(next_run_time=date)
+        else:
+            query = {'_id': 0, 'start_vote': 1, 'end_vote': 1}
+            document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+            # Start vote job (on start_vote date in db)
+            start_vote = document.get('start_vote', '')
+            end_vote = document.get('end_vote', '')
+
+            if start_vote:
+                sched.add_job(scheduled_start_voting, 'date', run_date=start_vote, id='scheduled_start_voting',
+                              misfire_grace_time=None, coalesce=True)
+
+            # End vote job (on end_vote date in db)
+            if end_vote:
+                sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting',
+                              misfire_grace_time=None, coalesce=True)
     except Exception as e:
         print(e)
 
