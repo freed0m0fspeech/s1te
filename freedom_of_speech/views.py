@@ -58,6 +58,10 @@ class HomePageView(TemplateView):
 
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
+        if not document:
+            # DataBase error
+            return HttpResponse(status=500)
+
         constitution = document.get('constitution', '')
         laws = document.get('laws', '')
         tlaws = document.get('tlaws', '')
@@ -966,6 +970,10 @@ class ProfilePageView(TemplateView):
         query = {'_id': 0, 'users': 1, 'candidates': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                               query=query)
+
+        if not document:
+            # DataBase error
+            return HttpResponse(status=500)
 
         users = document.get('users', '')
         context = {
