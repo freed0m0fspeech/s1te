@@ -1,6 +1,6 @@
 # from datetime import datetime, timedelta
 # from apscheduler.executors.pool import ThreadPoolExecutor
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from apscheduler.events import (
     EVENT_JOB_EXECUTED,
@@ -47,15 +47,21 @@ def start():
 
     # Start vote job (on start_vote date in db)
     start_vote = document.get('start_vote', '')
-    if start_vote:
-        sched.add_job(scheduled_start_voting, 'date', run_date=start_vote, id='scheduled_start_voting',
-                      misfire_grace_time=None, coalesce=True)
+    if not start_vote:
+        start_vote = datetime.now(tz=utc) + timedelta(hours=1)
+        start_vote = start_vote.strftime('%Y-%m-%d %H:%M:%S')
+
+    sched.add_job(scheduled_start_voting, 'date', run_date=start_vote, id='scheduled_start_voting',
+                  misfire_grace_time=None, coalesce=True)
 
     # End vote job (on end_vote date in db)
     end_vote = document.get('end_vote', '')
-    if end_vote:
-        sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting',
-                      misfire_grace_time=None, coalesce=True)
+    if not end_vote:
+        end_vote = datetime.now(tz=utc) + timedelta(hours=1)
+        end_vote = end_vote.strftime('%Y-%m-%d %H:%M:%S')
+
+    sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting',
+                  misfire_grace_time=None, coalesce=True)
 
     # Referendum check job (every day)
     # sched.add_job(scheduled_referendum_check, 'interval', days=1, id='scheduled_referendum_check')
