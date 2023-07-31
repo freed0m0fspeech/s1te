@@ -30,30 +30,35 @@
         </ul>
 
         <ul class="footer__community">
-            <a href="https://t.me/freed0m0fspeech" target="_blank" class="footer__community-link">
-                <i class="ri-telegram-line"></i>
+            {% for community in social %}
+            <a href="{{community.href}}" target="_blank" class="footer__community-link">
+                <i class="{{community.class}}"></i>
             </a>
-            <a href="https://discord.com/invite/dwKpNwQ" target="_blank" class="footer__community-link">
-                <i class="ri-discord-line"></i>
-            </a>
-            <a href="https://vk.me/join/AAAAAOUSazBFPCDP0CGaVjyh" target="_blank" class="footer__community-link">
-                <i class="uil uil-vk-alt"></i>
-            </a>
-            <a href="https://ig.me/j/AbYGVQ6I8k2hQoUQ" target="_blank" class="footer__community-link">
-                <i class="ri-instagram-line"></i>
-            </a>
-            <a href="https://facetime.apple.com/join#v=1&p=pe8BGv1tEe2evpLF+c6kJw&k=tm9NVJy3NmbPFXMAHM2S-v-wi64_l0WqeoVJ2qbhQDs&l=Freedom%20of%20speech" target="_blank" class="footer__community-link">
-                <i class="uil uil-apple-alt"></i>
-            </a>
-            <a href="steam://connect/130.61.63.137:27015" target="_blank" class="footer__community-link">
-                <i class="ri-steam-line"></i>
-            </a>
-            <a href="https://github.com/freed0m0fspeech" target="_blank" class="footer__community-link">
-                <i class="ri-github-line"></i>
-            </a>
-            <a href="https://stats.uptimerobot.com/6G3WGsP8PY" target="_blank" class="footer__community-link">
-                <i class="uil uil-cloud-wifi"></i>
-            </a>
+            {% endfor %}
+<!--            <a href="https://t.me/freed0m0fspeech" target="_blank" class="footer__community-link">-->
+<!--                <i class="ri-telegram-line"></i>-->
+<!--            </a>-->
+<!--            <a href="https://discord.com/invite/dwKpNwQ" target="_blank" class="footer__community-link">-->
+<!--                <i class="ri-discord-line"></i>-->
+<!--            </a>-->
+<!--            <a href="https://vk.me/join/AAAAAOUSazBFPCDP0CGaVjyh" target="_blank" class="footer__community-link">-->
+<!--                <i class="uil uil-vk-alt"></i>-->
+<!--            </a>-->
+<!--            <a href="https://ig.me/j/AbYGVQ6I8k2hQoUQ" target="_blank" class="footer__community-link">-->
+<!--                <i class="ri-instagram-line"></i>-->
+<!--            </a>-->
+<!--            <a href="https://facetime.apple.com/join#v=1&p=pe8BGv1tEe2evpLF+c6kJw&k=tm9NVJy3NmbPFXMAHM2S-v-wi64_l0WqeoVJ2qbhQDs&l=Freedom%20of%20speech" target="_blank" class="footer__community-link">-->
+<!--                <i class="uil uil-apple-alt"></i>-->
+<!--            </a>-->
+<!--            <a href="steam://connect/130.61.63.137:27015" target="_blank" class="footer__community-link">-->
+<!--                <i class="ri-steam-line"></i>-->
+<!--            </a>-->
+<!--            <a href="https://github.com/freed0m0fspeech" target="_blank" class="footer__community-link">-->
+<!--                <i class="ri-github-line"></i>-->
+<!--            </a>-->
+<!--            <a href="https://stats.uptimerobot.com/6G3WGsP8PY" target="_blank" class="footer__community-link">-->
+<!--                <i class="uil uil-cloud-wifi"></i>-->
+<!--            </a>-->
         </ul>
 
         <span class="footer__copy" id="footer__copy__years_value">2017<!--            &#169; Copyright 2017-2023, @. All rights reserved--></span>

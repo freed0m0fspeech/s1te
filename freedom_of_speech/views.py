@@ -54,7 +54,7 @@ class HomePageView(TemplateView):
 
         query = {'_id': 0, 'constitution': 1, 'laws': 1, 'tlaws': 1, 'users': 1, 'testimonials': 1, 'president': 1,
                  'parliament': 1, 'judge': 1, 'start_vote': 1, 'end_vote': 1, 'chat': 1, 'candidates': 1, 'votes': 1,
-                 'referendum': 1}
+                 'referendum': 1, 'social': 1}
 
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
@@ -173,6 +173,7 @@ class HomePageView(TemplateView):
         context['users'] = document.get('users', {}).keys()
         context['parliament_voted'] = document.get('votes', {}).get('parliament', {}).get(username, '')
         context['president_voted'] = document.get('votes', {}).get('president', {}).get(username, '')
+        context['social'] = document.get('social', {})
 
         response = render(request=request, template_name='freedom_of_speech/index.html', context=context)
 
