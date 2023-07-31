@@ -447,7 +447,7 @@ input:-webkit-autofill:active{
 
 .voting img{
     border-style: solid;
-    animation: deeppink-deepskyblue infinite 3s;
+    animation: deeppink-deepskyblue-border infinite 3s;
 }
 
 .voting a{
@@ -535,8 +535,8 @@ input:-webkit-autofill:active{
 }
 
 .home__blob video{
-    /*border-radius: 50%;*/
-    clip-path: circle();
+    border-radius: 50%;
+    /*clip-path: circle();*/
 }
 
 .home__perfil{
@@ -688,8 +688,8 @@ input:-webkit-autofill:active{
 }
 
 .profile__blob img{
-    /*border-radius: 50%;*/
-    clip-path: circle();
+    border-radius: 50%;
+    /*clip-path: circle();*/
 }
 
 .profile__perfil{
