@@ -779,7 +779,7 @@ class AddTestimonialPageView(TemplateView):
         role = 'Незнакомец'
         if user:
             # member = user.get('member', {})
-            member_parameters = document.get('chat', {}).get('members_parameters', {}).get(users.get(username, {}).get('telegram', {}).get('username', ''), {})
+            member_parameters = document.get('chat', {}).get('members_parameters', {}).get(users.get(username, {}).get('telegram', {}).get('id', ''), {})
             if member_parameters:
                 role = member_parameters.get('custom_title', 'Участник')
 
@@ -841,13 +841,14 @@ class AuthTelegramPageView(TemplateView):
         # data = {'id', 'first_name', 'last_name', 'username', 'photo_url', 'auth_date', 'hash'}
         role = ''
         if user:
-            newtusername = data.get('username', '')
+            # newtusername = data.get('username', '')
+            newtid = data.get('id', '')
             for tuser in users.values():
                 telegram = tuser.get('telegram', '')
                 if telegram:
-                    tusername = telegram.get('username', '')
-                    if tusername == newtusername:
-                        if user.get('telegram', {}).get('username', '') == tusername:
+                    tid = telegram.get('id', '')
+                    if tid == newtid:
+                        if user.get('telegram', {}).get('id', '') == tid:
                             # Unlinking telegram account
                             # Unlink rules prevent from unlink
                             if (
@@ -865,10 +866,7 @@ class AuthTelegramPageView(TemplateView):
 
                                 return HttpResponse(status=200)
 
-            query = {f'users.{username}.telegram.first_name': data.get('first_name', ''),
-                     f'users.{username}.telegram.last_name': data.get('last_name', ''),
-                     f'users.{username}.telegram.photo_url': data.get('photo_url', ''),
-                     f'users.{username}.telegram.username': data.get('username', '')}
+            query = {f'users.{username}.telegram': data}
 
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set', query=query) is None:
                 return HttpResponse(status=500)
@@ -886,11 +884,12 @@ class AuthTelegramPageView(TemplateView):
             origin = os.getenv('HOSTNAME', '')
             # origin = rsa.encrypt(origin, publicKeyReloaded)
 
-            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{newtusername}",
+            member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{newtid}",
                                   data=data, headers={'Origin': origin, 'Host': origin})
             if member and member.status_code == 200:
                 member = member.json()
 
+                # Member position not updating in telegram bot API request member
                 member['position'] = document.get('chat', {}).get('members_parameters', {}).get(username, {}).get('position', '')
 
                 query = {f'chat.members_parameters.{username}': member}
@@ -1010,8 +1009,8 @@ class ProfilePageView(TemplateView):
                     # context['candidate'] = document.get('candidates', {}).get(username, {})
                     telegram = user.get('telegram', '')
                     if telegram:
-                        telegram_username = telegram.get('username', '')
-                        context['telegram_username'] = telegram_username
+                        telegram_id = telegram.get('id', '')
+                        context['telegram_username'] = telegram.get('username', '')
                         context['telegram_first_name'] = telegram.get('first_name', '')
                         context['telegram_last_name'] = telegram.get('last_name', '')
 
@@ -1021,7 +1020,7 @@ class ProfilePageView(TemplateView):
 
                         context['telegram_link_status'] = True
 
-                        member_parameters = chat.get('members_parameters', {}).get(telegram_username, {})
+                        member_parameters = chat.get('members_parameters', {}).get(telegram_id, {})
                         if member_parameters:
                             context['messages_count'] = member_parameters.get('messages_count', '')
                             context['lvl'] = member_parameters.get('lvl', '')
@@ -1114,9 +1113,9 @@ class VotePresidentPageView(TemplateView):
             # Voting for not candidate
             return HttpResponse(status=409)
 
-        telegram_username = users.get(username, {}).get('telegram', {}).get('username', '')
+        telegram_id = users.get(username, {}).get('telegram', {}).get('id', '')
 
-        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}):
+        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_id, {}):
             # Not member of group
             return HttpResponse(status=401)
 
@@ -1137,7 +1136,7 @@ class VotePresidentPageView(TemplateView):
             #     return HttpResponse(status=409)
 
             # Users with freedom less than 30 days can't vote
-            joined_date = document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}).get('joined_date', '')
+            joined_date = document.get('chat', {}).get('members_parameters', {}).get(telegram_id, {}).get('joined_date', '')
             if joined_date:
                 date = json.loads(joined_date, object_hook=json_util.object_hook)
                 if date:
@@ -1208,9 +1207,9 @@ class VoteParliamentPageView(TemplateView):
             # Voting for not candidate
             return HttpResponse(status=409)
 
-        telegram_username = users.get(username, {}).get('telegram', {}).get('username')
+        telegram_id = users.get(username, {}).get('telegram', {}).get('id', '')
 
-        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}):
+        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_id, {}):
             # Not member of group
             return HttpResponse(status=401)
 
@@ -1231,7 +1230,7 @@ class VoteParliamentPageView(TemplateView):
             #     return HttpResponse(status=409)
 
             # Users with freedom less than 30 days can't vote
-            joined_date = document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}).get('joined_date', '')
+            joined_date = document.get('chat', {}).get('members_parameters', {}).get(telegram_id, {}).get('joined_date', '')
             if joined_date:
                 date = json.loads(joined_date, object_hook=json_util.object_hook)
                 if date:
@@ -1302,13 +1301,13 @@ class VoteJudgePageView(TemplateView):
             # Voting for not candidate
             return HttpResponse(status=409)
 
-        telegram_username = users.get(username, {}).get('telegram', {}).get('username')
-        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}) and judge:
+        telegram_id = users.get(username, {}).get('telegram', {}).get('id', '')
+        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_id, {}) and judge:
             # Not member of group
             return HttpResponse(status=401)
 
         if judge:
-            tjudge = users.get(judge, {}).get('telegram', {}).get('username', '')
+            tjudge = users.get(judge, {}).get('telegram', {}).get('id', '')
             if not tjudge:
                 return HttpResponse(status=404)
 
@@ -1335,7 +1334,7 @@ class VoteJudgePageView(TemplateView):
                     # Remove Judge
                     tjudge = users.get(judge_info.get('judge', ''), {}).get('telegram', {}).get('username', '')
                     if tjudge:
-                        text = f"{text}Судья [{judge_info.get('judge', '')}](t.me/{tjudge}) был(а) снят(а) со своего поста"
+                        text = f"{text}Судья [{judge_info.get('judge', '')}](tg://user?id={tjudge}) был(а) снят(а) со своего поста"
 
                         # Demote judge in chat
                         chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
@@ -1351,9 +1350,9 @@ class VoteJudgePageView(TemplateView):
                         return HttpResponse(status=404)
                 else:
                     # New Judge
-                    tjudge = users.get(judge, {}).get('telegram', {}).get('username', '')
+                    tjudge = users.get(judge, {}).get('telegram', {}).get('id', '')
                     if tjudge:
-                        text = f"{text}Новый Судья: [{judge}](t.me/{tjudge})"
+                        text = f"{text}Новый Судья: [{judge}](tg://user?id={tjudge})"
 
                         # Promote new judge (tjudge)
                         chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
@@ -1369,6 +1368,7 @@ class VoteJudgePageView(TemplateView):
 
                         ojudge = judge_info.get('judge', '')
                         if ojudge:
+                            tojudge = users.get(ojudge, {}).get('telegram', {}).get('id', '')
                             # Demote old judge
                             chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
                             origin = os.getenv('HOSTNAME', '')
@@ -1378,7 +1378,7 @@ class VoteJudgePageView(TemplateView):
                             }
                             data = json.dumps(data)
                             requests.post(
-                                f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{ojudge}",
+                                f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tojudge}",
                                 data=data, headers={'Origin': origin, 'Host': origin})
                     else:
                         return HttpResponse(status=404)
@@ -1394,9 +1394,9 @@ class VoteJudgePageView(TemplateView):
 
                     if not judge:
                         # Remove Judge
-                        tjudge = users.get(judge_info.get('judge', ''), {}).get('telegram', {}).get('username', '')
+                        tjudge = users.get(judge_info.get('judge', ''), {}).get('telegram', {}).get('id', '')
                         if tjudge:
-                            text = f"{text}Судья [{judge_info.get('judge', '')}](t.me/{tjudge}) был(а) снят(а) со своего поста"
+                            text = f"{text}Судья [{judge_info.get('judge', '')}](tg://user?id={tjudge}) был(а) снят(а) со своего поста"
 
                             chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
                             origin = os.getenv('HOSTNAME', '')
@@ -1412,7 +1412,7 @@ class VoteJudgePageView(TemplateView):
                             return HttpResponse(status=404)
                     else:
                         # New Judge
-                        tjudge = users.get(judge, {}).get('telegram', {}).get('username', '')
+                        tjudge = users.get(judge, {}).get('telegram', {}).get('id', '')
                         if tjudge:
                             text = f"{text}Новый Судья: [{judge}](t.me/{tjudge})"
 
@@ -1431,6 +1431,7 @@ class VoteJudgePageView(TemplateView):
 
                             ojudge = judge_info.get('judge', '')
                             if ojudge:
+                                tojudge = users.get(ojudge, {}).get('telegram', {}).get('id', '')
                                 # Demote old judge
                                 chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
                                 origin = os.getenv('HOSTNAME', '')
@@ -1440,7 +1441,7 @@ class VoteJudgePageView(TemplateView):
                                 }
                                 data = json.dumps(data)
                                 requests.post(
-                                    f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{ojudge}",
+                                    f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tojudge}",
                                     data=data, headers={'Origin': origin, 'Host': origin})
                         else:
                             return HttpResponse(status=404)
@@ -1531,8 +1532,8 @@ class VoteCandidatePageView(TemplateView):
             # Users without telegram account can't stand
             return HttpResponse(status=404)
 
-        telegram_username = users.get(username, {}).get('telegram', {}).get('username')
-        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}):
+        telegram_id = users.get(username, {}).get('telegram', {}).get('id', '')
+        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_id, {}):
             # Not member of group
             return HttpResponse(status=401)
 
@@ -1541,7 +1542,7 @@ class VoteCandidatePageView(TemplateView):
             return HttpResponse(status=409)
 
         # Users with freedom less than 30 days can't stand
-        joined_date = document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}).get('joined_date', '')
+        joined_date = document.get('chat', {}).get('members_parameters', {}).get(telegram_id, {}).get('joined_date', '')
         if joined_date:
             date = json.loads(joined_date, object_hook=json_util.object_hook)
             if date:
@@ -1642,8 +1643,8 @@ class VoteReferendumPageView(TemplateView):
             # Judge can't vote for referendum
             return HttpResponse(status=409)
 
-        telegram_username = users.get(username, {}).get('telegram', {}).get('username')
-        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}):
+        telegram_id = users.get(username, {}).get('telegram', {}).get('id', '')
+        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_id, {}):
             # Not member of group
             return HttpResponse(status=409)
 

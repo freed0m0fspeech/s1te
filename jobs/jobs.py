@@ -188,7 +188,10 @@ def scheduled_end_voting():
             }
             data = json.dumps(data)
             old_president = document.get('president', '')
-            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{old_president}",
+            told_president = document.get('users', {}).get(old_president, {}).get('telegram', {}).get('id', '')
+            tpresident = document.get('users', {}).get(president, {}).get('telegram', {}).get('id', '')
+
+            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{told_president}",
                           data=data, headers={'Origin': origin, 'Host': origin})
             # Promote new president
             data = {
@@ -197,7 +200,7 @@ def scheduled_end_voting():
                 'parameters': {'custom_title': 'Президент'},
             }
             data = json.dumps(data)
-            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{president}",
+            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tpresident}",
                           data=data, headers={'Origin': origin, 'Host': origin})
 
         if parliament != document.get('parliament', ''):
@@ -208,7 +211,10 @@ def scheduled_end_voting():
             }
             data = json.dumps(data)
             old_parliament = document.get('parliament', '')
-            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{old_parliament}",
+            told_parliament = document.get('users', {}).get(old_parliament, {}).get('telegram', {}).get('id', '')
+            tparliament = document.get('users', {}).get(parliament, {}).get('telegram', {}).get('id', '')
+
+            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{told_parliament}",
                           data=data, headers={'Origin': origin, 'Host': origin})
             # Promote new parliament
             data = {
@@ -218,7 +224,7 @@ def scheduled_end_voting():
             }
             data = json.dumps(data)
 
-            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{parliament}",
+            requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tparliament}",
                           data=data, headers={'Origin': origin, 'Host': origin})
 
         # Delete vote and votes information from database
@@ -232,17 +238,17 @@ def scheduled_end_voting():
                                    action='$set', query=query)
 
         users = document.get('users', {})
-        tpresident = users.get(president, {}).get('telegram', {}).get('username', '')
-        tparliament = users.get(parliament, {}).get('telegram', {}).get('username', '')
+        tpresident = users.get(president, {}).get('telegram', {}).get('id', '')
+        tparliament = users.get(parliament, {}).get('telegram', {}).get('id', '')
 
         text = f"**Завершены выборы [Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech:\n\n**"
         if tpresident:
-            text = f"{text}Новый Президент: [{president}](t.me/{tpresident})\n"
+            text = f"{text}Новый Президент: [{president}](tg://user?id={tpresident})\n"
         else:
             text = f"{text}Новый Президент: {president}\n"
 
         if tparliament:
-            text = f"{text}Новый Парламент: [{parliament}](t.me/{tparliament})\n"
+            text = f"{text}Новый Парламент: [{parliament}](tg://user?id={tparliament})\n"
         else:
             text = f"{text}Новый Парламент: {parliament}\n"
 
@@ -284,10 +290,10 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
         if not document:
             return
 
-        last_update = document.get('chat', {}).get('date', '')
+        last_update_chat = document.get('chat', {}).get('chat_parameters', {}).get('date', '')
 
-        if last_update:
-            last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update,
+        if last_update_chat:
+            last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_chat,
                                                                                                  '%Y-%m-%d %H:%M:%S')).seconds
         else:
             last_update_seconds = 14400
@@ -305,9 +311,6 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
 
             if chat and chat.status_code == 200:
                 chat = chat.json()
-
-                date = datetime.now(tz=utc)
-                date = date.strftime('%Y-%m-%d %H:%M:%S')
 
                 query = {'chat.chat_parameters': chat.get('chat_parameters', {}), 'chat.members_parameters': chat.get('members_parameters', {})}
                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
@@ -342,7 +345,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
 
                         if members_count:
                             # Count of referendum_true values
-                            if (100 * float(len(referendum_usernames)) / float(members_count - len(government))) >= 75:
+                            if (100 * float(len(referendum_usernames)) / float(members_count - len(government))) >= document.get('referendum', {}).get('percent', 75):
 
                                 try:
                                     sched.remove_job('scheduled_start_voting')
@@ -360,31 +363,31 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$set', query=query)
 
-                query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'chat': 1}
-                document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                                      query=query)
-
-                president = document.get('president', '')
-                parliament = document.get('parliament', '')
-                judge = document.get('judge', {}).get('judge', '')
-                telegram_president = document.get('users', {}).get(president, {}).get('telegram', {}).get('username', '')
-                telegram_parliament = document.get('users', {}).get(parliament, {}).get('telegram', {}).get('username', '')
-                telegram_judge = document.get('users', {}).get(judge, {}).get('telegram', {}).get('username', '')
-
-                query = {}
-                # Unset president, parliament, judge in DataBase
-                if not document.get('chat', {}).get('members_parameters', {}).get(telegram_president, {}):
-                    query['president'] = ''
-                else:
-                    if not document.get('chat', {}).get('members_parameters', {}).get(telegram_parliament, {}):
-                        query['parliament'] = ''
-                    else:
-                        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_judge, {}):
-                            query['judge'] = ''
-
-                if query:
-                    mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                               action='$unset', query=query)
+                                # query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'chat': 1}
+                                # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+                                #                                       query=query)
+                                #
+                                # president = document.get('president', '')
+                                # parliament = document.get('parliament', '')
+                                # judge = document.get('judge', {}).get('judge', '')
+                                # telegram_president = document.get('users', {}).get(president, {}).get('telegram', {}).get('username', '')
+                                # telegram_parliament = document.get('users', {}).get(parliament, {}).get('telegram', {}).get('username', '')
+                                # telegram_judge = document.get('users', {}).get(judge, {}).get('telegram', {}).get('username', '')
+                                #
+                                # query = {}
+                                # # Unset president, parliament, judge in DataBase
+                                # if not document.get('chat', {}).get('members_parameters', {}).get(telegram_president, {}):
+                                #     query['president'] = ''
+                                # else:
+                                #     if not document.get('chat', {}).get('members_parameters', {}).get(telegram_parliament, {}):
+                                #         query['parliament'] = ''
+                                #     else:
+                                #         if not document.get('chat', {}).get('members_parameters', {}).get(telegram_judge, {}):
+                                #             query['judge'] = ''
+                                #
+                                # if query:
+                                #     mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                #                                action='$unset', query=query)
     except Exception as e:
         print(e)
 

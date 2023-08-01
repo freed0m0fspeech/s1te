@@ -134,14 +134,14 @@
                             {% if telegram_first_name %}
                                 {{telegram_first_name}} {{telegram_last_name}} <br><br>
                             {% endif %}
+                            {% if position and members_count %}
+                                Топ: {{position}} | {{members_count}} <br>
+                            {% endif %}
                             {% if lvl %}
                                 Уровень: {{lvl}} <br>
                             {% endif %}
                             {% if xp_have and xp_need %}
                                 Опыт: {{xp_have}} | {{xp_need}} <br>
-                            {% endif %}
-                            {% if position and members_count %}
-                                Топ: {{position}} | {{members_count}}
                             {% endif %}
                         </p>
                     </div>
@@ -152,11 +152,21 @@
                         </h3>
 
                         <p class="profile__info-description">
-                            <span class="contact__data-info">Telegram: @{{telegram_username}}</span>
-                            <br>
-                            <a href="https://t.me/{{telegram_username}}" target="_blank" class="contact__button">
-                                Написать <i class="ri-arrow-right-line"></i>
-                            </a>
+                            {% if telegram_username %}
+                                <span class="contact__data-info">Telegram: @{{telegram_username}}</span>
+                                <br>
+                                <a href="https://t.me/{{telegram_username}}" target="_blank" class="contact__button">
+                                    Написать <i class="ri-arrow-right-line"></i>
+                                </a>
+                            {% else %}
+                                {% if telegram_id %}
+                                    <span class="contact__data-info">Telegram ID: {{telegram_id}}</span>
+                                    <br>
+                                    <a href="tg://user?id={{telegram_id}}" target="_blank" class="contact__button">
+                                        Написать <i class="ri-arrow-right-line"></i>
+                                    </a>
+                                {% endif %}
+                            {% endif %}
                         </p>
                     </div>
 
