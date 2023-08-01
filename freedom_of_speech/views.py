@@ -1026,6 +1026,7 @@ class ProfilePageView(TemplateView):
                             context['lvl'] = member_parameters.get('lvl', '')
                             context['xp_have'] = member_parameters.get('xp_have', '')
                             context['xp_need'] = member_parameters.get('xp_need', '')
+                            # context['xp'] = member_parameters.get('xp', '')
                             context['hours_in_voice_channel'] = member_parameters.get('hours_in_voice_channel', '')
                             context['role'] = member_parameters.get('custom_title', 'Участник')
                             context['position'] = member_parameters.get('position', '')
@@ -1739,9 +1740,10 @@ class UpdateMemberPageView(TemplateView):
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
         user = document.get('users', {}).get(username, {})
+        telegram_id = user.get('telegram', {}).get('id', '')
 
         last_update_chat = document.get('chat', {}).get('chat_parameters', {}).get('date', '')
-        last_update = document.get('chat', {}).get('members_parameters', {}).get(username, {}).get('date', last_update_chat)
+        last_update = document.get('chat', {}).get('members_parameters', {}).get(telegram_id, {}).get('date', last_update_chat)
 
         if last_update:
             # update only every 30 minutes
@@ -1752,9 +1754,9 @@ class UpdateMemberPageView(TemplateView):
         else:
             return HttpResponse(status=422)
 
-        telegram_username = user.get('telegram', {}).get('username', '')
+        telegram_id = user.get('telegram', {}).get('id', '')
 
-        if not telegram_username:
+        if not telegram_id:
             # No telegram username to update member info
             return HttpResponse(status=422)
 
@@ -1766,15 +1768,15 @@ class UpdateMemberPageView(TemplateView):
         origin = os.getenv('HOSTNAME', '')
 
         member = requests.get(
-            f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{telegram_username}",
+            f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{telegram_id}",
             data=data, headers={'Origin': origin, 'Host': origin})
 
         if member and member.status_code == 200:
             member = member.json()
 
-            member['position'] = document.get('chat', {}).get('members_parameters', {}).get(username, {}).get('position', '')
+            member['position'] = document.get('chat', {}).get('members_parameters', {}).get(telegram_id, {}).get('position', '')
 
-            query = {f'chat.members_parameters.{username}': member}
+            query = {f'chat.members_parameters.{telegram_id}': member}
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                        action='$set', query=query) is None:
                 return HttpResponse(status=500)
@@ -1788,7 +1790,7 @@ class UpdateMemberPageView(TemplateView):
                 # date = datetime.now(tz=utc)
                 # date = date.strftime('%Y-%m-%d %H:%M:%S')
 
-                query = {f'chat.members_parameters.{username}': '', f'referendum.votes.{username}': ''}
+                query = {f'chat.members_parameters.{telegram_id}': '', f'referendum.votes.{username}': ''}
                 if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                            action='$unset', query=query) is None:
                     return HttpResponse(status=500)
