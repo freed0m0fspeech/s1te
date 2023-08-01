@@ -159,7 +159,7 @@ class HomePageView(TemplateView):
         context['parliament'] = parliament
         context['constitution'] = constitution
         context['members_count'] = members_count
-        context['date_updated'] = document.get('chat', {}).get('date', '')
+        context['date_updated'] = document.get('chat', {}).get('chat_parameters', {}).get('date', '')
         context['username'] = username
         context['laws'] = laws
         context['tlaws'] = tlaws
@@ -455,8 +455,8 @@ class EditLawsPageView(TemplateView):
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                               query=query)
 
-        parliament = document.get('parliament')
-        president = document.get('president')
+        parliament = document.get('parliament', '')
+        president = document.get('president', '')
 
         is_president = False
         is_parliament = False
@@ -762,7 +762,7 @@ class AddTestimonialPageView(TemplateView):
             username = cookies.get('username', '')
 
             if 'sessionid' and 'username' in cookies:
-                query = {'_id': 0, 'users': 1}
+                query = {'_id': 0, 'users': 1, 'chat': 1}
 
                 document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                                       query=query)
@@ -778,15 +778,14 @@ class AddTestimonialPageView(TemplateView):
 
         role = 'Незнакомец'
         if user:
-            member = user.get('member', {})
-            if member:
-                member_parameters = member.get('member_parameters', {})
-                if member_parameters:
-                    role = member_parameters.get('custom_title', 'Участник')
+            # member = user.get('member', {})
+            member_parameters = document.get('chat', {}).get('members_parameters', {}).get(users.get(username, {}).get('telegram', {}).get('username', ''), {})
+            if member_parameters:
+                role = member_parameters.get('custom_title', 'Участник')
 
-                    # If user has no role in chat
-                    if not role:
-                        role = 'Участник'
+                # If user has no role in chat
+                if not role:
+                    role = 'Участник'
         else:
             username = 'Аноним'
 
@@ -859,8 +858,7 @@ class AuthTelegramPageView(TemplateView):
                             ):
                                 return HttpResponse(status=409)
                             else:
-                                query = {f'users.{username}.telegram': '', f'users.{username}.member': '',
-                                         f'users.{username}.date': '', f'referendum.votes.{username}': ''}
+                                query = {f'users.{username}.telegram': '', f'referendum.votes.{username}': ''}
 
                                 if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$unset', query=query) is None:
                                     return HttpResponse(status=500)
@@ -893,7 +891,9 @@ class AuthTelegramPageView(TemplateView):
             if member and member.status_code == 200:
                 member = member.json()
 
-                query = {f'users.{username}.member': member}
+                member['position'] = document.get('chat', {}).get('members_parameters', {}).get(username, {}).get('position', '')
+
+                query = {f'chat.members_parameters.{username}': member}
                 if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                            action='$set', query=query) is None:
                     return HttpResponse(status=500)
@@ -968,7 +968,7 @@ class ProfilePageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'candidates': 1}
+        query = {'_id': 0, 'users': 1, 'candidates': 1, 'chat': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                               query=query)
 
@@ -977,6 +977,7 @@ class ProfilePageView(TemplateView):
             return HttpResponse(status=500)
 
         users = document.get('users', '')
+        chat = document.get('chat', {})
         context = {
 
         }
@@ -1020,34 +1021,34 @@ class ProfilePageView(TemplateView):
 
                         context['telegram_link_status'] = True
 
-                        member = user.get('member', {})
-                        if member:
-                            member_parameters = member.get('member_parameters', '')
-                            context['messages_count'] = member.get('messages_count', '')
-                            context['lvl'] = member.get('lvl', '')
-                            context['xp_have'] = member.get('xp_have', '')
-                            context['xp_need'] = member.get('xp_need', '')
-                            context['hours_in_voice_channel'] = member.get('hours_in_voice_channel', '')
+                        member_parameters = chat.get('members_parameters', {}).get(telegram_username, {})
+                        if member_parameters:
+                            context['messages_count'] = member_parameters.get('messages_count', '')
+                            context['lvl'] = member_parameters.get('lvl', '')
+                            context['xp_have'] = member_parameters.get('xp_have', '')
+                            context['xp_need'] = member_parameters.get('xp_need', '')
+                            context['hours_in_voice_channel'] = member_parameters.get('hours_in_voice_channel', '')
+                            context['role'] = member_parameters.get('custom_title', 'Участник')
+                            context['position'] = member_parameters.get('position', '')
+                            context['members_count'] = chat.get('chat_parameters', {}).get('members_count', '')
+                            context['date_updated'] = member_parameters.get('date', '')
                             context['member_status'] = True
-                            if member_parameters:
-                                context['role'] = member_parameters.get('custom_title', 'Участник')
-                                if not context['role']:
-                                    candidate = document.get('candidates', {}).get(username, '')
-                                    if candidate:
-                                        context['role'] = 'Кандидат'
-                                    else:
-                                        context['role'] = 'Участник'
 
-                                joined_date = member_parameters.get('joined_date', '')
-                                if joined_date:
-                                    date = json.loads(joined_date, object_hook=json_util.object_hook)
-                                    if date:
-                                        # date = datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S')
-                                        # context['joined_date'] = date.strftime('%b %e, %Y')
-                                        # print(date.strftime('%Y-%m-%d %H:%M:%S'))
-                                        context['joined_date'] = date.strftime('%Y-%m-%d %H:%M:%S')
+                            if not context['role']:
+                                candidate = document.get('candidates', {}).get(username, '')
+                                if candidate:
+                                    context['role'] = 'Кандидат'
+                                else:
+                                    context['role'] = 'Участник'
 
-                        context['date_updated'] = user.get('date', '')
+                            joined_date = member_parameters.get('joined_date', '')
+                            if joined_date:
+                                date = json.loads(joined_date, object_hook=json_util.object_hook)
+                                if date:
+                                    # date = datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S')
+                                    # context['joined_date'] = date.strftime('%b %e, %Y')
+                                    # print(date.strftime('%Y-%m-%d %H:%M:%S'))
+                                    context['joined_date'] = date.strftime('%Y-%m-%d %H:%M:%S')
                     else:
                         context['telegram_link_status'] = False
                         context['role'] = 'Аноним'
@@ -1076,7 +1077,7 @@ class VotePresidentPageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'votes': 1, 'candidates': 1}
+        query = {'_id': 0, 'users': 1, 'votes': 1, 'candidates': 1, 'chat': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                               query=query)
 
@@ -1113,7 +1114,9 @@ class VotePresidentPageView(TemplateView):
             # Voting for not candidate
             return HttpResponse(status=409)
 
-        if not users.get(username, {}).get('member', {}):
+        telegram_username = users.get(username, {}).get('telegram', {}).get('username', '')
+
+        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}):
             # Not member of group
             return HttpResponse(status=401)
 
@@ -1134,7 +1137,7 @@ class VotePresidentPageView(TemplateView):
             #     return HttpResponse(status=409)
 
             # Users with freedom less than 30 days can't vote
-            joined_date = users.get(username, {}).get('member', {}).get('member_parameters', {}).get('joined_date', '')
+            joined_date = document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}).get('joined_date', '')
             if joined_date:
                 date = json.loads(joined_date, object_hook=json_util.object_hook)
                 if date:
@@ -1205,7 +1208,9 @@ class VoteParliamentPageView(TemplateView):
             # Voting for not candidate
             return HttpResponse(status=409)
 
-        if not users.get(username, {}).get('member', {}):
+        telegram_username = users.get(username, {}).get('telegram', {}).get('username')
+
+        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}):
             # Not member of group
             return HttpResponse(status=401)
 
@@ -1226,7 +1231,7 @@ class VoteParliamentPageView(TemplateView):
             #     return HttpResponse(status=409)
 
             # Users with freedom less than 30 days can't vote
-            joined_date = users.get(username, {}).get('member', {}).get('member_parameters', {}).get('joined_date', '')
+            joined_date = document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}).get('joined_date', '')
             if joined_date:
                 date = json.loads(joined_date, object_hook=json_util.object_hook)
                 if date:
@@ -1297,7 +1302,8 @@ class VoteJudgePageView(TemplateView):
             # Voting for not candidate
             return HttpResponse(status=409)
 
-        if not users.get(judge, {}).get('member', {}) and judge:
+        telegram_username = users.get(username, {}).get('telegram', {}).get('username')
+        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}) and judge:
             # Not member of group
             return HttpResponse(status=401)
 
@@ -1525,7 +1531,8 @@ class VoteCandidatePageView(TemplateView):
             # Users without telegram account can't stand
             return HttpResponse(status=404)
 
-        if not users.get(username, {}).get('member', {}):
+        telegram_username = users.get(username, {}).get('telegram', {}).get('username')
+        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}):
             # Not member of group
             return HttpResponse(status=401)
 
@@ -1534,7 +1541,7 @@ class VoteCandidatePageView(TemplateView):
             return HttpResponse(status=409)
 
         # Users with freedom less than 30 days can't stand
-        joined_date = users.get(username, {}).get('member', {}).get('member_parameters', {}).get('joined_date', '')
+        joined_date = document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}).get('joined_date', '')
         if joined_date:
             date = json.loads(joined_date, object_hook=json_util.object_hook)
             if date:
@@ -1635,7 +1642,8 @@ class VoteReferendumPageView(TemplateView):
             # Judge can't vote for referendum
             return HttpResponse(status=409)
 
-        if not users.get(username, {}).get('member', {}):
+        telegram_username = users.get(username, {}).get('telegram', {}).get('username')
+        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_username, {}):
             # Not member of group
             return HttpResponse(status=409)
 
@@ -1677,7 +1685,7 @@ class UpdateChatPageView(TemplateView):
         query = {'_id': 0, 'chat': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
-        last_update = document.get('chat', {}).get('date', '')
+        last_update = document.get('chat', {}).get('chat_parameters', {}).get('date', '')
 
         if last_update:
             # update only every 30 minutes
@@ -1700,10 +1708,7 @@ class UpdateChatPageView(TemplateView):
         if chat and chat.status_code == 200:
             chat = chat.json()
 
-            date = datetime.now(tz=utc)
-            date = date.strftime('%Y-%m-%d %H:%M:%S')
-
-            query = {'chat.chat_parameters': chat.get('chat_parameters', {}), 'chat.date': date}
+            query = {'chat.chat_parameters': chat.get('chat_parameters', {}), 'chat.members_parameters': chat.get('members_parameters', {})}
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                        action='$set', query=query) is None:
                 return HttpResponse(status=500)
@@ -1734,7 +1739,8 @@ class UpdateMemberPageView(TemplateView):
 
         user = document.get('users', {}).get(username, {})
 
-        last_update = user.get('date', '')
+        last_update_chat = document.get('chat', {}).get('chat_parameters', {}).get('date', '')
+        last_update = document.get('chat', {}).get('members_parameters', {}).get(username, {}).get('date', last_update_chat)
 
         if last_update:
             # update only every 30 minutes
@@ -1765,10 +1771,9 @@ class UpdateMemberPageView(TemplateView):
         if member and member.status_code == 200:
             member = member.json()
 
-            date = datetime.now(tz=utc)
-            date = date.strftime('%Y-%m-%d %H:%M:%S')
+            member['position'] = document.get('chat', {}).get('members_parameters', {}).get(username, {}).get('position', '')
 
-            query = {f'users.{username}.member': member, f'users.{username}.date': date}
+            query = {f'chat.members_parameters.{username}': member}
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                        action='$set', query=query) is None:
                 return HttpResponse(status=500)
@@ -1782,10 +1787,11 @@ class UpdateMemberPageView(TemplateView):
                 # date = datetime.now(tz=utc)
                 # date = date.strftime('%Y-%m-%d %H:%M:%S')
 
-                query = {f'users.{username}.member': '', f'users.{username}.date': '',
-                         f'referendum.votes.{username}': ''}
+                query = {f'chat.members_parameters.{username}': '', f'referendum.votes.{username}': ''}
                 if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                            action='$unset', query=query) is None:
                     return HttpResponse(status=500)
+            else:
+                return HttpResponse(status=member.status_code)
 
             return HttpResponse()

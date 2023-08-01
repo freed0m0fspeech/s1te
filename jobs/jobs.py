@@ -309,7 +309,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                 date = datetime.now(tz=utc)
                 date = date.strftime('%Y-%m-%d %H:%M:%S')
 
-                query = {'chat.chat_parameters': chat.get('chat_parameters', {}), 'chat.date': date}
+                query = {'chat.chat_parameters': chat.get('chat_parameters', {}), 'chat.members_parameters': chat.get('members_parameters', {})}
                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                            action='$set', query=query)
 
@@ -360,89 +360,31 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$set', query=query)
 
-            time.sleep(60)
+                query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'chat': 1}
+                document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+                                                      query=query)
 
-        users = document.get('users', '')
+                president = document.get('president', '')
+                parliament = document.get('parliament', '')
+                judge = document.get('judge', {}).get('judge', '')
+                telegram_president = document.get('users', {}).get(president, {}).get('telegram', {}).get('username', '')
+                telegram_parliament = document.get('users', {}).get(parliament, {}).get('telegram', {}).get('username', '')
+                telegram_judge = document.get('users', {}).get(judge, {}).get('telegram', {}).get('username', '')
 
-        # Sync data for start, stop, step inverval (60 seconds delay) (default 200 users)
-        # for user in itertools.islice(users, start, stop, step):
-        # sync_count = 0
-        for user in users:
-            tuser = users.get(user, '')
-            # print(tuser)
-
-            # password = user.get('password', '')
-            # sessionid = user.get('sessionid', '')
-            # permissions = user.get('permissions', {})
-
-            last_update = tuser.get('date', '')
-
-            if last_update:
-                last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update,
-                                                                                                     '%Y-%m-%d %H:%M:%S')).seconds
-            else:
-                last_update_seconds = 14400
-
-            # update only every 4 hours
-            if last_update_seconds >= 14400:
-                telegram = tuser.get('telegram', {})
-
-                if telegram:
-                    chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
-                    telegram_username = telegram.get('username', '')
-
-                    data = {
-                        'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
-                    }
-                    data = json.dumps(data)
-                    origin = os.getenv('HOSTNAME', '')
-
-                    member = requests.get(
-                        f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{telegram_username}",
-                        data=data, headers={'Origin': origin, 'Host': origin})
-                    # sync_count += 1
-
-                    if member and member.status_code == 200:
-                        member = member.json()
-
-                        date = datetime.now(tz=utc)
-                        date = date.strftime('%Y-%m-%d %H:%M:%S')
-
-                        query = {f'users.{user}.member': member, f'users.{user}.date': date}
-                        mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                   action='$set', query=query)
+                query = {}
+                # Unset president, parliament, judge in DataBase
+                if not document.get('chat', {}).get('members_parameters', {}).get(telegram_president, {}):
+                    query['president'] = ''
+                else:
+                    if not document.get('chat', {}).get('members_parameters', {}).get(telegram_parliament, {}):
+                        query['parliament'] = ''
                     else:
-                        if member.status_code == 422:
-                            # if not member or not user or not chat:
-                            #     return Response(status=422)
+                        if not document.get('chat', {}).get('members_parameters', {}).get(telegram_judge, {}):
+                            query['judge'] = ''
 
-                            # date = datetime.now(tz=utc)
-                            # date = date.strftime('%Y-%m-%d %H:%M:%S')
-
-                            if tuser.get('member', ''):
-                                query = {f'users.{user}.member': '', f'users.{user}.date': '',
-                                         f'referendum.votes.{user}': ''}
-
-                                president = document.get('president', '')
-                                parliament = document.get('parliament', '')
-                                judge = document.get('judge', {}).get('judge', '')
-
-                                # Unset president, parliament, judge in DataBase
-                                if user == president:
-                                    query['president'] = ''
-                                else:
-                                    if user == parliament:
-                                        query['parliament'] = ''
-                                    else:
-                                        if user == judge:
-                                            query['judge'] = ''
-
-                                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                           action='$unset', query=query)
-
-                    time.sleep(60)
-
-
+                if query:
+                    mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                               action='$unset', query=query)
     except Exception as e:
         print(e)
 
