@@ -219,6 +219,11 @@ class SignInPageView(TemplateView):
         if not username or not password:
             return HttpResponse(status=422)
 
+        try:
+            username.encode('latin-1')
+        except UnicodeEncodeError:
+            return HttpResponse(status=422)
+
         query = {'_id': 0, 'users': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
@@ -244,6 +249,7 @@ class SignInPageView(TemplateView):
             response = HttpResponse(status=200)
 
             expires = datetime.now(tz=utc) + timedelta(days=7)
+
             response.set_cookie(key='username', value=username, secure=True, samesite='None', expires=expires)
             response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='None', expires=expires)
 
@@ -300,6 +306,11 @@ class SignUpPageView(TemplateView):
         repeat_password = data.get('repeat_password', '')
 
         if not username or not password or not repeat_password:
+            return HttpResponse(status=422)
+
+        try:
+            username.encode('latin-1')
+        except UnicodeEncodeError:
             return HttpResponse(status=422)
 
         query = {'_id': 0, 'users': 1}
