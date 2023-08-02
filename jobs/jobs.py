@@ -26,7 +26,12 @@ def scheduled_start_voting():
             start_vote = datetime.now(tz=utc) + timedelta(hours=1)
             start_vote = start_vote.strftime('%Y-%m-%d %H:%M:%S')
 
-            sched.get_job('scheduled_start_voting').modify(next_run_time=start_vote)
+            job = sched.get_job('scheduled_start_voting')
+            if job:
+                job.modify(next_run_time=start_vote)
+            else:
+                sched.add_job(scheduled_start_voting, 'date', run_date=start_vote, id='scheduled_start_voting',
+                              misfire_grace_time=None, coalesce=True)
             return
 
         query = {'_id': 0, 'candidates': 1, 'chat': 1}
@@ -77,8 +82,17 @@ def scheduled_start_voting():
         mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                    action='$set', query=query)
 
-        sched.add_job(scheduled_end_voting, 'date', run_date=end_vote)
-        sched.add_job(scheduled_start_voting, 'date', run_date=start_vote)
+        job = sched.get_job('scheduled_end_voting')
+        if job:
+            job.modify(next_run_time=end_vote)
+        else:
+            sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting')
+
+        job = sched.get_job('scheduled_start_voting')
+        if job:
+            job.modify(next_run_time=start_vote)
+        else:
+            sched.add_job(scheduled_start_voting, 'date', run_date=start_vote, id='scheduled_start_voting')
 
         text = f"**В данный момент на [официальном сайте]({os.getenv('HOSTNAME', '')}freedom_of_speech) проходят [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
 
@@ -107,7 +121,12 @@ def scheduled_end_voting():
             end_vote = datetime.now(tz=utc) + timedelta(hours=1)
             end_vote = end_vote.strftime('%Y-%m-%d %H:%M:%S')
 
-            sched.get_job('scheduled_end_voting').modify(next_run_time=end_vote)
+            job = sched.get_job('scheduled_end_voting')
+            if job:
+                job.modify(next_run_time=end_vote)
+            else:
+                sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting',
+                              misfire_grace_time=None, coalesce=True)
 
             sched.print_jobs()
 
@@ -353,8 +372,12 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                                     # job not found
                                     pass
 
-                                sched.add_job(scheduled_start_voting, 'date', run_date=datetime.now(tz=utc),
-                                              id='scheduled_start_voting')
+                                job = sched.get_job('scheduled_start_voting')
+                                if job:
+                                    job.modify(next_run_time=datetime.now(tz=utc))
+                                else:
+                                    sched.add_job(scheduled_start_voting, 'date', run_date=datetime.now(tz=utc),
+                                                  id='scheduled_start_voting')
 
                                 referendum_date = datetime.now(tz=utc)
                                 referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
@@ -402,7 +425,12 @@ def scheduled_voting():
             date = datetime.now(tz=utc) + timedelta(minutes=15)
             date = date.strftime('%Y-%m-%d %H:%M:%S')
 
-            sched.get_job('scheduled_voting').modify(next_run_time=date)
+            job = sched.get_job('scheduled_voting')
+            if job:
+                job.modify(next_run_time=date)
+            else:
+                sched.add_job(scheduled_voting, 'date', run_date=date, id='scheduled_voting', misfire_grace_time=None,
+                              coalesce=True)
         else:
             query = {'_id': 0, 'start_vote': 1, 'end_vote': 1}
             document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
@@ -412,13 +440,21 @@ def scheduled_voting():
             end_vote = document.get('end_vote', '')
 
             if start_vote:
-                sched.add_job(scheduled_start_voting, 'date', run_date=start_vote, id='scheduled_start_voting',
-                              misfire_grace_time=None, coalesce=True)
+                job = sched.get_job('scheduled_start_voting')
+                if job:
+                    job.modify(next_run_time=start_vote)
+                else:
+                    sched.add_job(scheduled_start_voting, 'date', run_date=start_vote, id='scheduled_start_voting',
+                                  misfire_grace_time=None, coalesce=True)
 
             # End vote job (on end_vote date in db)
             if end_vote:
-                sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting',
-                              misfire_grace_time=None, coalesce=True)
+                job = sched.get_job('scheduled_end_voting')
+                if job:
+                    job.modify(next_run_time=end_vote)
+                else:
+                    sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting',
+                                  misfire_grace_time=None, coalesce=True)
     except Exception as e:
         print(e)
 
