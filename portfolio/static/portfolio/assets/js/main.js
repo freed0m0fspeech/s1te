@@ -140,6 +140,26 @@ themeButton.classList.add(localStorage.getItem('selected-icon'))
 const themes = {'system-theme': 'light-theme', 'light-theme': 'dark-theme', 'dark-theme': 'system-theme'}
 const icons = {'ri-contrast-line': 'ri-sun-line', 'ri-moon-line': 'ri-contrast-line', 'ri-sun-line': 'ri-moon-line'}
 
+// const darkTheme = 'dark-theme'
+// const iconTheme = 'ri-sun-line'
+
+//
+// // Previously selected topic (if user selected)
+// const selectedTheme = selected_theme
+// const selectedIcon = selected_icon
+//
+// window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+
+// // We obtain the current theme that the interface has by validating the dark-theme class
+// const getCurrentTheme = () => document.body.classList.contains(darkTheme) ? 'dark' : 'light'
+// const getCurrentIcon = () => themeButton.classList.contains(iconTheme) ? 'ri-moon-line' : 'ri-sun-line'
+
+// // We validate if the user previously chose a topic
+// if (selectedTheme) {
+// If the validation is fulfilled, we ask what the issue was to know if we activated or deactivated the dark
+// document.body.classList[selectedTheme === 'dark' ? 'add' : 'remove'](darkTheme)
+// themeButton.classList[selectedIcon === 'ri-moon-line' ? 'add' : 'remove'](iconTheme)
+// }
 
 // Activate / deactivate the theme manually with the button
 themeButton.addEventListener('click', () => {
