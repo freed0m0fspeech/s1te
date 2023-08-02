@@ -125,6 +125,11 @@ img {
     height: auto;
 }
 
+video{
+    max-width: 100%;
+    height: auto;
+}
+
 /*=============== THEME ===============*/
 .nav__buttons{
     display: flex;

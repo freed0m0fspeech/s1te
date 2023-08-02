@@ -9,12 +9,20 @@
 
       {% if end_vote %}
         <div class="home__blob grid voting">
-          <img src="{% static 'freedom_of_speech/assets/img/freedom_of_speech-logo-light.gif' %}" alt="home perfil">
+<!--          <img src="{% static 'freedom_of_speech/assets/img/freedom_of_speech-logo-light.gif' %}" alt="home perfil">-->
+          <video autoplay loop muted playsinline>
+            <!--            <source src="my-animation.webm" type="video/webm" />-->
+            <source src="{% static 'freedom_of_speech/assets/img/freedom_of_speech-logo-light.mp4' %}" type="video/mp4" />
+          </video>
           <a href="#government"> Проголосуй <i class="ri-arrow-down-circle-line"></i></a>
         </div>
       {% else %}
         <div class="home__blob grid">
-          <img src="{% static 'freedom_of_speech/assets/img/freedom_of_speech-logo-light.gif' %}" alt="home perfil">
+<!--          <img src="{% static 'freedom_of_speech/assets/img/freedom_of_speech-logo-light.gif' %}" alt="home perfil">-->
+          <video autoplay loop muted playsinline>
+            <!--            <source src="my-animation.webm" type="video/webm" />-->
+            <source src="{% static 'freedom_of_speech/assets/img/freedom_of_speech-logo-light.mp4' %}" type="video/mp4" />
+          </video>
         </div>
       {% endif %}
 
