@@ -47,14 +47,13 @@
 
       <div class="members__container container">
         {% for username, member_parameters, telegram_parameters in members %}
-            <a href="/freedom_of_speech/profile/{{username}}/" target="_blank">
-              {{member_parameters.position}}
-              &nbsp;<img src="{{telegram_parameters.photo_url}}">&nbsp;
-              {{username}}
-<!--              @{{telegram_parameters.username}} ( {{telegram_parameters.first_name}} {{telegram_parameters.last_name}} )-->
-<!--              Уровень: {{member_parameters.lvl}}-->
-<!--              Опыт: {{member_parameters.xp_have}} | {{member_parameters.xp_need}}-->
-            </a>
+          <a href="/freedom_of_speech/profile/{{username}}/" target="_blank">
+            <img src="{{telegram_parameters.photo_url}}">&nbsp;
+            @{{username}} ({{member_parameters.position}})
+            Уровень: {{member_parameters.lvl}}
+            <!--              @{{telegram_parameters.username}} ( {{telegram_parameters.first_name}} {{telegram_parameters.last_name}} )-->
+            <!--              Опыт: {{member_parameters.xp_have}} | {{member_parameters.xp_need}}-->
+          </a>
         {% endfor %}
       </div>
 

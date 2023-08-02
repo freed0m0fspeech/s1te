@@ -1026,9 +1026,9 @@ class ProfilePageView(TemplateView):
                         context['telegram_first_name'] = telegram.get('first_name', '')
                         context['telegram_last_name'] = telegram.get('last_name', '')
 
-                        telegram_photo_url = telegram.get('photo_url', '')
-                        if is_url_image(telegram_photo_url):
-                            context['telegram_photo_url'] = telegram_photo_url
+                        # telegram_photo_url = telegram.get('photo_url', '')
+                        # if is_url_image(telegram_photo_url):
+                        context['telegram_photo_url'] = telegram.get('photo_url', '')
 
                         context['telegram_link_status'] = True
 
@@ -1838,10 +1838,10 @@ class MembersPageView(TemplateView):
 
         for username, user_parameters in document.get('users', {}).items():
             member_parameters = members_parameters.get(user_parameters.get('telegram', {}).get('id', ''), {})
-            # if member_parameters:
+            if member_parameters:
                 # position = member_parameters.get('position', -1)
-            member = (username, member_parameters, user_parameters.get('telegram', {}))
-            members.append(member)
+                member = (username, member_parameters, user_parameters.get('telegram', {}))
+                members.append(member)
 
         # Sort members by xp
         # If you just need a number that's bigger than all others, you can use float('inf')
