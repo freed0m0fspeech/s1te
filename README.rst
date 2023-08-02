@@ -7,7 +7,7 @@ Personal site for different puprposes, HTML, CSS, JavaScript, Django Python proj
 
 ---------------
 
-Additional info about ``s1te`` file, you can find `here <https://github.com/pr0stre1/s1te/releases>`_.
+Additional info about ``s1te``, you can find `here <https://github.com/pr0stre1/s1te/releases>`_.
 
 ---------------
 

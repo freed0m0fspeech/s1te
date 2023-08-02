@@ -729,7 +729,10 @@ $('#signout-button').on('click', function(e) {
             }, 1000);
         },
         error(xhr,status,error){
-            alert(error)
+            if (error)
+                alert(error)
+            else
+                alert("status=".concat(xhr.status))
         }
     });
 });
@@ -838,7 +841,10 @@ $('#contact_button').on('click', function(e) {
                 if (xhr.status === 422)
                     contactMessage.text('Возникли проблемы с вашим запросом')
                 else
-                    contactMessage.text(error)
+                    if (error)
+                        contactMessage.text(status)
+                    else
+                        contactMessage.text("status=".concat(xhr.status))
 
                 setTimeout(() => {
                     contactMessage.text('')
@@ -904,7 +910,10 @@ $('#auth-telegram_button').on('click', function(e) {
                 if (xhr.status === 409)
                     alert('Твоя роль не позволяет отвязать Telegram')
                 else
-                    alert(error)
+                    if (error)
+                        alert(error)
+                    else
+                        alert("status=".concat(xhr.status))
                 // Some error
             },
         });
@@ -1001,7 +1010,10 @@ $('#government__votes_president').on('click', function (e){
                 else if(xhr.status === 401)
                     alert('Только участники Telegram группы "Freedom of speech" могут голосовать')
                 else
-                    alert(error)
+                    if (error)
+                        alert(error)
+                    else
+                        alert("status=".concat(xhr.status))
             },
         });
     }else {
@@ -1050,7 +1062,10 @@ $('#government__votes_parliament').on('click', function (e){
                 else if(xhr.status === 401)
                     alert('Только участники Telegram группы "Freedom of speech" могут голосовать')
                 else
-                    alert(error)
+                    if (error)
+                        alert(error)
+                    else
+                        alert("status=".concat(xhr.status))
             },
         });
     }else {
@@ -1115,7 +1130,10 @@ $('#government__votes_judge').on('click', function (e){
                 else if(xhr.status === 401)
                     alert('Только участники Telegram группы "Freedom of speech" могут быть Судьей')
                 else
-                    alert(error)
+                    if (error)
+                        alert(error)
+                    else
+                        alert("status=".concat(xhr.status))
                 // contactMessage.text('Возникли проблемы с вашим запросом')
             },
         });
@@ -1166,7 +1184,10 @@ $('#government__votes').on('click', function (e){
                 else if (xhr.status === 422)
                     alert('Только авторизованные пользователи могут голосовать за референдум')
                 else
-                    alert(error)
+                    if (error)
+                        alert(error)
+                    else
+                        alert("status=".concat(xhr.status))
             },
         });
     }else {
@@ -1231,7 +1252,10 @@ $('.government__card').on('click', function (e){
                 else if(xhr.status === 422)
                     alert('Только авторизованные пользователи могут баллотироваться')
                 else
-                    alert(error)
+                    if (error)
+                        alert(error)
+                    else
+                        alert("status=".concat(xhr.status))
             },
         });
     }else {
@@ -1281,7 +1305,10 @@ $('#date__updated').on('click', function (e){
             else if(xhr.status === 429)
                 alert('Обновлять данные можно только каждые 30 минут')
             else
-                alert(error)
+                if (error)
+                    alert(error)
+                else
+                    alert("status=".concat(xhr.status))
         },
     });
 });
