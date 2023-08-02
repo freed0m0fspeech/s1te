@@ -78,12 +78,11 @@
 
       <div>
         <h3 class="home__info-title">
-          КОНТАКТЫ
+          ПОЛЬЗОВАТЕЛЕЙ
         </h3>
 
-        <p class="home__info-description">
-          Email: prostre1@ukr.net <br>
-          Telegram: @pr0stre1 <br>
+        <p class="home__info-number" id="users_value">
+            {{users_count}}
         </p>
       </div>
 
@@ -93,10 +92,22 @@
         </h3>
 
         <p class="home__info-description">
-          Дискорд бот <br>
-          Телеграм бот <br>
-          Официальная страница <br>
-          CS:GO сервер <br>
+          <a href="https://discord.com/users/805497711264661565" target="_blank">
+            Дискорд бот <br>
+          </a>
+
+          <a href="https://t.me/F0S_bot" target="_blank">
+            Телеграм бот <br>
+          </a>
+
+          <a href="#">
+            Официальная страница <br>
+          </a>
+
+          <a href="steam://connect/130.61.63.137:27015" target="_blank">
+            CS:GO сервер <br>
+          </a>
+
         </p>
       </div>
     </div>
@@ -129,7 +140,9 @@
         </h3>
 
         <p class="home__info-number" id="members_value">
-          {{members_count}}
+          <a href="/freedom_of_speech/members/">
+            {{members_count}}
+          </a>
 <!--          <div class="animated_number home__info-number"></div>-->
         </p>
       </div>

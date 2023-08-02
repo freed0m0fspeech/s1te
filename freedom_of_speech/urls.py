@@ -5,6 +5,7 @@ urlpatterns = [
     re_path(r'^freedom_of_speech/$', views.HomePageView.as_view(), name='HomePageView'),
     re_path(r'^freedom_of_speech/profile/$', views.ProfilePageView.as_view(), name='ProfilePageView'),
     re_path(r'^freedom_of_speech/profile/(?P<username>[^\\/]+)/$', views.ProfilePageView.as_view(), name='UserProfilePageView'),
+    re_path(r'^freedom_of_speech/members/', views.MembersPageView.as_view(), name='MembersPageView'),
     re_path(r'^freedom_of_speech/signin/$', views.SignInPageView.as_view(), name='SignInPageView'),
     re_path(r'^freedom_of_speech/signup/$', views.SignUpPageView.as_view(), name='SignUpPageView'),
     re_path(r'^freedom_of_speech/signout/$', views.SignOutPageView.as_view(), name='SignOutPageView'),

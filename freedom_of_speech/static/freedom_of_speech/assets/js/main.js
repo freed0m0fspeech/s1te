@@ -144,10 +144,8 @@ const sr = ScrollReveal({
 
 sr.reveal(`.home__data, .constitution__content, .laws__content, .testimonial__container, .profile__data, .entry__content`, {origin: 'top'})
 sr.reveal(`.footer__container`, {origin: 'bottom'})
-sr.reveal(`.home__info:nth-child(odd) div, .profile__info:nth-child(odd) div`, {origin: 'left'})
-sr.reveal(`.home__info:nth-child(even) div, .profile__info:nth-child(even) div`, {origin: 'right'})
-sr.reveal(`.contact__content:nth-child(odd)`, {origin: 'left'})
-sr.reveal(`.contact__content:nth-child(even)`, {origin: 'right'})
+sr.reveal(`.home__info:nth-child(odd) div, .profile__info:nth-child(odd) div, .members__container a:nth-child(odd), .contact__content:nth-child(odd)`, {origin: 'left'})
+sr.reveal(`.home__info:nth-child(even) div, .profile__info:nth-child(even) div, .members__container a:nth-child(even), .contact__content:nth-child(even)`, {origin: 'right'})
 sr.reveal(`.government__card`, {interval: 50})
 
 // let number = 69;

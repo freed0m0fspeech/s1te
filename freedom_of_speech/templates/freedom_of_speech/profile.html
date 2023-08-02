@@ -153,17 +153,13 @@
 
                         <p class="profile__info-description">
                             {% if telegram_username %}
-                                <span class="contact__data-info">Telegram: @{{telegram_username}}</span>
-                                <br>
                                 <a href="https://t.me/{{telegram_username}}" target="_blank" class="contact__button">
-                                    Написать <i class="ri-arrow-right-line"></i>
+                                    Telegram <i class="ri-arrow-right-line"></i>
                                 </a>
                             {% else %}
                                 {% if telegram_id %}
-                                    <span class="contact__data-info">Telegram ID: {{telegram_id}}</span>
-                                    <br>
                                     <a href="tg://user?id={{telegram_id}}" target="_blank" class="contact__button">
-                                        Написать <i class="ri-arrow-right-line"></i>
+                                        Telegram <i class="ri-arrow-right-line"></i>
                                     </a>
                                 {% endif %}
                             {% endif %}

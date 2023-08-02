@@ -185,6 +185,10 @@ body.dark-theme {
     box-shadow: 0 4px 20px hsla(0, 0%, 0%);
 }
 
+.dark-theme .members__container{
+    /*box-shadow: 0 4px 20px hsla(0, 0%, 0%);*/
+}
+
 /*=============== SCROLL BAR ===============*/
 .dark-theme::-webkit-scrollbar{
     width: .5rem;
@@ -227,6 +231,28 @@ body.dark-theme {
 }
 
 .dark-theme .government__votes::-webkit-scrollbar-thumb:hover{
+    background-color: hsl(171, 100%, 50%) /* Scrollbar-thumb color pink - hsl(328, 100%, 54%); */
+}
+
+.dark-theme .members__container ::-webkit-scrollbar{
+    width: .5rem;
+    border-radius: .5rem;
+    background-color: var(--container-color);
+}
+
+.dark-theme .members__container::-webkit-scrollbar:hover{
+    width: .5rem;
+    border-radius: .5rem;
+    background-color: var(--container-color)
+}
+
+.dark-theme .members__container::-webkit-scrollbar-thumb{
+    background-color: hsl(0, 0%, 100%);
+    border-radius: .5rem;
+
+}
+
+.dark-theme .members__container::-webkit-scrollbar-thumb:hover{
     background-color: hsl(171, 100%, 50%) /* Scrollbar-thumb color pink - hsl(328, 100%, 54%); */
 }
 
@@ -616,7 +642,7 @@ input:-webkit-autofill:active{
     font-family: var(--body-font);
     font-size: var(--smaller-font-size);
     font-weight: 400;
-    color: var(--text-color-light);
+    color: var(--title-color);
     margin-bottom: 1rem;
 }
 
@@ -641,20 +667,41 @@ input:-webkit-autofill:active{
     cursor: pointer;
 }
 
+.date__updated p:hover{
+    color: var(--title-color)
+}
+
 .home__info-description,
 .home__info-number{
     font-family: var(--title-font);
-    color: var(--title-color);
+    color: var(--text-color-light);
 }
 
 .home__info-description{
     padding-right: 4rem;
 }
 
+.home__info-number a,
+.home__info-description a {
+    color: var(--text-color-light);
+}
+
+.home__info-number a:hover,
+.home__info-description a:hover{
+    color: var(--title-color);
+}
+
 .home__info-number{
     font-size: var(--h2-font-size);
     font-weight: var(--font-semi-bold);
+    color: var(--text-color-light)
 }
+
+.home__info-number a{
+    cursor: pointer;
+    color: var(--text-color-light)
+}
+
 
 /*=============== PROFILE ===============*/
 .profile__container{
@@ -742,7 +789,7 @@ input:-webkit-autofill:active{
 
 .profile__community-link{
     font-size: 1.5rem;
-    color: var(--text-color-light);
+    color: var(--title-color);
     /*transition: color .3s;*/
 }
 
@@ -767,13 +814,22 @@ input:-webkit-autofill:active{
     font-family: var(--body-font);
     font-size: var(--smaller-font-size);
     font-weight: 400;
-    color: var(--text-color-light);
+    color: var(--title-color);
     margin-bottom: 1rem;
 }
 
 .profile__info-description,
 .profile__info-number{
     font-family: var(--title-font);
+    color: var(--text-color-light);
+}
+
+.profile__info-description span,
+.profile__info-description a{
+    color: var(--text-color-light);
+}
+
+.profile__info-description a:hover{
     color: var(--title-color);
 }
 
@@ -1157,6 +1213,68 @@ input:-webkit-autofill:active{
     max-height: 0;
     /*width: 200px;*/
     justify-self: center;
+}
+
+.members__container{
+    /*display: grid;*/
+
+    /*justify-content: center;*/
+    /*align-content: center;*/
+    /*align-items: center;*/
+    /*justify-items: center;*/
+
+    margin: 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+
+    /*max-height: 66vh;*/
+    /*overflow-y: scroll;*/
+    /*overflow-x: hidden;*/
+}
+
+.members__container a{
+    color: var(--text-color-light);
+    padding: 0.5rem 0.5rem;
+    margin: 0.5rem 0.5rem;
+    border-radius: 0.5em;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    /*min-height: 33px;*/
+    /*min-width: 176px;*/
+    /*max-width: 176px;*/
+    /*max-height: 33px;*/
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /*-ms-word-break: break-all;*/
+    /*word-break: break-all;*/
+    /*word-break: break-word;*/
+    /*-webkit-hyphens: auto;*/
+    /*-moz-hyphens: auto;*/
+    /*-ms-hyphens: auto;*/
+    /*hyphens: auto;*/
+
+    /*display: grid;*/
+    /*grid-template-columns: repeat(auto-fit, 50vh);*/
+    /*justify-items: center;*/
+}
+
+.members__container a:hover{
+    color: var(--title-color);
+    /*background: var(--text-color-light);*/
+}
+
+.members__container a img{
+    border-radius: 50%;
+    max-width: 5vh;
 }
 
 /*=============== CONSTITUTION ===============*/
