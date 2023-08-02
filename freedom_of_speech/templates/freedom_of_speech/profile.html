@@ -25,10 +25,32 @@
 <body>
 {% csrf_token %}
 {% load filter %}
+<!--==================== THEME ====================-->
+<script>
+    let selected_theme = localStorage.getItem('selected-theme')
+    let selected_icon = localStorage.getItem('selected-icon')
+
+    if (selected_theme !== null)
+        localStorage.setItem('selected-theme', selected_theme === 'dark-theme' ? 'dark-theme' : selected_theme === 'light-theme' ? 'light-theme' : 'system-theme')
+
+    if (selected_icon !== null)
+        localStorage.setItem('selected-icon', selected_icon === 'ri-contrast-line' ? 'ri-contrast-line' : selected_icon === 'ri-moon-line' ? 'ri-moon-line' : 'ri-sun-line')
+
+    if (selected_theme === null || selected_icon === null) {
+        localStorage.setItem('selected-theme', 'system-theme')
+        localStorage.setItem('selected-icon', 'ri-contrast-line')
+    }
+
+    if (selected_theme === 'dark-theme')
+        document.body.classList.add('dark-theme')
+    else if (selected_theme === 'system-theme')
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+            document.body.classList.add('dark-theme')
+</script>
 <!--==================== HEADER ====================-->
 <header class="header" id="header">
     <nav class="nav container">
-        <a href="/freedom_of_speech" class="nav__logo">
+        <a href="/freedom_of_speech/" class="nav__logo">
             Freedom of speech
         </a>
 
@@ -70,7 +92,7 @@
 
         <div class="nav__buttons">
             <!--Theme change button-->
-            <i class="ri-moon-line change-theme" id="theme-button"></i>
+            <i class="change-theme" id="theme-button"></i>
 
             {% if authorized %}
                 <!--            Toggle button-->

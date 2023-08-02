@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!--    <meta name="theme-color" media="(prefers-color-scheme: light)" content="black" />-->
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="black" />
 <!--    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="white" />-->
     <meta name="description" content="Freedom of speech official website">
 
@@ -30,6 +30,35 @@
 </head>
 <body>
 {% csrf_token %}
+<!--==================== THEME ====================-->
+<script>
+    let startTime = performance.now();
+
+    let selected_theme = localStorage.getItem('selected-theme')
+    let selected_icon = localStorage.getItem('selected-icon')
+
+    if (selected_theme !== null)
+        localStorage.setItem('selected-theme', selected_theme === 'dark-theme' ? 'dark-theme' : selected_theme === 'light-theme' ? 'light-theme' : 'system-theme')
+
+    if (selected_icon !== null)
+        localStorage.setItem('selected-icon', selected_icon === 'ri-contrast-line' ? 'ri-contrast-line' : selected_icon === 'ri-moon-line' ? 'ri-moon-line' : 'ri-sun-line')
+
+    if (selected_theme === null || selected_icon === null) {
+        localStorage.setItem('selected-theme', 'system-theme')
+        localStorage.setItem('selected-icon', 'ri-contrast-line')
+    }
+
+    if (selected_theme === 'dark-theme')
+        document.body.classList.add('dark-theme')
+    else if (selected_theme === 'system-theme')
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+            document.body.classList.add('dark-theme')
+
+    let endTime = performance.now();
+    let timeElapsed = endTime - startTime;
+
+    console.log(timeElapsed)
+</script>
 <!--==================== HEADER ====================-->
 {% include 'freedom_of_speech/header.html' %}
 

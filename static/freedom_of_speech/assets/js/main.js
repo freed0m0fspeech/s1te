@@ -95,33 +95,75 @@ window.addEventListener('scroll', scrollUp)
 
 /*=============== DARK LIGHT THEME ===============*/
 const themeButton = document.getElementById('theme-button')
-const darkTheme = 'dark-theme'
-const iconTheme = 'ri-sun-line'
 
-// Previously selected topic (if user selected)
-const selectedTheme = localStorage.getItem('selected-theme')
-const selectedIcon = localStorage.getItem('selected-icon')
+themeButton.classList.add(localStorage.getItem('selected-icon'))
+const themes = {'system-theme': 'light-theme', 'light-theme': 'dark-theme', 'dark-theme': 'system-theme'}
+const icons = {'ri-contrast-line': 'ri-sun-line', 'ri-moon-line': 'ri-contrast-line', 'ri-sun-line': 'ri-moon-line'}
 
-// We obtain the current theme that the interface has by validating the dark-theme class
-const getCurrentTheme = () => document.body.classList.contains(darkTheme) ? 'dark' : 'light'
-const getCurrentIcon = () => themeButton.classList.contains(iconTheme) ? 'ri-moon-line' : 'ri-sun-line'
+// const darkTheme = 'dark-theme'
+// const iconTheme = 'ri-sun-line'
 
-// We validate if the user previously chose a topic
-if (selectedTheme) {
+//
+// // Previously selected topic (if user selected)
+// const selectedTheme = selected_theme
+// const selectedIcon = selected_icon
+//
+// window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+
+// // We obtain the current theme that the interface has by validating the dark-theme class
+// const getCurrentTheme = () => document.body.classList.contains(darkTheme) ? 'dark' : 'light'
+// const getCurrentIcon = () => themeButton.classList.contains(iconTheme) ? 'ri-moon-line' : 'ri-sun-line'
+
+// // We validate if the user previously chose a topic
+// if (selectedTheme) {
     // If the validation is fulfilled, we ask what the issue was to know if we activated or deactivated the dark
-    document.body.classList[selectedTheme === 'dark' ? 'add' : 'remove'](darkTheme)
-    themeButton.classList[selectedIcon === 'ri-moon-line' ? 'add' : 'remove'](iconTheme)
-}
+    // document.body.classList[selectedTheme === 'dark' ? 'add' : 'remove'](darkTheme)
+    // themeButton.classList[selectedIcon === 'ri-moon-line' ? 'add' : 'remove'](iconTheme)
+// }
 
 // Activate / deactivate the theme manually with the button
 themeButton.addEventListener('click', () => {
-    // Add or remove the dark / icon theme
-    document.body.classList.toggle(darkTheme)
-    themeButton.classList.toggle(iconTheme)
-    // We save the theme and the current icon that the user chose
-    localStorage.setItem('selected-theme', getCurrentTheme())
-    localStorage.setItem('selected-icon', getCurrentIcon())
+    // System - Light - Dark
+
+    localStorage.setItem('selected-theme', themes["".concat(localStorage.getItem('selected-theme'))])
+    localStorage.setItem('selected-icon', icons["".concat(localStorage.getItem('selected-icon'))])
+
+    let selected_theme = localStorage.getItem('selected-theme')
+    let selected_icon = localStorage.getItem('selected-icon')
+
+    themeButton.className = ''
+    themeButton.classList.add('change-theme')
+    themeButton.classList.add(selected_icon)
+
+    if (selected_theme === 'dark-theme'){
+        document.body.className = ''
+        document.body.classList.add('dark-theme')
+    } else if (selected_theme === 'system-theme'){
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+            document.body.className = ''
+            document.body.classList.add('dark-theme')
+        } else{
+            document.body.className = ''
+        }
+    } else {
+        document.body.className = ''
+    }
 })
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+    let selected_theme = localStorage.getItem('selected-theme')
+
+    if (selected_theme === 'system-theme') {
+        if ((event.matches ? "dark" : "light") === "light") {
+            // Changed to light
+            document.body.className = ''
+        } else {
+            // Changed to dark
+            document.body.className = ''
+            document.body.classList.add('dark-theme')
+        }
+    }
+});
 
 /*=============== CHANGE BACKGROUND HEADER ===============*/
 const scrollHeader = () =>{

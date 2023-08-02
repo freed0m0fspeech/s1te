@@ -1026,9 +1026,9 @@ class ProfilePageView(TemplateView):
                         context['telegram_first_name'] = telegram.get('first_name', '')
                         context['telegram_last_name'] = telegram.get('last_name', '')
 
-                        # telegram_photo_url = telegram.get('photo_url', '')
+                        telegram_photo_url = telegram.get('photo_url', '')
                         # if is_url_image(telegram_photo_url):
-                        context['telegram_photo_url'] = telegram.get('photo_url', '')
+                        context['telegram_photo_url'] = telegram_photo_url
 
                         context['telegram_link_status'] = True
 
@@ -1840,6 +1840,9 @@ class MembersPageView(TemplateView):
             member_parameters = members_parameters.get(user_parameters.get('telegram', {}).get('id', ''), {})
             if member_parameters:
                 # position = member_parameters.get('position', -1)
+                # if not is_url_image(user_parameters.get('telegram', {}).get('photo_url')):
+                #     user_parameters['telegram']['photo_url'] = ''
+
                 member = (username, member_parameters, user_parameters.get('telegram', {}))
                 members.append(member)
 
