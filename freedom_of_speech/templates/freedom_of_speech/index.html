@@ -32,8 +32,6 @@
 {% csrf_token %}
 <!--==================== THEME ====================-->
 <script>
-    let startTime = performance.now();
-
     let selected_theme = localStorage.getItem('selected-theme')
     let selected_icon = localStorage.getItem('selected-icon')
 
@@ -53,11 +51,6 @@
     else if (selected_theme === 'system-theme')
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
             document.body.classList.add('dark-theme')
-
-    let endTime = performance.now();
-    let timeElapsed = endTime - startTime;
-
-    console.log(timeElapsed)
 </script>
 <!--==================== HEADER ====================-->
 {% include 'freedom_of_speech/header.html' %}

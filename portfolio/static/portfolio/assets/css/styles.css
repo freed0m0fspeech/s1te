@@ -125,6 +125,11 @@ img {
     height: auto;
 }
 
+video{
+    max-width: 100%;
+    height: auto;
+}
+
 /*=============== THEME ===============*/
 .nav__buttons{
     display: flex;
@@ -146,6 +151,13 @@ body.dark-theme {
     --body-color: hsl(207, 4%, 10%);
     --container-color: hsl(207, 4%, 12%);
 }
+
+/*body[class="dark-theme"]{*/
+/*    --title-color: hsl(207, 4%, 95%);*/
+/*    --text-color: hsl(207, 4%, 65%);*/
+/*    --body-color: hsl(207, 4%, 10%);*/
+/*    --container-color: hsl(207, 4%, 12%);*/
+/*}*/
 
 /*==========
     Color changes in some parts of
