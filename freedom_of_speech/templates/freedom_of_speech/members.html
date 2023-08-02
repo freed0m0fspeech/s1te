@@ -47,7 +47,7 @@
 
       <div class="members__container container">
         {% for username, member_parameters, telegram_parameters in members %}
-          <a href="/freedom_of_speech/profile/{{username}}/" target="_blank">
+          <a href="/freedom_of_speech/profile/{{username}}/">
             <img src="{{telegram_parameters.photo_url}}">&nbsp;
             @{{username}} ({{member_parameters.position}})
             Уровень: {{member_parameters.lvl}}
