@@ -788,29 +788,42 @@ input:-webkit-autofill:active{
     z-index: -1;
 }
 
+.profile__community-link i{
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
 .profile__community{
-    justify-self: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 1rem);
+    grid-auto-flow: column;
 
-    /*display: grid;*/
-    /*grid-template-columns: repeat(auto-fit, 1rem);*/
-    /*grid-auto-flow: column;*/
-    /*align-items: center;*/
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+    /*justify-self: center;*/
 
-    /*column-gap: 1.25rem;*/
+    column-gap: 1.25rem;
 }
 
 .profile__community-link{
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: var(--title-color);
     /*transition: color .3s;*/
 }
 
 .profile__community-link__True{
-    color: springgreen;
+    /*color: springgreen;*/
+    color: hsl(171, 100%, 50%);
 }
 
 .profile__community-link__False{
-    color: red;
+    /*color: red;*/
+    color: hsl(328, 100%, 54%);
 }
 
 .profile__community-link:hover{
@@ -2023,6 +2036,21 @@ input:-webkit-autofill:active{
     background-color: hsl(328, 100%, 54%); /* Scrollbar-thumb color pink - hsl(328, 100%, 54%);*/
 }
 
+video::-webkit-media-controls {
+    display: none;
+}
+
+/* Could Use thise as well for Individual Controls */
+/*video::-webkit-media-controls-play-button {}*/
+
+/*video::-webkit-media-controls-volume-slider {}*/
+
+/*video::-webkit-media-controls-mute-button {}*/
+
+/*video::-webkit-media-controls-timeline {}*/
+
+/*video::-webkit-media-controls-current-time-display {}*/
+
 .government__votes::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
@@ -2474,7 +2502,7 @@ input:-webkit-autofill:active{
     }
 
     .profile__community-link{
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
 
     .profile__info{

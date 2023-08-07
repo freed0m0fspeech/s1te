@@ -12,7 +12,7 @@
     <link rel="shortcut icon" href="{% static 'freedom_of_speech/assets/img/favicon.jpg' %}" type="image/x-icon">
 
     <!--=============== REMIXICONS ===============-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
 
     <!--=============== UNICONS ===============-->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.0/css/line.css">
@@ -32,12 +32,14 @@
 {% csrf_token %}
 <!--==================== THEME ====================-->
 <script>
+    const icons = {'light-theme': 'ri-sun-line', 'system-theme': 'ri-contrast-line', 'dark-theme': 'ri-moon-line'}
+
     let selected_theme = localStorage.getItem('selected-theme')
-    let selected_icon = localStorage.getItem('selected-icon')
+    let selected_icon = icons["".concat(localStorage.getItem('selected-theme'))]
 
     if (!selected_theme || !selected_icon) {
         localStorage.setItem('selected-theme', 'system-theme')
-        localStorage.setItem('selected-icon', 'ri-sun-line')
+        localStorage.setItem('selected-icon', icons["".concat(localStorage.getItem('selected-theme'))])
     }
 
     if (selected_theme === 'dark-theme')

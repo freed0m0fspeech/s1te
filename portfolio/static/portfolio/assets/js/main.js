@@ -136,9 +136,10 @@ window.addEventListener('scroll', scrollUp)
 /*=============== DARK LIGHT THEME ===============*/
 const themeButton = document.getElementById('theme-button')
 
-themeButton.classList.add(localStorage.getItem('selected-icon'))
 const themes = {'system-theme': 'light-theme', 'light-theme': 'dark-theme', 'dark-theme': 'system-theme'}
-const icons = {'ri-contrast-line': 'ri-sun-line', 'ri-moon-line': 'ri-contrast-line', 'ri-sun-line': 'ri-moon-line'}
+// const icons = {'light-theme': 'ri-sun-line', 'system-theme': 'ri-contrast-line', 'dark-theme': 'ri-moon-line'}
+
+themeButton.classList.add(icons["".concat(localStorage.getItem('selected-theme'))])
 
 // const darkTheme = 'dark-theme'
 // const iconTheme = 'ri-sun-line'
@@ -166,7 +167,7 @@ themeButton.addEventListener('click', () => {
     // System - Light - Dark
 
     localStorage.setItem('selected-theme', themes["".concat(localStorage.getItem('selected-theme'))])
-    localStorage.setItem('selected-icon', icons["".concat(localStorage.getItem('selected-icon'))])
+    localStorage.setItem('selected-icon', icons["".concat(localStorage.getItem('selected-theme'))])
 
     let selected_theme = localStorage.getItem('selected-theme')
     let selected_icon = localStorage.getItem('selected-icon')

@@ -12,6 +12,7 @@ from jobs.jobs import (
     scheduled_start_voting,
     scheduled_end_voting,
     scheduled_telegram_synching,
+    scheduled_discord_synching,
     scheduled_voting
 )
 from pytz import utc
@@ -77,6 +78,10 @@ def start():
 
     # Telegram synch job and referendum check (every 4 hours)
     sched.add_job(scheduled_telegram_synching, 'interval', hours=4, id='scheduled_telegram_synching',
+                  misfire_grace_time=None, coalesce=True)
+
+    # Discord synch job (every 4 hours)
+    sched.add_job(scheduled_discord_synching, 'interval', hours=4, id='scheduled_discord_synching',
                   misfire_grace_time=None, coalesce=True)
 
     # sched.get_job('scheduled_telegram_synching').modify(next_run_time=datetime.now(tz=utc))

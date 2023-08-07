@@ -96,9 +96,10 @@ window.addEventListener('scroll', scrollUp)
 /*=============== DARK LIGHT THEME ===============*/
 const themeButton = document.getElementById('theme-button')
 
-themeButton.classList.add(localStorage.getItem('selected-icon'))
 const themes = {'system-theme': 'light-theme', 'light-theme': 'dark-theme', 'dark-theme': 'system-theme'}
-const icons = {'ri-contrast-line': 'ri-sun-line', 'ri-moon-line': 'ri-contrast-line', 'ri-sun-line': 'ri-moon-line'}
+// const icons = {'light-theme': 'ri-sun-line', 'system-theme': 'ri-contrast-line', 'dark-theme': 'ri-moon-line'}
+
+themeButton.classList.add(icons["".concat(localStorage.getItem('selected-theme'))])
 
 // const darkTheme = 'dark-theme'
 // const iconTheme = 'ri-sun-line'
@@ -126,7 +127,7 @@ themeButton.addEventListener('click', () => {
     // System - Light - Dark
 
     localStorage.setItem('selected-theme', themes["".concat(localStorage.getItem('selected-theme'))])
-    localStorage.setItem('selected-icon', icons["".concat(localStorage.getItem('selected-icon'))])
+    localStorage.setItem('selected-icon', icons["".concat(localStorage.getItem('selected-theme'))])
 
     let selected_theme = localStorage.getItem('selected-theme')
     let selected_icon = localStorage.getItem('selected-icon')
@@ -506,7 +507,7 @@ $('#signin-button').on('click', function(e) {
             setTimeout(() => {
                 // window.location.replace(`/freedom_of_speech/profile/${username.val()}`)
                 window.location.replace("/freedom_of_speech/")
-            }, 3000);
+            }, 0);
             // setTimeout(redirect('/freedom_of_speech/'), 5000)
             // redirect('/freedom_of_speech/')
 
@@ -589,7 +590,7 @@ $('#signup-button').on('click', function(e) {
 
             setTimeout(() => {
                 window.location.replace(`/freedom_of_speech/profile/${username.val()}`)
-            }, 3000);
+            }, 0);
 
             username.val('')
             password.val('')
@@ -659,7 +660,7 @@ $('#username-change_button').on('click', function(e) {
 
             setTimeout(() => {
                 window.location.replace(`/freedom_of_speech/profile/${new_username}`)
-            }, 3000);
+            }, 0);
 
             username.val('')
             password.val('')
@@ -768,7 +769,7 @@ $('#signout-button').on('click', function(e) {
         success: function (data, status, jqXHR) {
             setTimeout(() => {
                 window.location.replace('/freedom_of_speech/')
-            }, 1000);
+            }, 0);
         },
         error(xhr,status,error){
             if (error)
@@ -871,7 +872,7 @@ $('#contact_button').on('click', function(e) {
 
                     // window.location.replace("/freedom_of_speech/")
                     window.location.reload()
-                }, 1000);
+                }, 0);
                 // location.reload();
                 // $('#constitution_text_span').text(data);
                 // console.log(data);
@@ -946,7 +947,7 @@ $('#auth-telegram_button').on('click', function(e) {
 
                 setTimeout(() => {
                     window.location.replace("/freedom_of_speech/profile/")
-                }, 1000);
+                }, 0);
             },
             error(xhr,status,error){
                 if (xhr.status === 409)
@@ -982,6 +983,48 @@ $('#auth-telegram_button').on('click', function(e) {
     //         print(data)
     //     }
     // });
+});
+
+function createPopupWindow(pageURL, pageTitle,
+                        popupWinWidth, popupWinHeight, features) {
+    var left = (screen.width - popupWinWidth) / 2;
+    var top = (screen.height - popupWinHeight) / 2;
+
+    return window.open(pageURL, pageTitle,
+        'resizable=yes, width=' + popupWinWidth
+        + ', height=' + popupWinHeight + ', top='
+        + top + ', left=' + left + features);
+}
+
+$('#auth-discord_button').on('click', function(e) {
+    e.preventDefault();
+
+    let params = 'scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no'
+    let url = "https://discord.com/api/oauth2/authorize?client_id=805497711264661565&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Ffreedom_of_speech%2Fauth%2Fdiscord%2F&response_type=code&scope=identify"
+
+    // const url = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=code&scope=${scopes}`
+    const popup = createPopupWindow(url, 'AuthDiscord', 486, 802, params)
+
+
+    // Set the state to localStorage when popup opens
+    localStorage.setItem('auth-discord', 'false')
+
+    // Keep track of changes to the popup state while the popup is open
+    window.addEventListener('storage', function auth_discord_storage(e){
+        if (e.key === 'auth-discord') {
+            // reload location
+            // popupData = JSON.parse(e.newValue);
+            if (e.newValue === 'true') {
+                // Reload this location
+                setTimeout(() => {
+                    window.location.reload()
+                }, 0);
+                // Delete this event listener
+                // window.removeEventListener('storage', auth_discord_storage)
+            }
+        }
+    })
+
 });
 
 $('#government__vote').on('click', function(e) {

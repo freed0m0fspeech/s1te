@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="{{telegram_photo_url}}" type="image/x-icon">
 
     <!--=============== REMIXICONS ===============-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
 
     <!--=============== UNICONS ===============-->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.0/css/line.css">
@@ -29,12 +29,14 @@
 {% load filter %}
 <!--==================== THEME ====================-->
 <script>
+    const icons = {'light-theme': 'ri-sun-line', 'system-theme': 'ri-contrast-line', 'dark-theme': 'ri-moon-line'}
+
     let selected_theme = localStorage.getItem('selected-theme')
-    let selected_icon = localStorage.getItem('selected-icon')
+    let selected_icon = icons["".concat(localStorage.getItem('selected-theme'))]
 
     if (!selected_theme || !selected_icon) {
         localStorage.setItem('selected-theme', 'system-theme')
-        localStorage.setItem('selected-icon', 'ri-sun-line')
+        localStorage.setItem('selected-icon', icons["".concat(localStorage.getItem('selected-theme'))])
     }
 
     if (selected_theme === 'dark-theme')
@@ -46,7 +48,7 @@
 <!--==================== HEADER ====================-->
 <header class="header" id="header">
     <nav class="nav container">
-        <a href="/freedom_of_speech/" class="nav__logo">
+        <a href="/freedom_of_speech" class="nav__logo">
             Freedom of speech
         </a>
 
@@ -73,7 +75,7 @@
                     </li>
 
                     <li class="nav__item">
-                        <a href="#signout" class="nav__link">
+                        <a href="#signout" class="nav__link" id="signout-button">
                             <i class="ri-logout-box-r-line"></i> Выйти
                         </a>
                     </li>
@@ -102,144 +104,9 @@
 
 <!--==================== MAIN ====================-->
 <main class="main">
-    <section class="profile section" id="profile">
-        <div class="{% if member_status %} profile__container {% endif %} {% if authorized %} section__border {% endif %} container grid">
-            <div class="profile__data grid">
-                <h1 class="profile__title">
-                    Страница профиля <br>
-                    {{username}} <br>
-                </h1>
+<!--    Telegram section-->
+    {% include 'freedom_of_speech/profile/info.html' %}
 
-                <div class="profile__blob grid">
-                    <!--        <div class="profile__perfil">-->
-                    <img src="{% if telegram_photo_url %} {{telegram_photo_url}} {% else %} {% static 'freedom_of_speech/assets/img/rick-astley-320px.gif' %} {% endif %}" alt="profile perfil">
-                    <!--        </div>-->
-
-                    <!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-waves.svg' %}" alt="profile waves" class="profile__shape-waves">-->
-                    <!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-circle.svg' %}" alt="profile circle" class="profile__shape-circle">-->
-                </div>
-
-                {% if date_updated and telegram_link_status%}
-                    <div class="date__updated">
-                        <p id="date__updated">{{date_updated}} UTC</p>
-                    </div>
-                {% endif %}
-            {%if authorized %}
-                <ul class="profile__community">
-                    <a href="#" target="_blank" class="profile__community-link profile__community-link__{{telegram_link_status}}" id="auth-telegram_button">
-                        <i class="uil uil-telegram"></i>
-                    </a>
-
-                    <!--          <a href="https://discord.com/invite/dwKpNwQ" target="_blank" class="profile__community-link__unlinked profile__community-link">-->
-                    <!--            <i class="uil uil-discord"></i>-->
-                    <!--          </a>-->
-                    <!--          <a href="https://vk.me/join/AAAAAOUSazBFPCDP0CGaVjyh" target="_blank" class="profile__community-link__unlinked profile__community-link">-->
-                    <!--            <i class="uil uil-vk"></i>-->
-                    <!--          </a>-->
-                </ul>
-            {% endif %}
-            </div>
-
-            {% if member_status %}
-                <!--==================== PROFILE INFO 1 ====================-->
-                <div class="profile__info">
-                    <div>
-                        <h3 class="profile__info-title">
-                            ИНФОРМАЦИЯ
-                        </h3>
-
-                        <p class="profile__info-description">
-                            {% if telegram_first_name %}
-                                {{telegram_first_name}} {{telegram_last_name}} <br><br>
-                            {% endif %}
-                            {% if position and members_count %}
-                                Топ: {{position}} | {{members_count}} <br>
-                            {% endif %}
-                            {% if lvl %}
-                                Уровень: {{lvl}} <br>
-                            {% endif %}
-                            {% if xp_have and xp_need %}
-                                Опыт: {{xp_have}} | {{xp_need}} <br>
-                            {% endif %}
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 class="profile__info-title">
-                            КОНТАКТЫ
-                        </h3>
-
-                        <p class="profile__info-description">
-                            {% if telegram_username %}
-                                <a href="https://t.me/{{telegram_username}}" target="_blank" class="contact__button">
-                                    Telegram <i class="ri-arrow-right-line"></i>
-                                </a>
-                            {% else %}
-                                {% if telegram_id %}
-                                    <a href="tg://user?id={{telegram_id}}" target="_blank" class="contact__button">
-                                        Telegram <i class="ri-arrow-right-line"></i>
-                                    </a>
-                                {% endif %}
-                            {% endif %}
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 class="profile__info-title">
-                            РОЛЬ
-                        </h3>
-
-                        <p class="profile__info-description">
-                            {% if role %}
-                                {{role}}
-                            {% endif %}
-                        </p>
-                    </div>
-                </div>
-                <!--==================== PROFILE INFO 2 ====================-->
-                <div class="profile__info">
-                    <div>
-                        <h3 class="profile__info-title">
-                            СВОБОДА
-                        </h3>
-
-                        {% if joined_date %}
-                            <p class="profile__info-number" id="profile__info__years_value">
-                                {{joined_date}} UTC
-                                <!--          2017-2023-->
-                                <div class="profile__info-description" id="profile__date_counter"></div>
-                            </p>
-                        {% endif %}
-                    </div>
-
-                    <div>
-                        <h3 class="profile__info-title">
-                            КОЛИЧЕСТВО СООБЩЕНИЙ
-                        </h3>
-
-                        <p class="profile__info-number">
-                            {% if messages_count %}
-                                {{messages_count}}
-                            {% endif %}
-                            <!--          <div class="animated_number profile__info-number"></div>-->
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 class="profile__info-title">
-                            ВРЕМЯ В ГОЛОСОВОМ КАНАЛЕ
-                        </h3>
-
-                        <p class="profile__info-number">
-                            {% if hours_in_voice_channel %}
-                                {{hours_in_voice_channel}}ч <br>
-                            {% endif %}
-                        </p>
-                    </div>
-                </div>
-            {% endif %}
-        </div>
-    </section>
     {%if authorized %}
 
         <section class="entry section" id="username">
@@ -295,17 +162,17 @@
                 </div>
             </div>
         </section>
-        <section class="entry section" id="signout">
-            <div class="entry__container container grid section__border">
-                <div class="entry__content">
-                    <form action="" class="entry__form">
-                        <button class="entry__button" id="signout-button">
-                            Выйти <i class="ri-logout-circle-r-line"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </section>
+<!--        <section class="entry section" id="signout">-->
+<!--            <div class="entry__container container grid section__border">-->
+<!--                <div class="entry__content">-->
+<!--                    <form action="" class="entry__form">-->
+<!--                        <button class="entry__button" id="signout-button">-->
+<!--                            Выйти <i class="ri-logout-circle-r-line"></i>-->
+<!--                        </button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </section>-->
     {% endif %}
 </main>
 

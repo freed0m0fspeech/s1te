@@ -1,8 +1,6 @@
-# import itertools
 import json
 import os
 import random
-# import sys
 import time
 import requests
 from datetime import datetime, timedelta
@@ -34,7 +32,7 @@ def scheduled_start_voting():
                               misfire_grace_time=None, coalesce=True)
             return
 
-        query = {'_id': 0, 'candidates': 1, 'chat': 1}
+        query = {'_id': 0, 'candidates': 1, 'telegram': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
         if not document:
@@ -56,11 +54,12 @@ def scheduled_start_voting():
 
             text = f"**Недостаточно кандидатов на выборы [Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech | Выборы были перенесены**"
 
-            chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
+            chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
             origin = os.getenv('HOSTNAME', '')
 
             data = {
                 "text": text,
+                "pin": 'true',
                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
             }
 
@@ -96,11 +95,12 @@ def scheduled_start_voting():
 
         text = f"**В данный момент на [официальном сайте]({os.getenv('HOSTNAME', '')}freedom_of_speech) проходят [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
 
-        chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
+        chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
         origin = os.getenv('HOSTNAME', '')
 
         data = {
             "text": text,
+            "pin": 'true',
             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
         }
 
@@ -115,7 +115,7 @@ def scheduled_start_voting():
 
 def scheduled_end_voting():
     from jobs.updater import sched
-    # print('Scheduled End Voting Running')
+
     try:
         if not mongoDataBase.check_connection():
             end_vote = datetime.now(tz=utc) + timedelta(hours=1)
@@ -133,7 +133,7 @@ def scheduled_end_voting():
             return
 
         query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'start_vote': 1, 'end_vote': 1,
-                 'votes': 1, 'candidates': 1, 'chat': 1}
+                 'votes': 1, 'candidates': 1, 'telegram': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
         if not document:
@@ -190,7 +190,7 @@ def scheduled_end_voting():
             president = document.get('president', '')
             parliament = document.get('parliament', '')
 
-        chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
+        chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
         origin = os.getenv('HOSTNAME', '')
 
         judge = document.get('judge', {}).get('judge', '')
@@ -273,6 +273,7 @@ def scheduled_end_voting():
 
         data = {
             "text": text,
+            "pin": 'true',
             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
         }
 
@@ -294,22 +295,17 @@ def scheduled_end_voting():
 def scheduled_telegram_synching(start=0, stop=200, step=1):
     from jobs.updater import sched
 
-    # sync_time = datetime.now(tz=utc) + timedelta(hours=4)
-    # sync_time = sync_time.strftime('%Y-%m-%d %H:%M:%S')
-
-    # sched.add_job(scheduled_telegram_synching, 'date', run_date=sync_time, id='scheduled_telegram_synching')
-    # print('Scheduled Telegram Synching Running')
     try:
         if not mongoDataBase.check_connection():
             return
 
-        query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'referendum': 1, 'chat': 1}
+        query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'referendum': 1, 'telegram': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
         if not document:
             return
 
-        last_update_chat = document.get('chat', {}).get('chat_parameters', {}).get('date', '')
+        last_update_chat = document.get('telegram', {}).get('chat_parameters', {}).get('date', '')
 
         if last_update_chat:
             last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_chat,
@@ -319,7 +315,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
 
         # update only every 4 hours
         if last_update_seconds >= 14400:
-            chat_username = document.get('chat', {}).get('chat_parameters', {}).get('username', '')
+            chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
             data = {
                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
             }
@@ -331,7 +327,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
             if chat and chat.status_code == 200:
                 chat = chat.json()
 
-                query = {'chat.chat_parameters': chat.get('chat_parameters', {}), 'chat.members_parameters': chat.get('members_parameters', {})}
+                query = {'telegram.chat_parameters': chat.get('chat_parameters', {}), 'telegram.members_parameters': chat.get('members_parameters', {})}
                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                            action='$set', query=query)
 
@@ -385,32 +381,52 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                                 query = {'referendum.votes': '', 'referendum.date': referendum_date}
                                 mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$set', query=query)
+    except Exception as e:
+        print(e)
 
-                                # query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'chat': 1}
-                                # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                #                                       query=query)
-                                #
-                                # president = document.get('president', '')
-                                # parliament = document.get('parliament', '')
-                                # judge = document.get('judge', {}).get('judge', '')
-                                # telegram_president = document.get('users', {}).get(president, {}).get('telegram', {}).get('username', '')
-                                # telegram_parliament = document.get('users', {}).get(parliament, {}).get('telegram', {}).get('username', '')
-                                # telegram_judge = document.get('users', {}).get(judge, {}).get('telegram', {}).get('username', '')
-                                #
-                                # query = {}
-                                # # Unset president, parliament, judge in DataBase
-                                # if not document.get('chat', {}).get('members_parameters', {}).get(telegram_president, {}):
-                                #     query['president'] = ''
-                                # else:
-                                #     if not document.get('chat', {}).get('members_parameters', {}).get(telegram_parliament, {}):
-                                #         query['parliament'] = ''
-                                #     else:
-                                #         if not document.get('chat', {}).get('members_parameters', {}).get(telegram_judge, {}):
-                                #             query['judge'] = ''
-                                #
-                                # if query:
-                                #     mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                #                                action='$unset', query=query)
+    sched.print_jobs()
+
+
+def scheduled_discord_synching(start=0, stop=200, step=1):
+    from jobs.updater import sched
+
+    try:
+        if not mongoDataBase.check_connection():
+            return
+
+        query = {'_id': 0, 'users': 1, 'discord': 1}
+        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        if not document:
+            return
+
+        last_update_guild = document.get('discord', {}).get('guild_parameters', {}).get('date', '')
+
+        if last_update_guild:
+            last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_guild,
+                                                                                                 '%Y-%m-%d %H:%M:%S')).seconds
+        else:
+            last_update_seconds = 14400
+
+        # update only every 4 hours
+        if last_update_seconds >= 14400:
+            guild_id = document.get('discord', {}).get('guild_parameters', {}).get('id', '')
+            data = {
+                'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+            }
+            data = json.dumps(data)
+            origin = os.getenv('HOSTNAME', '')
+            guild = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/guild/{guild_id}", data=data,
+                                headers={'Origin': origin, 'Host': origin})
+
+            if guild and guild.status_code == 200:
+                guild = guild.json()
+
+                query = {'discord.guild_parameters': guild.get('guild_parameters', {}),
+                         'discord.members_parameters': guild.get('members_parameters', {})}
+                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                           action='$set', query=query)
+
     except Exception as e:
         print(e)
 

@@ -29,12 +29,14 @@
 {% load filter %}
 <!--==================== THEME ====================-->
 <script>
+  const icons = {'light-theme': 'ri-sun-line', 'system-theme': 'ri-contrast-line', 'dark-theme': 'ri-moon-line'}
+
   let selected_theme = localStorage.getItem('selected-theme')
-  let selected_icon = localStorage.getItem('selected-icon')
+  let selected_icon = icons["".concat(localStorage.getItem('selected-theme'))]
 
   if (!selected_theme || !selected_icon) {
     localStorage.setItem('selected-theme', 'system-theme')
-    localStorage.setItem('selected-icon', 'ri-sun-line')
+    localStorage.setItem('selected-icon', icons["".concat(localStorage.getItem('selected-theme'))])
   }
 
   if (selected_theme === 'dark-theme')
@@ -64,11 +66,12 @@
     <span class="section__subtitle">Топ участников Freedom of speech</span>
 
       <div class="members__container container">
-        {% for username, member_parameters, telegram_parameters in members %}
+        {% for username, xp, parameters, telegram_parameters, discord_parameters in members %}
           <a href="/freedom_of_speech/profile/{{username}}/">
             <img src="{{telegram_parameters.photo_url}}">&nbsp;
-            @{{username}} ({{member_parameters.position}})
-            Уровень: {{member_parameters.lvl}}
+            @{{username}} ({{forloop.counter}})
+<!--            forloop.counter0-->
+            Уровень: {{parameters.lvl}}
             <!--              @{{telegram_parameters.username}} ( {{telegram_parameters.first_name}} {{telegram_parameters.last_name}} )-->
             <!--              Опыт: {{member_parameters.xp_have}} | {{member_parameters.xp_need}}-->
           </a>

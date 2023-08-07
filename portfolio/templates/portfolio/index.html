@@ -28,12 +28,14 @@
 {% csrf_token %}
 <!--==================== THEME ====================-->
 <script>
+    const icons = {'light-theme': 'ri-sun-line', 'system-theme': 'ri-contrast-line', 'dark-theme': 'ri-moon-line'}
+
     let selected_theme = localStorage.getItem('selected-theme')
-    let selected_icon = localStorage.getItem('selected-icon')
+    let selected_icon = icons["".concat(localStorage.getItem('selected-theme'))]
 
     if (!selected_theme || !selected_icon) {
         localStorage.setItem('selected-theme', 'system-theme')
-        localStorage.setItem('selected-icon', 'ri-sun-line')
+        localStorage.setItem('selected-icon', icons["".concat(localStorage.getItem('selected-theme'))])
     }
 
     if (selected_theme === 'dark-theme')

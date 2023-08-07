@@ -169,7 +169,6 @@ class Google:
             data.append(item)
 
         if response.status_code != 200:
-            # TODO exeption
             raise LyricScraperException(data)
 
         return data
@@ -210,7 +209,6 @@ class Google:
                 lyrics = self.__extract_lyrics(result_url, title)
             except Exception as err:
                 raise LyricScraperException(err)
-                # TODO exception
 
             if lyrics:
                 return {
@@ -221,5 +219,4 @@ class Google:
 
             return None
 
-        # TODO exception
         # raise LyricScraperException({"error": "No results found"})
