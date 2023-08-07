@@ -1763,7 +1763,7 @@ class UpdateChatPageView(TemplateView):
         }
         data = json.dumps(data)
         origin = os.getenv('HOSTNAME', '')
-        guild = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/guild/{guild_id}", data=data,
+        guild = requests.get(f"https://discord-bot-freed0m0fspeech.fly.dev/guild/{guild_id}", data=data,
                                 headers={'Origin': origin, 'Host': origin})
 
         if guild and guild.status_code == 200:
