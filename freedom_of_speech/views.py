@@ -124,7 +124,8 @@ class HomePageView(TemplateView):
         context['parliament'] = parliament
         context['constitution'] = constitution
         context['members_count'] = members_count
-        context['date_updated'] = document.get('telegram', {}).get('chat_parameters', {}).get('date', '')
+        date_updated = max(document.get('telegram', {}).get('chat_parameters', {}).get('date', ''), document.get('discord', {}).get('chat_parameters', {}).get('date', ''))
+        context['date_updated'] = date_updated
         context['username'] = username
         context['laws'] = laws
         context['tlaws'] = tlaws
@@ -1713,14 +1714,23 @@ class UpdateChatPageView(TemplateView):
         if not data:
             return HttpResponse(status=422)
 
-        query = {'_id': 0, 'telegram': 1}
+        query = {'_id': 0, 'telegram': 1, 'discord': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
-        last_update = document.get('telegram', {}).get('chat_parameters', {}).get('date', '')
+        last_update_telegram = document.get('telegram', {}).get('chat_parameters', {}).get('date', '')
+        last_update_discord = document.get('discord', {}).get('guild_parameters', {}).get('date', '')
 
-        if last_update:
+        if last_update_telegram:
             # update only every 30 minutes
-            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update,
+            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_telegram,
+                                                                              '%Y-%m-%d %H:%M:%S')).seconds < 1800:
+                # Too many requests
+                return HttpResponse(status=429)
+        else:
+            return HttpResponse(status=422)
+
+        if last_update_discord:
+            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_discord,
                                                                               '%Y-%m-%d %H:%M:%S')).seconds < 1800:
                 # Too many requests
                 return HttpResponse(status=429)
@@ -1744,10 +1754,30 @@ class UpdateChatPageView(TemplateView):
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                           action='$set', query=query) is None:
                 return HttpResponse(status=500)
-
-            return HttpResponse()
         else:
             return HttpResponse(status=422)
+
+        guild_id = document.get('discord', {}).get('guild_parameters', {}).get('id', '')
+        data = {
+            'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+        }
+        data = json.dumps(data)
+        origin = os.getenv('HOSTNAME', '')
+        guild = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/guild/{guild_id}", data=data,
+                                headers={'Origin': origin, 'Host': origin})
+
+        if guild and guild.status_code == 200:
+            guild = guild.json()
+
+            query = {'discord.guild_parameters': guild.get('guild_parameters', {}),
+                     'discord.members_parameters': guild.get('members_parameters', {})}
+            if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                          action='$set', query=query) is None:
+                return HttpResponse(status=500)
+        else:
+            return HttpResponse(status=422)
+
+        return HttpResponse()
 
 
 # class UpdateMemberPageView(TemplateView):
