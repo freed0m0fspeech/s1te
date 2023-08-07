@@ -40,7 +40,7 @@ class HomePageView(TemplateView):
         query = {'_id': 0, 'constitution': 1, 'laws': 1, 'tlaws': 1, 'users': 1, 'testimonials': 1, 'president': 1,
                  'parliament': 1, 'judge': 1, 'start_vote': 1, 'end_vote': 1, 'telegram': 1, 'candidates': 1,
                  'votes': 1,
-                 'referendum': 1, 'social': 1}
+                 'referendum': 1, 'social': 1, 'discord': 1}
 
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
@@ -909,7 +909,7 @@ class ProfilePageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'candidates': 1, 'telegram': 1, 'xp': 1}
+        query = {'_id': 0, 'users': 1, 'candidates': 1, 'telegram': 1, 'xp': 1, 'discord': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                               query=query)
 
@@ -1861,7 +1861,7 @@ class MembersPageView(TemplateView):
 
         }
 
-        query = {'_id': 0, 'users': 1, 'telegram': 1, 'xp': 1}
+        query = {'_id': 0, 'users': 1, 'telegram': 1, 'xp': 1, 'discord': 1}
 
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
@@ -1940,7 +1940,7 @@ class AuthDiscordPageView(TemplateView):
 
             if 'sessionid' and 'username' in cookies:
                 query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'candidates': 1,
-                         'telegram': 1}
+                         'telegram': 1, 'discord': 1}
 
                 document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
                                                       query=query)
