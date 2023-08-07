@@ -104,12 +104,11 @@ class HomePageView(TemplateView):
             permissions = {}
 
         telegram = document.get('telegram', {})
-        members_count = ''
+        discord = document.get('discord', {})
+        members_count = 0
 
-        if telegram:
-            chat_parameters = telegram.get('chat_parameters', '')
-            if chat_parameters:
-                members_count = chat_parameters.get('members_count', '')
+        members_count += int(discord.get('chat_parameters', {}).get('members_count', 0))
+        members_count += int(discord.get('guild_parameters', {}).get('member_count', 0))
 
         if context.get('is_president', ''):
             context['judge'] = judge_info.get('president', '')
@@ -124,7 +123,7 @@ class HomePageView(TemplateView):
         context['parliament'] = parliament
         context['constitution'] = constitution
         context['members_count'] = members_count
-        date_updated = max(document.get('telegram', {}).get('chat_parameters', {}).get('date', ''), document.get('discord', {}).get('chat_parameters', {}).get('date', ''))
+        date_updated = min(document.get('telegram', {}).get('chat_parameters', {}).get('date', ''), document.get('discord', {}).get('chat_parameters', {}).get('date', ''))
         context['date_updated'] = date_updated
         context['username'] = username
         context['laws'] = laws
@@ -985,7 +984,7 @@ class ProfilePageView(TemplateView):
                             voicetime += round(member_parameters.get('voicetime', 0) / 3600, 1)
                             context['telegram_role'] = member_parameters.get('custom_title', 'Участник')
                             context['telegram_position'] = member_parameters.get('position', '')
-                            members_count += telegram.get('chat_parameters', {}).get('members_count', '')
+                            members_count += int(telegram.get('chat_parameters', {}).get('members_count', 0))
                             context['telegram_date_updated'] = member_parameters.get('date', '')
                             context['telegram_member_status'] = True
 
@@ -1044,7 +1043,7 @@ class ProfilePageView(TemplateView):
                             voicetime += round(member_parameters.get('voicetime', 0) / 3600, 1)
                             # context['discord_role'] = member_parameters.get('custom_title', 'Участник')
                             context['discord_position'] = member_parameters.get('position', '')
-                            members_count += discord.get('guild_parameters', {}).get('members_count', '')
+                            members_count += int(discord.get('guild_parameters', {}).get('member_count', 0))
                             context['discord_date_updated'] = member_parameters.get('date', '')
                             context['discord_member_status'] = True
 
@@ -1722,60 +1721,51 @@ class UpdateChatPageView(TemplateView):
 
         if last_update_telegram:
             # update only every 30 minutes
-            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_telegram,
+            if not (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_telegram,
                                                                               '%Y-%m-%d %H:%M:%S')).seconds < 1800:
-                # Too many requests
-                return HttpResponse(status=429)
-        else:
-            return HttpResponse(status=422)
+                chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+                data = {
+                    'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+                }
+                data = json.dumps(data)
+                origin = os.getenv('HOSTNAME', '')
+                chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat_username}", data=data,
+                                    headers={'Origin': origin, 'Host': origin})
+
+                if chat and chat.status_code == 200:
+                    chat = chat.json()
+
+                    query = {'telegram.chat_parameters': chat.get('chat_parameters', {}),
+                             'telegram.members_parameters': chat.get('members_parameters', {})}
+                    if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                  action='$set', query=query) is None:
+                        return HttpResponse(status=500)
+                else:
+                    return HttpResponse(status=422)
 
         if last_update_discord:
-            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_discord,
+            # update only every 30 minutes
+            if not (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_discord,
                                                                               '%Y-%m-%d %H:%M:%S')).seconds < 1800:
-                # Too many requests
-                return HttpResponse(status=429)
-        else:
-            return HttpResponse(status=422)
+                guild_id = document.get('discord', {}).get('guild_parameters', {}).get('id', '')
+                data = {
+                    'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+                }
+                data = json.dumps(data)
+                origin = os.getenv('HOSTNAME', '')
+                guild = requests.get(f"https://discord-bot-freed0m0fspeech.fly.dev/guild/{guild_id}", data=data,
+                                     headers={'Origin': origin, 'Host': origin})
 
-        chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
-        data = {
-            'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
-        }
-        data = json.dumps(data)
-        origin = os.getenv('HOSTNAME', '')
-        chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat_username}", data=data,
-                                headers={'Origin': origin, 'Host': origin})
+                if guild and guild.status_code == 200:
+                    guild = guild.json()
 
-        if chat and chat.status_code == 200:
-            chat = chat.json()
-
-            query = {'telegram.chat_parameters': chat.get('chat_parameters', {}),
-                     'telegram.members_parameters': chat.get('members_parameters', {})}
-            if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                          action='$set', query=query) is None:
-                return HttpResponse(status=500)
-        else:
-            return HttpResponse(status=422)
-
-        guild_id = document.get('discord', {}).get('guild_parameters', {}).get('id', '')
-        data = {
-            'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
-        }
-        data = json.dumps(data)
-        origin = os.getenv('HOSTNAME', '')
-        guild = requests.get(f"https://discord-bot-freed0m0fspeech.fly.dev/guild/{guild_id}", data=data,
-                                headers={'Origin': origin, 'Host': origin})
-
-        if guild and guild.status_code == 200:
-            guild = guild.json()
-
-            query = {'discord.guild_parameters': guild.get('guild_parameters', {}),
-                     'discord.members_parameters': guild.get('members_parameters', {})}
-            if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                          action='$set', query=query) is None:
-                return HttpResponse(status=500)
-        else:
-            return HttpResponse(status=422)
+                    query = {'discord.guild_parameters': guild.get('guild_parameters', {}),
+                             'discord.members_parameters': guild.get('members_parameters', {})}
+                    if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                  action='$set', query=query) is None:
+                        return HttpResponse(status=500)
+                else:
+                    return HttpResponse(status=422)
 
         return HttpResponse()
 
