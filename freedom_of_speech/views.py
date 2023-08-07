@@ -123,7 +123,7 @@ class HomePageView(TemplateView):
         context['parliament'] = parliament
         context['constitution'] = constitution
         context['members_count'] = members_count
-        date_updated = min(document.get('telegram', {}).get('chat_parameters', {}).get('date', ''), document.get('discord', {}).get('chat_parameters', {}).get('date', ''))
+        date_updated = max(telegram.get('chat_parameters', {}).get('date', ''), discord.get('guild_parameters', {}).get('date', ''))
         context['date_updated'] = date_updated
         context['username'] = username
         context['laws'] = laws
