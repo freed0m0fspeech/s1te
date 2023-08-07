@@ -105,10 +105,10 @@ class HomePageView(TemplateView):
 
         telegram = document.get('telegram', {})
         discord = document.get('discord', {})
-        members_count = 0
+        # members_count = 0
 
-        members_count += int(telegram.get('chat_parameters', {}).get('members_count', 0))
-        members_count += int(discord.get('guild_parameters', {}).get('member_count', 0))
+        telegram_members_count = int(telegram.get('chat_parameters', {}).get('members_count', 0))
+        discord_members_count = int(discord.get('guild_parameters', {}).get('member_count', 0))
 
         if context.get('is_president', ''):
             context['judge'] = judge_info.get('president', '')
@@ -122,7 +122,8 @@ class HomePageView(TemplateView):
         context['president'] = president
         context['parliament'] = parliament
         context['constitution'] = constitution
-        context['members_count'] = members_count
+        context['telegram_members_count'] = telegram_members_count
+        context['discord_members_count'] = discord_members_count
         date_updated = max(telegram.get('chat_parameters', {}).get('date', ''), discord.get('guild_parameters', {}).get('date', ''))
         context['date_updated'] = date_updated
         context['username'] = username
@@ -954,7 +955,7 @@ class ProfilePageView(TemplateView):
                     user_discord = user.get('discord', {})
                     xp = 0
                     messages_count = 0
-                    members_count = 0
+                    # members_count = 0
                     voicetime = 0
                     if user_telegram:
                         context['telegram_id'] = user_telegram.get('id', '')
@@ -984,7 +985,7 @@ class ProfilePageView(TemplateView):
                             voicetime += round(member_parameters.get('voicetime', 0) / 3600, 1)
                             context['telegram_role'] = member_parameters.get('custom_title', 'Участник')
                             context['telegram_position'] = member_parameters.get('position', '')
-                            members_count += int(telegram.get('chat_parameters', {}).get('members_count', 0))
+                            context['telegram_members_count'] = int(telegram.get('chat_parameters', {}).get('members_count', 0))
                             context['telegram_date_updated'] = member_parameters.get('date', '')
                             context['telegram_member_status'] = True
 
@@ -1030,8 +1031,6 @@ class ProfilePageView(TemplateView):
                         # if is_url_image(telegram_photo_url):
                         # context['discord_photo_url'] = discord_photo_url
 
-                        context['discord_link_status'] = True
-
                         member_parameters = discord.get('members_parameters', {}).get(context.get('discord_id', ''), {})
                         if member_parameters:
                             messages_count += member_parameters.get('messages_count', 0)
@@ -1043,7 +1042,7 @@ class ProfilePageView(TemplateView):
                             voicetime += round(member_parameters.get('voicetime', 0) / 3600, 1)
                             # context['discord_role'] = member_parameters.get('custom_title', 'Участник')
                             context['discord_position'] = member_parameters.get('position', '')
-                            members_count += int(discord.get('guild_parameters', {}).get('member_count', 0))
+                            context['discord_members_count'] = int(discord.get('guild_parameters', {}).get('member_count', 0))
                             context['discord_date_updated'] = member_parameters.get('date', '')
                             context['discord_member_status'] = True
 
@@ -1058,7 +1057,7 @@ class ProfilePageView(TemplateView):
                     else:
                         context['discord_link_status'] = False
 
-                    context['members_count'] = members_count
+                    # context['members_count'] = members_count
                     context['messages_count'] = messages_count
                     context['voicetime'] = voicetime
                     xp_factor = document.get('xp', {}).get('xp_factor', 100)  # threshold
@@ -1871,25 +1870,28 @@ class MembersPageView(TemplateView):
 
         for username, user_parameters in document.get('users', {}).items():
             telegram_member_parameters = telegram_members_parameters.get(user_parameters.get('telegram', {}).get('id', ''), {})
+            xp = 0
+
             if telegram_member_parameters:
-                xp = telegram_member_parameters.get('xp', 0)
-                discord_member_parameters = discord_members_parameters.get(user_parameters.get('discord', {}).get('id', ''), {})
-                if discord_members_parameters:
-                    xp += discord_member_parameters.get('xp', 0)
+                xp += telegram_member_parameters.get('xp', 0)
 
-                lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
+            discord_member_parameters = discord_members_parameters.get(user_parameters.get('discord', {}).get('id', ''), {})
+            if discord_members_parameters:
+                xp += discord_member_parameters.get('xp', 0)
 
-                parameters = {}
-                parameters['lvl'] = lvl
-                parameters['xp_have'] = xp_have
-                parameters['xp_need'] = xp_need
+            lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
 
-                # position = member_parameters.get('position', -1)
-                # if not is_url_image(user_parameters.get('telegram', {}).get('photo_url')):
-                #     user_parameters['telegram']['photo_url'] = ''
+            parameters = {}
+            parameters['lvl'] = lvl
+            parameters['xp_have'] = xp_have
+            parameters['xp_need'] = xp_need
 
-                member = (username, xp, parameters, user_parameters.get('telegram', {}), user_parameters.get('discord', {}))
-                members.append(member)
+            # position = member_parameters.get('position', float('inf'))
+            # if not is_url_image(user_parameters.get('telegram', {}).get('photo_url')):
+            #     user_parameters['telegram']['photo_url'] = ''
+
+            member = (username, xp, parameters, user_parameters.get('telegram', {}), user_parameters.get('discord', {}))
+            members.append(member)
 
         # Sort members by xp
         # If you just need a number that's bigger than all others, you can use float('inf')
@@ -1906,7 +1908,105 @@ class MembersPageView(TemplateView):
         # for member in members:
         #     print(member[0])
 
-        response = render(request=request, template_name='freedom_of_speech/members.html', context=context)
+        response = render(request=request, template_name='freedom_of_speech/members/members.html', context=context)
+
+        return response
+
+
+class TelegramMembersPageView(TemplateView):
+    # async def get(self, request, *args, **kwargs):
+    #     return HttpResponse(status=404)
+
+    async def get(self, request, *args, **kwargs):
+        # cockies = request.COOKIES
+
+        context = {
+
+        }
+
+        query = {'_id': 0, 'users': 1, 'telegram': 1, 'xp': 1}
+
+        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        if not document:
+            return HttpResponse(status=500)
+
+        members = []
+
+        telegram_members_parameters = document.get('telegram', {}).get('members_parameters', {})
+        xp_factor = document.get('xp', {}).get('xp_factor', 100)  # threshold
+
+        for username, user_parameters in document.get('users', {}).items():
+            telegram_member_parameters = telegram_members_parameters.get(user_parameters.get('telegram', {}).get('id', ''), {})
+
+            if telegram_member_parameters:
+                xp = telegram_member_parameters.get('xp', 0)
+                lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
+
+                parameters = {}
+                parameters['lvl'] = lvl
+                parameters['xp_have'] = xp_have
+                parameters['xp_need'] = xp_need
+
+                position = telegram_member_parameters.get('position', float('inf'))
+                member = (username, position, parameters, user_parameters.get('telegram', {}))
+                members.append(member)
+
+        members.sort(reverse=False, key=lambda x: x[1])
+
+        # Max 100 members
+        context['members'] = members[:100]
+
+        response = render(request=request, template_name='freedom_of_speech/members/telegram.html', context=context)
+
+        return response
+
+
+class DiscordMembersPageView(TemplateView):
+    # async def get(self, request, *args, **kwargs):
+    #     return HttpResponse(status=404)
+
+    async def get(self, request, *args, **kwargs):
+        # cockies = request.COOKIES
+
+        context = {
+
+        }
+
+        query = {'_id': 0, 'users': 1, 'discord': 1, 'xp': 1}
+
+        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        if not document:
+            return HttpResponse(status=500)
+
+        members = []
+
+        discord_members_parameters = document.get('discord', {}).get('members_parameters', {})
+        xp_factor = document.get('xp', {}).get('xp_factor', 100)  # threshold
+
+        for username, user_parameters in document.get('users', {}).items():
+            discord_member_parameters = discord_members_parameters.get(user_parameters.get('discord', {}).get('id', ''), {})
+
+            if discord_member_parameters:
+                xp = discord_member_parameters.get('xp', 0)
+                lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
+
+                parameters = {}
+                parameters['lvl'] = lvl
+                parameters['xp_have'] = xp_have
+                parameters['xp_need'] = xp_need
+
+                position = discord_member_parameters.get('position', float('inf'))
+                member = (username, position, parameters, user_parameters.get('discord', {}))
+                members.append(member)
+
+        members.sort(reverse=True, key=lambda x: x[1])
+
+        # Max 100 members
+        context['members'] = members[:100]
+
+        response = render(request=request, template_name='freedom_of_speech/members/discord.html', context=context)
 
         return response
 

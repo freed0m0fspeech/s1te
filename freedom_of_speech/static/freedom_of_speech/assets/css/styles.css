@@ -714,7 +714,6 @@ input:-webkit-autofill:active{
     color: var(--text-color-light)
 }
 
-
 /*=============== PROFILE ===============*/
 .profile__container{
     row-gap: 4rem;
@@ -817,13 +816,13 @@ input:-webkit-autofill:active{
 }
 
 .profile__community-link__True{
-    /*color: springgreen;*/
-    color: hsl(171, 100%, 50%);
+    color: springgreen;
+    /*color: hsl(171, 100%, 50%);*/
 }
 
 .profile__community-link__False{
-    /*color: red;*/
-    color: hsl(328, 100%, 54%);
+    color: red;
+    /*color: hsl(328, 100%, 54%);*/
 }
 
 .profile__community-link:hover{

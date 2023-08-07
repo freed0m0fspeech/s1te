@@ -1031,6 +1031,22 @@ $('#auth-discord_button').on('click', function(e) {
 
 });
 
+$('#members_value').on('click', function (e){
+    let members_value = $('#members_value')
+
+    let change = members_value.text()
+    let new_change = members_value.attr('change')
+    members_value.attr('change', change)
+    members_value.text(new_change)
+
+    let members_value_name = $('#members_value_name')
+    let name = members_value_name.text()
+    let new_name = members_value_name.attr('change')
+    members_value_name.attr('change', name)
+    members_value_name.text(new_name)
+
+})
+
 $('#government__vote').on('click', function(e) {
     e.preventDefault();
     e.stopPropagation();

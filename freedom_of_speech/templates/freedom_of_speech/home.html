@@ -90,7 +90,9 @@
         </h3>
 
         <p class="home__info-number" id="users_value">
+          <a href="/freedom_of_speech/members/">
             {{users_count}}
+          </a>
         </p>
       </div>
 
@@ -124,9 +126,9 @@
       <div>
         <h3 class="home__info-title">
           {% if end_vote %}
-            Выборы
+            ТЕКУЩИЕ ВЫБОРЫ
           {% else %}
-            Следующие выборы
+            СЛЕДУЮЩИЕ ВЫБОРЫ
           {% endif %}
         </h3>
 
@@ -143,13 +145,13 @@
       </div>
 
       <div>
-        <h3 class="home__info-title">
-          УЧАСТНИКОВ
+        <h3 class="home__info-title" id="members_value_name" change="УЧАСТНИКОВ DISCORD">
+          УЧАСТНИКОВ TELEGRAM
         </h3>
 
-        <p class="home__info-number" id="members_value">
-          <a href="/freedom_of_speech/members/">
-            {{members_count}}
+        <p class="home__info-number">
+          <a id="members_value" change="{{discord_members_count}}">
+              {{telegram_members_count}}
           </a>
 <!--          <div class="animated_number home__info-number"></div>-->
         </p>
