@@ -1713,10 +1713,11 @@ class UpdateChatPageView(TemplateView):
 
         last_update_telegram = document.get('telegram', {}).get('chat_parameters', {}).get('date', '')
         last_update_discord = document.get('discord', {}).get('guild_parameters', {}).get('date', '')
+        print(last_update_telegram)
 
         if last_update_telegram:
             # update only every 30 minutes
-            if not (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_telegram,
+            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_telegram,
                                                                               '%Y-%m-%d %H:%M:%S')).seconds >= 1800:
                 chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
                 data = {
