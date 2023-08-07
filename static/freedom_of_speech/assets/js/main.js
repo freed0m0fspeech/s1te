@@ -238,6 +238,10 @@ window.onload = function() {
         document.getElementById('date__updated').textContent = 'Обновлено '.concat(new Date(document.getElementById('date__updated').textContent.replace(/-/g, "/")).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}))
     }
 
+    if (document.getElementById('date__updated_admin')){
+        document.getElementById('date__updated_admin').textContent = 'Обновлено '.concat(new Date(document.getElementById('date__updated_admin').textContent.replace(/-/g, "/")).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}))
+    }
+
     if (document.getElementById('profile__date_counter')) {
         date = document.getElementById('profile__info__years_value').textContent;
         countUpFromTime(date, 'profile__date_counter');
@@ -1348,7 +1352,7 @@ $('.government__card').on('click', function (e){
     }
 });
 
-$('#date__updated').on('click', function (e){
+$('#date__updated_admin').on('click', function (e){
     e.stopPropagation()
 
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
@@ -1364,8 +1368,6 @@ $('#date__updated').on('click', function (e){
         target = 'chat'
     else if ($(this).parent().parent().hasClass('profile__data'))
         target = 'member'
-
-    $('#date__updated').off('click')
 
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {

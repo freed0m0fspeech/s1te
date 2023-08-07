@@ -675,11 +675,11 @@ input:-webkit-autofill:active{
     /*align-items: center;*/
 }
 
-.date__updated p{
+.date__updated_admin{
     cursor: pointer;
 }
 
-.date__updated p:hover{
+.date__updated_admin:hover{
     color: var(--title-color)
 }
 

@@ -28,7 +28,7 @@
 
       {% if date_updated %}
         <div class="date__updated">
-          <p id="date__updated">{{date_updated}} UTC</p>
+          <p {% if administrator %}id="date__updated_admin" class="date__updated_admin" {% else %}id="date__updated"{% endif %}>{{date_updated}} UTC</p>
         </div>
       {% endif %}
 <!--      <div class="home__blob grid">-->
