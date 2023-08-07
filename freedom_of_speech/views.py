@@ -1047,13 +1047,6 @@ class ProfilePageView(TemplateView):
                             context['discord_date_updated'] = member_parameters.get('date', '')
                             context['discord_member_status'] = True
 
-                            if not context['discord_role']:
-                                candidate = document.get('candidates', {}).get(username, '')
-                                if candidate:
-                                    context['discord_role'] = 'Кандидат'
-                                else:
-                                    context['discord_role'] = 'Участник'
-
                             joined_date = member_parameters.get('joined_date', '')
                             if joined_date:
                                 date = json.loads(joined_date, object_hook=json_util.object_hook)
@@ -1064,7 +1057,6 @@ class ProfilePageView(TemplateView):
                                     context['discord_joined_date'] = date.strftime('%Y-%m-%d %H:%M:%S')
                     else:
                         context['discord_link_status'] = False
-                        context['discord_role'] = 'Аноним'
 
                     context['members_count'] = members_count
                     context['messages_count'] = messages_count

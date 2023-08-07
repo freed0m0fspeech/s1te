@@ -1365,6 +1365,8 @@ $('#date__updated').on('click', function (e){
     else if ($(this).parent().parent().hasClass('profile__data'))
         target = 'member'
 
+    $('#date__updated').off('click')
+
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
             xhr.setRequestHeader('X-CSRFToken', csrf_token);
