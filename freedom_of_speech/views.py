@@ -107,7 +107,7 @@ class HomePageView(TemplateView):
         discord = document.get('discord', {})
         members_count = 0
 
-        members_count += int(discord.get('chat_parameters', {}).get('members_count', 0))
+        members_count += int(telegram.get('chat_parameters', {}).get('members_count', 0))
         members_count += int(discord.get('guild_parameters', {}).get('member_count', 0))
 
         if context.get('is_president', ''):
