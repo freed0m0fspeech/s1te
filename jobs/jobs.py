@@ -17,8 +17,8 @@ mongoDataBase = dataBases.mongodb_client
 
 
 def scheduled_start_voting():
+    print('scheduled_start_voting()')
     from jobs.updater import sched
-    # print('Scheduled Start Voting Running')
     try:
         if not mongoDataBase.check_connection():
             start_vote = datetime.now(tz=utc) + timedelta(hours=1)
@@ -114,6 +114,7 @@ def scheduled_start_voting():
     sched.print_jobs()
 
 def scheduled_end_voting():
+    print('scheduled_end_voting()')
     from jobs.updater import sched
 
     try:
@@ -293,6 +294,7 @@ def scheduled_end_voting():
 
 
 def scheduled_telegram_synching(start=0, stop=200, step=1):
+    print('scheduled_telegram_synching()')
     from jobs.updater import sched
 
     try:
@@ -328,8 +330,9 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                 chat = chat.json()
 
                 query = {'telegram.chat_parameters': chat.get('chat_parameters', {}), 'telegram.members_parameters': chat.get('members_parameters', {})}
-                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                           action='$set', query=query)
+                if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                           action='$set', query=query) is None:
+                    return
 
                 # Check for referendum
                 referendum_date = document.get('referendum', {}).get('date', '')
@@ -388,6 +391,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
 
 
 def scheduled_discord_synching(start=0, stop=200, step=1):
+    print('scheduled_discord_synching()')
     from jobs.updater import sched
 
     try:
@@ -416,7 +420,7 @@ def scheduled_discord_synching(start=0, stop=200, step=1):
             }
             data = json.dumps(data)
             origin = os.getenv('HOSTNAME', '')
-            guild = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/guild/{guild_id}", data=data,
+            guild = requests.get(f"https://discord-bot-freed0m0fspeech.fly.dev/guild/{guild_id}", data=data,
                                 headers={'Origin': origin, 'Host': origin})
 
             if guild and guild.status_code == 200:
@@ -434,6 +438,7 @@ def scheduled_discord_synching(start=0, stop=200, step=1):
 
 
 def scheduled_voting():
+    print('scheduled_voting()')
     from jobs.updater import sched
 
     try:

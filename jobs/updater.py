@@ -84,7 +84,8 @@ def start():
     sched.add_job(scheduled_discord_synching, 'interval', hours=4, id='scheduled_discord_synching',
                   misfire_grace_time=None, coalesce=True)
 
-    # sched.get_job('scheduled_telegram_synching').modify(next_run_time=datetime.now(tz=utc))
+    sched.get_job('scheduled_telegram_synching').modify(next_run_time=datetime.now(tz=utc))
+    sched.get_job('scheduled_discord_synching').modify(next_run_time=datetime.now(tz=utc))
     # schduler.add_job(test, 'date', run_date=datetime.now(tz=utc), args=['1', '2'])
 
     sched.start()
