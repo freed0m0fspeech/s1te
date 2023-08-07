@@ -1708,13 +1708,16 @@ class UpdateChatPageView(TemplateView):
         query = {'_id': 0, 'telegram': 1, 'discord': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
+        if not document:
+            return
+
         last_update_telegram = document.get('telegram', {}).get('chat_parameters', {}).get('date', '')
         last_update_discord = document.get('discord', {}).get('guild_parameters', {}).get('date', '')
 
         if last_update_telegram:
             # update only every 30 minutes
             if not (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_telegram,
-                                                                              '%Y-%m-%d %H:%M:%S')).seconds < 1800:
+                                                                              '%Y-%m-%d %H:%M:%S')).seconds >= 1800:
                 chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
                 data = {
                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1737,8 +1740,8 @@ class UpdateChatPageView(TemplateView):
 
         if last_update_discord:
             # update only every 30 minutes
-            if not (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_discord,
-                                                                              '%Y-%m-%d %H:%M:%S')).seconds < 1800:
+            if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_discord,
+                                                                              '%Y-%m-%d %H:%M:%S')).seconds >= 1800:
                 guild_id = document.get('discord', {}).get('guild_parameters', {}).get('id', '')
                 data = {
                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
