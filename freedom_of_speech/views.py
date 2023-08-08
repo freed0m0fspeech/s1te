@@ -1871,13 +1871,19 @@ class MembersPageView(TemplateView):
         for username, user_parameters in document.get('users', {}).items():
             telegram_member_parameters = telegram_members_parameters.get(user_parameters.get('telegram', {}).get('id', ''), {})
             xp = 0
+            voicetime = 0
+            messages_count = 0
 
             if telegram_member_parameters:
                 xp += telegram_member_parameters.get('xp', 0)
+                voicetime += round(telegram_member_parameters.get('voicetime', 0) / 3600, 1)
+                messages_count += telegram_member_parameters.get('messages_count', 0)
 
             discord_member_parameters = discord_members_parameters.get(user_parameters.get('discord', {}).get('id', ''), {})
             if discord_members_parameters:
                 xp += discord_member_parameters.get('xp', 0)
+                voicetime += round(discord_member_parameters.get('voicetime', 0) / 3600, 1)
+                messages_count += discord_member_parameters.get('messages_count', 0)
 
             lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
 
@@ -1885,6 +1891,8 @@ class MembersPageView(TemplateView):
             parameters['lvl'] = lvl
             parameters['xp_have'] = xp_have
             parameters['xp_need'] = xp_need
+            parameters['voicetime'] = voicetime
+            parameters['messages_count'] = messages_count
 
             # position = member_parameters.get('position', float('inf'))
             # if not is_url_image(user_parameters.get('telegram', {}).get('photo_url')):
@@ -1947,6 +1955,8 @@ class TelegramMembersPageView(TemplateView):
                 parameters['lvl'] = lvl
                 parameters['xp_have'] = xp_have
                 parameters['xp_need'] = xp_need
+                parameters['voicetime'] = round(telegram_member_parameters.get('voicetime', 0) / 3600, 1)
+                parameters['messages_count'] = telegram_member_parameters.get('messages_count', 0)
 
                 position = telegram_member_parameters.get('position', float('inf'))
                 member = (username, position, parameters, user_parameters.get('telegram', {}))
@@ -1996,6 +2006,8 @@ class DiscordMembersPageView(TemplateView):
                 parameters['lvl'] = lvl
                 parameters['xp_have'] = xp_have
                 parameters['xp_need'] = xp_need
+                parameters['voicetime'] = round(discord_member_parameters.get('voicetime', 0) / 3600, 1)
+                parameters['messages_count'] = discord_member_parameters.get('messages_count', 0)
 
                 position = discord_member_parameters.get('position', float('inf'))
                 member = (username, position, parameters, user_parameters.get('discord', {}))
