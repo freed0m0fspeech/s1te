@@ -4,7 +4,7 @@
 
     <div class="container section__border">
         <div class="government__container container grid">
-            <div class="government__card" id="government__card_president">
+            <div class="government__card" id="government__card_president" stand="{{end_vote}}">
                 <i class="ri-vip-crown-line"></i>
 
                 <h2 class="government__title">
@@ -40,7 +40,7 @@
                 <div class="government__border {% if candidate == 'president' %} government__border-selected {% endif %}"></div>
             </div>
 
-            <div class="government__card" id="government__card_parliament">
+            <div class="government__card" id="government__card_parliament" stand="{{end_vote}}">
                 <i class="ri-vip-crown-2-line"></i>
 
                 <h2 class="government__title">
@@ -76,7 +76,7 @@
                 <div class="government__border {% if candidate == 'parliament' %} government__border-selected {% endif %}"></div>
             </div>
 
-            <div class="government__card" id="government__card_judge">
+            <div class="government__card" id="government__card_judge" stand="{{end_vote}}">
                 <i class="fa-solid fa-handcuffs"></i>
 
                 <h2 class="government__title">

@@ -399,7 +399,7 @@ input:-webkit-autofill:active{
         box-shadow: 0 4px 20px hsla(207, 24%, 35%, .1);
         padding: 2rem 1.5rem 5rem;
         border-radius: 2rem;
-        transition: bottom .1s;
+        /*transition: bottom .1s;*/
     }
 }
 
@@ -1247,13 +1247,13 @@ input:-webkit-autofill:active{
     /*align-items: center;*/
     /*justify-items: center;*/
 
-    margin: 1rem;
-
     display: flex;
     align-items: center;
     justify-content: center;
     align-content: center;
     flex-direction: column;
+
+    margin: 1rem 1rem 4rem;
 
     /*max-height: 66vh;*/
     /*overflow-y: scroll;*/

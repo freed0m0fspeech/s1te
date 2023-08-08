@@ -1300,10 +1300,13 @@ $('#government__votes').on('click', function (e){
     }
 });
 
-$('.government__card').on('click', function (e){
+$('.government__card').on('click', function stand(e){
     // if (e.target.tagName.toLowerCase() in {'a': '', 'ul': '', 'li': ''})
     //     return
     e.stopPropagation()
+
+    if ($(this).attr('stand'))
+        return
 
     if (e.target.tagName.toLowerCase() === 'a')
         return
