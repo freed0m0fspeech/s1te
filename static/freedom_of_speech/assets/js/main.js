@@ -785,45 +785,26 @@ $('#signout-button').on('click', function(e) {
 });
 
 $(document).ready(function () {
-    // const signup_password = $('#signup-password')
-    // const entry_message = $('#entry-message')
-    //
-    // signup_password.keyup(function () {
-    //     entry_message.html(checkStrength(signup_password.val()))
-    // })
-    // function checkStrength(password) {
-    //     var strength = 0
-    //     if (password.length < 6) {
-    //         entry_message.removeClass()
-    //         entry_message.addClass('short__password')
-    //         return 'Too short'
-    //     }
-    //     if (password.length > 7) strength += 1
-    //     // If password contains both lower and uppercase characters, increase strength value.
-    //     if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) strength += 1
-    //     // If it has numbers and characters, increase strength value.
-    //     if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/)) strength += 1
-    //     // If it has one special character, increase strength value.
-    //     if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1
-    //     // If it has two special characters, increase strength value.
-    //     if (password.match(/(.*[!,%,&,@,#,$,^,*,?,_,~].*[!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1
-    //     // Calculated strength value, we can return messages
-    //     // If value is less than 2
-    //     if (strength < 2) {
-    //         entry_message.removeClass()
-    //         entry_message.addClass('weak__password')
-    //         return 'Weak'
-    //     } else if (strength == 2) {
-    //         entry_message.removeClass()
-    //         entry_message.addClass('good__password')
-    //         return 'Good'
-    //     } else {
-    //         entry_message.removeClass()
-    //         entry_message.addClass('strong__password')
-    //         return 'Strong'
-    //     }
-    // }
-    return 1
+// Add smooth scrolling to all links
+    $("a").on('click', function(event) {
+        // Make sure this.hash has a value before overriding default behavior
+        if (this.hash !== "") {
+            // Prevent default anchor click behavior
+            event.preventDefault();
+
+            // Store hash
+            var hash = this.hash;
+
+            // Using jQuery's animate() method to add smooth page scroll
+            // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+            $('html, body').animate({
+                scrollTop: $(hash).offset().top
+            }, 500, function(){
+                // Add hash (#) to URL when done scrolling (default click behavior)
+                window.location.hash = hash;
+            });
+        } // End if
+    });
 });
 
 $('#contact_button').on('click', function(e) {
