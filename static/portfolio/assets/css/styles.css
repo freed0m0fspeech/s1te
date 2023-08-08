@@ -432,7 +432,7 @@ input:-webkit-autofill:active{
 .nav__close {
     position: absolute;
     right: 1.5rem;
-    bottom: .7rem;
+    bottom: 1rem;
     font-size: 1.5rem;
     cursor: pointer;
 }
