@@ -100,7 +100,7 @@
     <div class="members__container container">
       {% for username, position, parameters, discord_parameters in members %}
       <a href="/freedom_of_speech/profile/{{username}}/">
-        {% if discord_id and discord_avatar %}
+        {% if discord_parameters.id and discord_parameters.avatar %}
           <img src="https://cdn.discordapp.com/avatars/{{discord_parameters.id}}/{{discord_parameters.avatar}}">&nbsp;
         {% endif %}
         @{{username}} ({{position}})
