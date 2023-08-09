@@ -347,7 +347,7 @@ class SignDiscordPageView(TemplateView):
         if not code:
             return HttpResponse(status=422)
 
-        redirect_uri = f"{os.getenv('HOSTNAME')}freedom_of_speech/signin/discord/"
+        redirect_uri = f"{os.getenv('HOSTNAME')}freedom_of_speech/sign/discord/"
         data = exchange_code(code, redirect_uri)
 
         # data = request.POST

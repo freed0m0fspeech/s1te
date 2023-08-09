@@ -13,22 +13,29 @@ Additional info about ``s1te``, you can find `here <https://github.com/pr0stre1/
 
 Information:
   * /portfolio - Personal portfolio project
-  * /freedom_of_speech - Personal project with additional functionality (database + telegram API + scheduler) 
+  * /freedom_of_speech - Personal project with additional functionality
 
 ---------------
 
 Functionality:
   * /portfolio:
 
-    - Testimonials save to DataBase
+    - Showcase of personal portfolio
+    - Testimonials system
+    - DataBase
+    - Themes
 
   * /freedom_of_speech:
 
     - Registration/Authorization
-    - Scheduled tasks (telegram sync, votes)
+    - DataBase
+    - Scheduled tasks
     - Vote system
-    - Saving information to DataBase
-    - Testimonials save to DataBase
-    - Change site text and save changes to DataBase
-    - Telegram linking
-    - Profile page features
+    - Sync system
+    - Content edit on site for some parts
+    - Telegram linking/authorization/registration
+    - Discord linking/authorization/registration
+    - Personal profiles features
+    - Testimonials system
+    - Themes
+    - Top members by different categories
