@@ -14,14 +14,14 @@ def is_url_image(image_url):
     return False
 
 
-def exchange_code(code: str):
+def exchange_code(code: str, redirect_uri: str):
     try:
         data = {
             "client_id": os.getenv('DISCORD_BOT_CLIENT_ID', ''),
             "client_secret": os.getenv('DISCORD_BOT_SECRET', ''),
             "grant_type": "authorization_code",
             "code": code,
-            "redirect_uri": f"{os.getenv('HOSTNAME')}freedom_of_speech/auth/discord/",
+            "redirect_uri": redirect_uri,
             "scope": "identify"
         }
 

@@ -1,6 +1,6 @@
 {% load static %}
 <section class="profile section" id="profile">
-  <div class="{% if telegram_member_status %} profile__container {% endif %} {% if authorized %} section__border {% endif %} container grid">
+  <div class="profile__container {% if authorized %} section__border {% endif %} container grid">
     <div class="profile__data grid">
       <h1 class="profile__title">
         Страница профиля <br>
@@ -9,21 +9,21 @@
 
       <div class="profile__blob grid">
         <!--        <div class="profile__perfil">-->
-        <img src="{% if telegram_photo_url %} {{telegram_photo_url}} {% endif %}">
+        <img src="{% if telegram_photo_url %} {{telegram_photo_url}} {% else %} {% if discord_id and discord_avatar %} https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}} {% endif %} {% endif %}">
         <!--        https://discord.com/developers/docs/reference#image-formatting-->
-        <!--        https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}}?size=320-->
+        <!--        https://cdn.discordapp.com/avatars/discord_id/discord_avatar?size=320-->
         <!--        </div>-->
 
         <!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-waves.svg' %}" alt="profile waves" class="profile__shape-waves">-->
         <!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-circle.svg' %}" alt="profile circle" class="profile__shape-circle">-->
       </div>
 
-<!--      {% if telegram_date_updated and telegram_link_status%}-->
+<!--       if telegram_date_updated and telegram_link_status-->
 <!--      <div class="date__updated">-->
-<!--        <p id="date__updated">{{telegram_date_updated}} UTC</p>-->
+<!--        <p id="date__updated">telegram_date_updated UTC</p>-->
 <!--      </div>-->
-<!--      {% endif %}-->
-      {%if authorized %}
+<!--       endif -->
+      {% if authorized %}
       <ul class="profile__community">
         <a href="#" target="_blank" class="profile__community-link profile__community-link__{{telegram_link_status}}" id="auth-telegram_button">
           <i class="ri-telegram-line"></i>
@@ -43,7 +43,6 @@
       {% endif %}
     </div>
 
-    {% if telegram_member_status %}
     <!--==================== PROFILE INFO 1 ====================-->
     <div class="profile__info">
       <div>
@@ -54,10 +53,11 @@
         <p class="profile__info-description">
           {% if telegram_first_name %}
             {{telegram_first_name}} {{telegram_last_name}} <br>
+            <br>
+          {% endif %}
 
-            {% if discord_global_name %}
-              {{discord_global_name}} <br>
-            {% endif %}
+          {% if discord_global_name %}
+            {{discord_global_name}} <br>
             <br>
           {% endif %}
 
@@ -120,13 +120,13 @@
           СВОБОДА
         </h3>
 
-        {% if telegram_joined_date %}
-          <p class="profile__info-number" id="profile__info__years_value">
-              {{telegram_joined_date}} UTC
-              <!--          2017-2023-->
-            <div class="profile__info-description" id="profile__date_counter"></div>
-          </p>
-        {% endif %}
+        <p class="profile__info-number" id="profile__info__years_value">
+          {% if telegram_joined_date %}
+            {{telegram_joined_date}} UTC
+          {% endif %}
+            <!--          2017-2023-->
+          <div class="profile__info-description" id="profile__date_counter"></div>
+        </p>
       </div>
 
       <div>
@@ -154,6 +154,5 @@
         </p>
       </div>
     </div>
-    {% endif %}
   </div>
 </section>

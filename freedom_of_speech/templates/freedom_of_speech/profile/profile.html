@@ -8,7 +8,7 @@
     <meta name="description" content="Freedom of speech official website">
 
     <!--=============== FAVICON ===============-->
-    <link rel="shortcut icon" href="{{telegram_photo_url}}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% if telegram_photo_url %} {{telegram_photo_url}} {% else %} {% if discord_id and discord_avatar %} https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}} {% endif %} {% endif %}" type="image/x-icon">
 
     <!--=============== REMIXICONS ===============-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
@@ -48,7 +48,7 @@
 <!--==================== HEADER ====================-->
 <header class="header" id="header">
     <nav class="nav container">
-        <a href="/freedom_of_speech" class="nav__logo">
+        <a href="/freedom_of_speech/" class="nav__logo">
             Freedom of speech
         </a>
 
@@ -110,7 +110,7 @@
     {% if authorized %}
         <section class="entry section" id="username">
             <h2 class="section__title">Никнейм</h2>
-            <span class="section__subtitle">Изменить никнейм персонального профиля</span>
+            <span class="section__subtitle">Изменить никнейм</span>
 
             <div class="entry__container container grid section__border">
                 <div class="entry__content">
@@ -120,10 +120,10 @@
                             <input type="text" name="user_name" required placeholder="Напишите новый никнейм" class="entry__form-input" id="username-change_username" autocomplete="username">
                         </div>
 
-                        <div class="entry__form-div">
-                            <label class="entry__form-tag">Текущий пароль</label>
-                            <input type="password" name="user_password" required placeholder="Напишите текущий пароль" class="entry__form-input" id="username-change_password" autocomplete="current-password">
-                        </div>
+<!--                        <div class="entry__form-div">-->
+<!--                            <label class="entry__form-tag">Текущий пароль</label>-->
+<!--                            <input type="password" name="user_password" required placeholder="Напишите текущий пароль" class="entry__form-input" id="username-change_password" autocomplete="current-password">-->
+<!--                        </div>-->
 
                         <p class="entry__message" id="entry-message-username"></p>
                         <button class="entry__button" id="username-change_button">
@@ -136,17 +136,17 @@
 
         <section class="entry section" id="password">
             <h2 class="section__title">Пароль</h2>
-            <span class="section__subtitle">Изменить пароль персонального профиля</span>
+            <span class="section__subtitle">Изменить пароль</span>
 
             <div class="entry__container container grid section__border">
                 <div class="entry__content">
                     <form action='' class="entry__form" id="entry-form-password">
                         <input hidden autocomplete="username" name="user_name" type="text" value="{{..}}"/>
 
-                        <div class="entry__form-div">
-                            <label class="entry__form-tag">Текущий пароль</label>
-                            <input type="password" name="user_password_old" required placeholder="Напишите текущий пароль" class="entry__form-input" id="password-change_old_password" autocomplete="current-password">
-                        </div>
+<!--                        <div class="entry__form-div">-->
+<!--                            <label class="entry__form-tag">Текущий пароль</label>-->
+<!--                            <input type="password" name="user_password_old" required placeholder="Напишите текущий пароль" class="entry__form-input" id="password-change_old_password" autocomplete="current-password">-->
+<!--                        </div>-->
 
                         <div class="entry__form-div">
                             <label class="entry__form-tag">Новый пароль</label>

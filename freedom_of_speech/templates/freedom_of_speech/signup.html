@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="{% static 'freedom_of_speech/assets/img/favicon.jpg' %}" type="image/x-icon">
 
     <!--=============== REMIXICONS ===============-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
 
     <!--=============== UNICONS ===============-->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.0/css/line.css">
@@ -53,7 +53,7 @@
 
         <div class="nav__buttons">
             <!--Theme change button-->
-            <i class="ri-moon-line change-theme" id="theme-button"></i>
+            <i class="change-theme" id="theme-button"></i>
         </div>
     </nav>
 </header>
@@ -62,7 +62,7 @@
 <main class="main">
     <section class="entry section">
         <h2 class="section__title">Регистрация</h2>
-        <span class="section__subtitle">Регистрация персонального аккаунта</span>
+        <span class="section__subtitle">Зарегистрировать персональный аккаунт</span>
 
         <div class="entry__container container grid">
             <div class="entry__content">
@@ -89,6 +89,16 @@
                         </a>
                     </div>
 
+                    <ul class="profile__community">
+                        <a href="#" target="_blank" class="profile__community-link" id="sign-telegram_button">
+                            <i class="ri-telegram-line"></i>
+                        </a>
+
+                        <a href="#" target="_blank" class="profile__community-link" id="sign-discord_button">
+                            <i class="ri-discord-line"></i>
+                        </a>
+                    </ul>
+
                     <button class="entry__button" id="signup-button">
                         Зарегистрироваться <i class="ri-login-circle-line"></i>
                     </button>
@@ -112,6 +122,9 @@
 
 <!--jQuery Core 3.6.3-->
 <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+<!--=============== TELEGRAM JS ===============-->
+<script src="https://telegram.org/js/telegram-widget.js?"></script>
 
 <!--=============== MAIN JS ===============-->
 <script src="{% static 'freedom_of_speech/assets/js/main.js' %}"></script>

@@ -124,9 +124,13 @@ class HomePageView(TemplateView):
         context['constitution'] = constitution
         context['telegram_members_count'] = telegram_members_count
         context['discord_members_count'] = discord_members_count
-        date_updated = max(telegram.get('chat_parameters', {}).get('date', ''), discord.get('guild_parameters', {}).get('date', ''))
+        date_updated = max(telegram.get('chat_parameters', {}).get('date', ''),
+                           discord.get('guild_parameters', {}).get('date', ''))
         context['date_updated'] = date_updated
-        context['username'] = username
+
+        if document.get('users', {}).get(username, {}):
+            context['username'] = username
+
         context['laws'] = laws
         context['tlaws'] = tlaws
         context['administrator'] = permissions.get('administrator', False)
@@ -238,6 +242,202 @@ class SignInPageView(TemplateView):
             return HttpResponse(status=401)
 
 
+class SignTelegramPageView(TemplateView):
+    async def get(self, request, *args, **kwargs):
+        return HttpResponse(status=404)
+
+    async def post(self, request, *args, **kwargs):
+        data = request.POST
+        # cookies = request.COOKIES
+
+        if not data:
+            return HttpResponse(status=422)
+
+        try:
+            verify_telegram_authentication(bot_token=os.getenv('TELEGRAM_BOT_TOKEN', ''), request_data=data)
+        except (TelegramDataIsOutdatedError, NotTelegramDataError):
+            return HttpResponse(status=422)
+
+        username = ''
+
+        query = {'_id': 0, 'users': 1}
+        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        if not document:
+            return HttpResponse(status=500)
+
+        try:
+            sessionid = ''
+            users = document.get('users', {})
+
+            for user in users:
+                user_telegram = users.get(user, {}).get('telegram', {})
+
+                if user_telegram.get('id', '') == data.get('id', ''):
+                    username = user
+                    sessionid = users.get(user, {}).get('sessionid', '')
+
+        except (IndexError, KeyError, TypeError):
+            return HttpResponse(status=401)
+
+        if sessionid:
+            query = {f'users.{username}.telegram': data}
+            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set', query=query, upsert=False)
+
+            context = {
+
+            }
+
+            response = HttpResponse(status=200)
+
+            expires = datetime.now(tz=utc) + timedelta(days=7)
+
+            response.set_cookie(key='username', value=username, secure=True, samesite='None', expires=expires)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='None', expires=expires)
+
+            return response
+        else:
+            # register new user
+            tid = data.get('id', '')
+            username = f"telegram@{tid}"
+
+            if not username:
+                return HttpResponse(status=422)
+
+            try:
+                username.encode('latin-1')
+            except UnicodeEncodeError:
+                return HttpResponse(status=422)
+
+            query = {'_id': 0, 'users': 1}
+            document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+                                                  query=query)
+
+            if not document:
+                return HttpResponse(status=500)
+
+            users = document.get('users', '')
+            user = ''
+            if users:
+                user = users.get(username, '')
+
+            if user:
+                return HttpResponse(status=409)  # Already registered username
+
+            response = HttpResponse(status=201)
+
+            session_num_bytes = 24
+            sessionid = secrets.token_urlsafe(session_num_bytes)
+            expires = datetime.now(tz=utc) + timedelta(days=7)
+            response.set_cookie(key='username', value=username, secure=True, samesite='None', expires=expires)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='None', expires=expires)
+
+            query = {f'users.{username}.sessionid': sessionid, f'users.{username}.telegram': data}
+            if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                     action='$set', query=query, upsert=False) is None:
+                return HttpResponse(status=500)
+
+            return response
+
+
+class SignDiscordPageView(TemplateView):
+    async def get(self, request, *args, **kwargs):
+        code = request.GET.get('code', '')
+
+        if not code:
+            return HttpResponse(status=422)
+
+        redirect_uri = f"{os.getenv('HOSTNAME')}freedom_of_speech/signin/discord/"
+        data = exchange_code(code, redirect_uri)
+
+        # data = request.POST
+        # cookies = request.COOKIES
+
+        if not data:
+            return HttpResponse(status=422)
+
+        username = ''
+
+        query = {'_id': 0, 'users': 1}
+        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        if not document:
+            return HttpResponse(status=500)
+
+        try:
+            sessionid = ''
+            users = document.get('users', {})
+
+            for user in users:
+                user_discord = users.get(user, {}).get('discord', {})
+
+                if user_discord.get('id', '') == data.get('id', ''):
+                    username = user
+                    sessionid = users.get(user, {}).get('sessionid', '')
+
+        except (IndexError, KeyError, TypeError):
+            return HttpResponse(status=401)
+
+        if sessionid:
+            query = {f'users.{username}.discord': data}
+            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set', query=query, upsert=False)
+
+            context = {
+
+            }
+
+            response = render(request=request, template_name='freedom_of_speech/popup_success.html', context={})
+
+            expires = datetime.now(tz=utc) + timedelta(days=7)
+
+            response.set_cookie(key='username', value=username, secure=True, samesite='None', expires=expires)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='None', expires=expires)
+
+            return response
+        else:
+            # register new user
+            did = data.get('id', '')
+            username = f"discord@{did}"
+
+            if not username:
+                return HttpResponse(status=422)
+
+            try:
+                username.encode('latin-1')
+            except UnicodeEncodeError:
+                return HttpResponse(status=422)
+
+            query = {'_id': 0, 'users': 1}
+            document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+                                                  query=query)
+
+            if not document:
+                return HttpResponse(status=500)
+
+            users = document.get('users', '')
+            user = ''
+            if users:
+                user = users.get(username, '')
+
+            if user:
+                return HttpResponse(status=409)  # Already registered username
+
+            response = render(request=request, template_name='freedom_of_speech/popup_success.html', context={})
+
+            session_num_bytes = 24
+            sessionid = secrets.token_urlsafe(session_num_bytes)
+            expires = datetime.now(tz=utc) + timedelta(days=7)
+            response.set_cookie(key='username', value=username, secure=True, samesite='None', expires=expires)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='None', expires=expires)
+
+            query = {f'users.{username}.sessionid': sessionid, f'users.{username}.discord': data}
+            if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                          action='$set', query=query, upsert=False) is None:
+                return HttpResponse(status=500)
+
+            return response
+
+
 class SignUpPageView(TemplateView):
     async def get(self, request, *args, **kwargs):
         # if 'username' in request.COOKIES and 'last_connection' in request.COOKIES:
@@ -281,6 +481,9 @@ class SignUpPageView(TemplateView):
         try:
             username.encode('latin-1')
         except UnicodeEncodeError:
+            return HttpResponse(status=422)
+
+        if any(char in "#/@" for char in username):
             return HttpResponse(status=422)
 
         query = {'_id': 0, 'users': 1}
@@ -371,14 +574,14 @@ class EditPasswordPageView(TemplateView):
         if not data:
             return HttpResponse(status=422)
 
-        old_password = data.get('old_password', '')
+        # old_password = data.get('old_password', '')
         new_password = data.get('new_password', '')
 
-        if not old_password or not new_password:
+        if not new_password:
             return HttpResponse(status=422)
 
-        if old_password == new_password:
-            return HttpResponse(status=401)
+        # if old_password == new_password:
+        #     return HttpResponse(status=401)
 
         query = {'_id': 0, 'users': 1}
         document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
@@ -393,19 +596,17 @@ class EditPasswordPageView(TemplateView):
                 if users.get(username, ''):
                     if users[username].get('sessionid', ''):
                         if sessionid == users[username]['sessionid']:
-                            if users[username]['password'] == old_password:
-                                user = users[username]
+                            if not users.get(username, {}).get('password', '') == new_password:
+                                user = users.get(username, {})
                             else:
-                                return HttpResponse(status=401)
+                                return HttpResponse(status=200)
         else:
             return HttpResponse(status=422)
 
         if user:
             query = {f'users.{username}.password': new_password}
-            updateMongo = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                     action='$set', query=query)
-
-            if updateMongo is None:
+            if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                     action='$set', query=query) is None:
                 return HttpResponse(status=500)
 
             return HttpResponse(status=200)
@@ -662,9 +863,9 @@ class EditUsernamePageView(TemplateView):
             return HttpResponse(status=422)
 
         new_username = data.get('username', '')
-        password = data.get('password', '')
+        # password = data.get('password', '')
 
-        if not new_username or not password:
+        if not new_username:
             return HttpResponse(status=422)
 
         query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1}
@@ -683,22 +884,26 @@ class EditUsernamePageView(TemplateView):
                 if users.get(username, ''):
                     if users[username].get('sessionid', ''):
                         if sessionid == users[username]['sessionid']:
-                            if users[username]['password'] == password:
-                                user = users[username]
+                            # if not users[username]['password'] == password:
+                            user = users[username]
 
-                                if username == new_username:
-                                    return HttpResponse(status=200)
-                            else:
-                                return HttpResponse(status=401)  # Worng credentials
+                            if username == new_username:
+                                return HttpResponse(status=200)
+
+                            if any(char in "#/@" for char in new_username):
+                                return HttpResponse(status=401)
+                            # else:
+                            #     return HttpResponse(status=401)  # Worng credentials
         else:
             return HttpResponse(status=422)
 
         if user:
             if users[username]:
                 # Delete old account info
-                # query = {f'users.{username}': ''}
-                # mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$unset',
-                #                           query=query)
+                query = {f'users.{username}': ''}
+                if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$unset',
+                                          query=query) is None:
+                    return HttpResponse(status=500)
                 # Add new account info
                 query = {f'users.{new_username}': users[username]}
 
@@ -709,10 +914,8 @@ class EditUsernamePageView(TemplateView):
                 if username == document.get('parliament', ''):
                     query['parliament'] = username
 
-                updateMongo = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                         action='$set', query=query)
-
-                if updateMongo is None:
+                if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                         action='$set', query=query) is None:
                     return HttpResponse(status=500)
             else:
                 return HttpResponse(status=500)
@@ -832,7 +1035,6 @@ class AuthTelegramPageView(TemplateView):
         else:
             return HttpResponse(status=422)
         # data = {'id', 'first_name', 'last_name', 'username', 'photo_url', 'auth_date', 'hash'}
-        role = ''
         if user:
             # newtusername = data.get('username', '')
             newtid = data.get('id', '')
@@ -852,6 +1054,13 @@ class AuthTelegramPageView(TemplateView):
                             ):
                                 return HttpResponse(status=409)
                             else:
+                                if not user.get('discord', {}):
+                                    if not user.get('password', ''):
+                                        return HttpResponse(status=409)
+                                    else:
+                                        if any(char in "#/@" for char in username):
+                                            return HttpResponse(status=409)
+
                                 query = {f'users.{username}.telegram': '', f'referendum.votes.{username}': ''}
 
                                 if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
@@ -860,39 +1069,16 @@ class AuthTelegramPageView(TemplateView):
 
                                 return HttpResponse(status=200)
 
+            for user in users:
+                if users.get(user, {}).get('telegram', {}).get('id', '') == newtid:
+                    # Found user with telegram linked
+                    return HttpResponse(status=409)
+
             query = {f'users.{username}.telegram': data}
 
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                           query=query) is None:
                 return HttpResponse(status=500)
-
-            chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
-
-            # publicKeyReloaded = rsa.PublicKey.load_pkcs1(os.getenv('RSA_PUBLIC_KEY', '').encode('utf8'))
-
-            data = {
-                'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
-            }
-
-            data = json.dumps(data)
-
-            origin = os.getenv('HOSTNAME', '')
-            # origin = rsa.encrypt(origin, publicKeyReloaded)
-
-            telegram_member = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{newtid}",
-                                  data=data, headers={'Origin': origin, 'Host': origin})
-            if telegram_member and telegram_member.status_code == 200:
-                telegram_member = telegram_member.json()
-
-                query = {}
-                for member_parameter in telegram_member:
-                    query[f'telegram.members_parameters.{newtid}.{member_parameter}'] = telegram_member.get(
-                        member_parameter, '')
-
-                if query:
-                    if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                  action='$set', query=query) is None:
-                        return HttpResponse(status=500)
         else:
             return HttpResponse(status=422)
 
@@ -969,7 +1155,8 @@ class ProfilePageView(TemplateView):
 
                         context['telegram_link_status'] = True
 
-                        member_parameters = telegram.get('members_parameters', {}).get(context.get('telegram_id', ''), {})
+                        member_parameters = telegram.get('members_parameters', {}).get(context.get('telegram_id', ''),
+                                                                                       {})
                         if member_parameters:
                             messages_count += member_parameters.get('messages_count', 0)
 
@@ -985,7 +1172,8 @@ class ProfilePageView(TemplateView):
                             voicetime += round(member_parameters.get('voicetime', 0) / 3600, 1)
                             context['telegram_role'] = member_parameters.get('custom_title', 'Участник')
                             context['telegram_position'] = member_parameters.get('position', '')
-                            context['telegram_members_count'] = int(telegram.get('chat_parameters', {}).get('members_count', 0))
+                            context['telegram_members_count'] = int(
+                                telegram.get('chat_parameters', {}).get('members_count', 0))
                             context['telegram_date_updated'] = member_parameters.get('date', '')
                             context['telegram_member_status'] = True
 
@@ -1042,11 +1230,12 @@ class ProfilePageView(TemplateView):
                             voicetime += round(member_parameters.get('voicetime', 0) / 3600, 1)
                             # context['discord_role'] = member_parameters.get('custom_title', 'Участник')
                             context['discord_position'] = member_parameters.get('position', '')
-                            context['discord_members_count'] = int(discord.get('guild_parameters', {}).get('member_count', 0))
+                            context['discord_members_count'] = int(
+                                discord.get('guild_parameters', {}).get('member_count', 0))
                             context['discord_date_updated'] = member_parameters.get('date', '')
                             context['discord_member_status'] = True
 
-                            joined_date = member_parameters.get('joined_date', '')
+                            joined_date = member_parameters.get('joined_at', '')
                             if joined_date:
                                 date = json.loads(joined_date, object_hook=json_util.object_hook)
                                 if date:
@@ -1152,8 +1341,7 @@ class VotePresidentPageView(TemplateView):
 
             # Users with freedom less than 30 days can't vote
             joined_date = document.get('telegram', {}).get('members_parameters', {}).get(telegram_id, {}).get(
-                'joined_date',
-                '')
+                'joined_date', '')
             if joined_date:
                 date = json.loads(joined_date, object_hook=json_util.object_hook)
                 if date:
@@ -1248,8 +1436,7 @@ class VoteParliamentPageView(TemplateView):
 
             # Users with freedom less than 30 days can't vote
             joined_date = document.get('telegram', {}).get('members_parameters', {}).get(telegram_id, {}).get(
-                'joined_date',
-                '')
+                'joined_date', '')
             if joined_date:
                 date = json.loads(joined_date, object_hook=json_util.object_hook)
                 if date:
@@ -1761,7 +1948,7 @@ class UpdateChatPageView(TemplateView):
                 else:
                     return HttpResponse(status=422)
 
-        return HttpResponse()
+        return HttpResponse(status=200)
 
 
 # class UpdateMemberPageView(TemplateView):
@@ -1844,7 +2031,7 @@ class UpdateChatPageView(TemplateView):
 #             else:
 #                 return HttpResponse(status=telegram_member.status_code)
 #
-#             return HttpResponse()
+#             return HttpResponse(status=200)
 
 
 class MembersPageView(TemplateView):
@@ -1869,7 +2056,8 @@ class MembersPageView(TemplateView):
         xp_factor = document.get('xp', {}).get('xp_factor', 100)  # threshold
 
         for username, user_parameters in document.get('users', {}).items():
-            telegram_member_parameters = telegram_members_parameters.get(user_parameters.get('telegram', {}).get('id', ''), {})
+            telegram_member_parameters = telegram_members_parameters.get(
+                user_parameters.get('telegram', {}).get('id', ''), {})
             xp = 0
             voicetime = 0
             messages_count = 0
@@ -1879,7 +2067,8 @@ class MembersPageView(TemplateView):
                 voicetime += round(telegram_member_parameters.get('voicetime', 0) / 3600, 1)
                 messages_count += telegram_member_parameters.get('messages_count', 0)
 
-            discord_member_parameters = discord_members_parameters.get(user_parameters.get('discord', {}).get('id', ''), {})
+            discord_member_parameters = discord_members_parameters.get(user_parameters.get('discord', {}).get('id', ''),
+                                                                       {})
             if discord_members_parameters:
                 xp += discord_member_parameters.get('xp', 0)
                 voicetime += round(discord_member_parameters.get('voicetime', 0) / 3600, 1)
@@ -1945,7 +2134,8 @@ class TelegramMembersPageView(TemplateView):
         xp_factor = document.get('xp', {}).get('xp_factor', 100)  # threshold
 
         for username, user_parameters in document.get('users', {}).items():
-            telegram_member_parameters = telegram_members_parameters.get(user_parameters.get('telegram', {}).get('id', ''), {})
+            telegram_member_parameters = telegram_members_parameters.get(
+                user_parameters.get('telegram', {}).get('id', ''), {})
 
             if telegram_member_parameters:
                 xp = telegram_member_parameters.get('xp', 0)
@@ -1996,7 +2186,8 @@ class DiscordMembersPageView(TemplateView):
         xp_factor = document.get('xp', {}).get('xp_factor', 100)  # threshold
 
         for username, user_parameters in document.get('users', {}).items():
-            discord_member_parameters = discord_members_parameters.get(user_parameters.get('discord', {}).get('id', ''), {})
+            discord_member_parameters = discord_members_parameters.get(user_parameters.get('discord', {}).get('id', ''),
+                                                                       {})
 
             if discord_member_parameters:
                 xp = discord_member_parameters.get('xp', 0)
@@ -2030,7 +2221,8 @@ class AuthDiscordPageView(TemplateView):
         if not code:
             return HttpResponse(status=422)
 
-        data = exchange_code(code)
+        redirect_uri = f"{os.getenv('HOSTNAME')}freedom_of_speech/auth/discord/"
+        data = exchange_code(code, redirect_uri)
 
         # data = request.POST
         cookies = request.COOKIES
@@ -2081,13 +2273,25 @@ class AuthDiscordPageView(TemplateView):
                             ):
                                 return HttpResponse(status=409)
                             else:
+                                if not user.get('telegram', {}):
+                                    if not user.get('password', ''):
+                                        return HttpResponse(status=409)
+                                    else:
+                                        if any(char in "#/@" for char in username):
+                                            return HttpResponse(status=409)
+
                                 query = {f'users.{username}.discord': ''}
 
                                 if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                               action='$unset', query=query) is None:
                                     return HttpResponse(status=500)
 
-                                return render(request=request, template_name='freedom_of_speech/popup_success.html', context={})
+                                return render(request=request, template_name='freedom_of_speech/popup_success.html',
+                                              context={})
+            for user in users:
+                if users.get(user, {}).get('discord', {}).get('id', '') == newdid:
+                    # Found user with discord linked
+                    return HttpResponse(status=409)
 
             query = {f'users.{username}.discord': data}
 
@@ -2095,34 +2299,4 @@ class AuthDiscordPageView(TemplateView):
                                           query=query) is None:
                 return HttpResponse(status=500)
 
-            guild_id = document.get('discord', {}).get('guild_parameters', {}).get('id', '')
-
-            # publicKeyReloaded = rsa.PublicKey.load_pkcs1(os.getenv('RSA_PUBLIC_KEY', '').encode('utf8'))
-
-            data = {
-                'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
-            }
-
-            data = json.dumps(data)
-
-            origin = os.getenv('HOSTNAME', '')
-            # origin = rsa.encrypt(origin, publicKeyReloaded)
-
-            discord_member = requests.get(f"https://discord-bot-freed0m0fspeech.fly.dev/member/{guild_id}/{newdid}",
-                                          data=data, headers={'Origin': origin, 'Host': origin})
-            if discord_member and discord_member.status_code == 200:
-                discord_member = discord_member.json()
-
-                query = {}
-                for member_parameter in discord_member:
-                    query[f'discord.members_parameters.{newdid}.{member_parameter}'] = discord_member.get(
-                        member_parameter, '')
-
-                if query:
-                    if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                  action='$set', query=query) is None:
-                        return HttpResponse(status=500)
-
         return render(request=request, template_name='freedom_of_speech/popup_success.html', context={})
-
-

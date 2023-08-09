@@ -137,17 +137,15 @@ themeButton.addEventListener('click', () => {
     themeButton.classList.add(selected_icon)
 
     if (selected_theme === 'dark-theme'){
-        document.body.className = ''
         document.body.classList.add('dark-theme')
     } else if (selected_theme === 'system-theme'){
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
-            document.body.className = ''
             document.body.classList.add('dark-theme')
         } else{
-            document.body.className = ''
+            document.body.classList.remove('dark-theme')
         }
     } else {
-        document.body.className = ''
+        document.body.classList.remove('dark-theme')
     }
 })
 
@@ -625,9 +623,9 @@ $('#username-change_button').on('click', function(e) {
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
     const entryMessage = $('#entry-message-username')
     const username = $('#username-change_username')
-    const password = $('#username-change_password')
+    // const password = $('#username-change_password')
 
-    if(username.val() === '' || password.val() === ''){
+    if(username.val() === ''){
         entryMessage.removeClass('color-green')
         entryMessage.addClass('color-red')
 
@@ -652,7 +650,7 @@ $('#username-change_button').on('click', function(e) {
         url: '/freedom_of_speech/edit/username/',
         data: {
             username: username.val(),
-            password: password.val(),
+            // password: password.val(),
         },
         success: function (data, status, jqXHR) {
             entryMessage.removeClass('color-red')
@@ -667,7 +665,7 @@ $('#username-change_button').on('click', function(e) {
             }, 0);
 
             username.val('')
-            password.val('')
+            // password.val('')
         },
         error(xhr,status,error){
             entryMessage.removeClass('color-green')
@@ -693,10 +691,10 @@ $('#password-change_button').on('click', function(e) {
     e.preventDefault();
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
     const entryMessage = $('#entry-message-password')
-    const old_password = $('#password-change_old_password')
+    // const old_password = $('#password-change_old_password')
     const new_password = $('#password-change_new_password')
 
-    if(old_password.val() === '' || new_password.val() === ''){
+    if(new_password.val() === ''){
         entryMessage.removeClass('color-green')
         entryMessage.addClass('color-red')
 
@@ -720,7 +718,7 @@ $('#password-change_button').on('click', function(e) {
         type: 'post',
         url: '/freedom_of_speech/edit/password/',
         data: {
-            old_password: old_password.val(),
+            // old_password: old_password.val(),
             new_password: new_password.val(),
         },
         success: function (data, status, jqXHR) {
@@ -728,7 +726,7 @@ $('#password-change_button').on('click', function(e) {
             entryMessage.addClass('color-green')
             entryMessage.text('Пароль успешно изменен')
 
-            old_password.val('')
+            // old_password.val('')
             new_password.val('')
 
             setTimeout(() => {
@@ -888,7 +886,10 @@ $('#contact_button').on('click', function(e) {
 $('#auth-telegram_button').on('click', function(e) {
     e.preventDefault();
 
-    auth_telegram_button = $('#auth-telegram_button')
+    let link_status = false
+
+    if ($(this).hasClass('profile__community-link__True'))
+        link_status = true
 
     // TODO get bot id
 
@@ -936,7 +937,10 @@ $('#auth-telegram_button').on('click', function(e) {
             },
             error(xhr,status,error){
                 if (xhr.status === 409)
-                    alert('Твоя роль не позволяет отвязать Telegram')
+                    if (!link_status)
+                        alert('Этот Telegram аккаунт уже привязан к другому персональному профилю')
+                    else
+                        alert('Тебе запрещено отвязывать Telegram в данный момент по одной из причин:\n 1. У твоего аккаунта не установлен пароль\n 2. Ты текущее правительство\n 3. Твой никнейм автоматически сгенерирован и его необходимо сменить')
                 else
                     if (error)
                         alert(error)
@@ -968,6 +972,81 @@ $('#auth-telegram_button').on('click', function(e) {
     //         print(data)
     //     }
     // });
+});
+
+$('#sign-telegram_button').on('click', function(e) {
+    e.preventDefault();
+
+    window.Telegram.Login.auth(
+        { bot_id: '2037332308', request_access: true },
+        (data) => {
+            if (!data) {
+            }else {
+                sendAuthDataToServer(data)
+            }
+        }
+    );
+
+    function sendAuthDataToServer (data){
+        const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+        const request_data = data
+        // const type = 'telegram'
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader('X-CSRFToken', csrf_token)
+            }
+        });
+
+        $.ajax({
+            type: 'post',
+            url: '/freedom_of_speech/signin/telegram/',
+            data: request_data,
+            success: function(data, status, jqXHR) {
+
+                setTimeout(() => {
+                    window.location.replace("/freedom_of_speech/profile/")
+                }, 0);
+            },
+            error(xhr,status,error){
+                if (error)
+                    alert(error)
+                else
+                    alert("status=".concat(xhr.status))
+                // Some error
+            },
+        });
+    }
+});
+
+$('#sign-discord_button').on('click', function(e) {
+    e.preventDefault();
+
+    let params = 'scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no'
+    let url = "https://discord.com/api/oauth2/authorize?client_id=805497711264661565&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Ffreedom_of_speech%2Fsign%2Fdiscord%2F&response_type=code&scope=identify"
+
+    // const url = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=code&scope=${scopes}`
+    const popup = createPopupWindow(url, 'AuthDiscord', 486, 802, params)
+
+    // Set the state to localStorage when popup opens
+    localStorage.setItem('auth-discord', 'false')
+
+    // Keep track of changes to the popup state while the popup is open
+    window.addEventListener('storage', function auth_discord_storage(e){
+        if (e.key === 'auth-discord') {
+            // reload location
+            // popupData = JSON.parse(e.newValue);
+            if (e.newValue === 'true') {
+                // Reload this location
+                setTimeout(() => {
+                    window.location.replace("/freedom_of_speech/profile/")
+                }, 0);
+                // Delete this event listener
+                // window.removeEventListener('storage', auth_discord_storage)
+            }
+        }
+    })
+
 });
 
 function createPopupWindow(pageURL, pageTitle,
