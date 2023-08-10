@@ -208,12 +208,12 @@ class SignInPageView(TemplateView):
             if users[username]:
                 user = users[username]
                 if user['password'] == password:
-                    sessionid = user['sessionid']
+                    sessionid = user.get('sessionid', '')
+
         except (IndexError, KeyError, TypeError):
             return HttpResponse(status=401)
 
         if sessionid:
-
             context = {
 
             }
@@ -224,8 +224,10 @@ class SignInPageView(TemplateView):
 
             expires = datetime.now(tz=utc) + timedelta(days=7)
 
-            response.set_cookie(key='username', value=username, secure=True, samesite='None', expires=expires)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='None', expires=expires)
+            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires,
+                                httponly=True)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires,
+                                httponly=True)
 
             # expires = datetime.datetime.now() + datetime.timedelta(days=7)
             # sessionid = secrets.token_urlsafe(24)
@@ -282,7 +284,9 @@ class SignTelegramPageView(TemplateView):
 
         if sessionid:
             query = {f'users.{username}.telegram': data}
-            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set', query=query, upsert=False)
+            if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
+                                       query=query, upsert=False) is None:
+                return HttpResponse(status=500)
 
             context = {
 
@@ -292,8 +296,8 @@ class SignTelegramPageView(TemplateView):
 
             expires = datetime.now(tz=utc) + timedelta(days=7)
 
-            response.set_cookie(key='username', value=username, secure=True, samesite='None', expires=expires)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='None', expires=expires)
+            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires, httponly=True)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires, httponly=True)
 
             return response
         else:
@@ -329,12 +333,12 @@ class SignTelegramPageView(TemplateView):
             session_num_bytes = 24
             sessionid = secrets.token_urlsafe(session_num_bytes)
             expires = datetime.now(tz=utc) + timedelta(days=7)
-            response.set_cookie(key='username', value=username, secure=True, samesite='None', expires=expires)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='None', expires=expires)
+            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires, httponly=True)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires, httponly=True)
 
             query = {f'users.{username}.sessionid': sessionid, f'users.{username}.telegram': data}
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                     action='$set', query=query, upsert=False) is None:
+                                          action='$set', query=query, upsert=False) is None:
                 return HttpResponse(status=500)
 
             return response
@@ -380,7 +384,9 @@ class SignDiscordPageView(TemplateView):
 
         if sessionid:
             query = {f'users.{username}.discord': data}
-            mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set', query=query, upsert=False)
+            if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
+                                       query=query, upsert=False) is None:
+                return HttpResponse(status=500)
 
             context = {
 
@@ -390,8 +396,8 @@ class SignDiscordPageView(TemplateView):
 
             expires = datetime.now(tz=utc) + timedelta(days=7)
 
-            response.set_cookie(key='username', value=username, secure=True, samesite='None', expires=expires)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='None', expires=expires)
+            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires, httponly=True)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires, httponly=True)
 
             return response
         else:
@@ -427,8 +433,8 @@ class SignDiscordPageView(TemplateView):
             session_num_bytes = 24
             sessionid = secrets.token_urlsafe(session_num_bytes)
             expires = datetime.now(tz=utc) + timedelta(days=7)
-            response.set_cookie(key='username', value=username, secure=True, samesite='None', expires=expires)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='None', expires=expires)
+            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires, httponly=True)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires, httponly=True)
 
             query = {f'users.{username}.sessionid': sessionid, f'users.{username}.discord': data}
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
@@ -513,8 +519,8 @@ class SignUpPageView(TemplateView):
         session_num_bytes = 24
         sessionid = secrets.token_urlsafe(session_num_bytes)
         expires = datetime.now(tz=utc) + timedelta(days=7)
-        response.set_cookie(key='username', value=username, secure=True, samesite='None', expires=expires)
-        response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='None', expires=expires)
+        response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires, httponly=True)
+        response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires, httponly=True)
 
         query = {f'users.{username}.password': password, f'users.{username}.sessionid': sessionid}
         updateMongo = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
@@ -606,7 +612,7 @@ class EditPasswordPageView(TemplateView):
         if user:
             query = {f'users.{username}.password': new_password}
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                     action='$set', query=query) is None:
+                                          action='$set', query=query) is None:
                 return HttpResponse(status=500)
 
             return HttpResponse(status=200)
@@ -899,11 +905,6 @@ class EditUsernamePageView(TemplateView):
 
         if user:
             if users[username]:
-                # Delete old account info
-                query = {f'users.{username}': ''}
-                if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$unset',
-                                          query=query) is None:
-                    return HttpResponse(status=500)
                 # Add new account info
                 query = {f'users.{new_username}': users[username]}
 
@@ -915,7 +916,14 @@ class EditUsernamePageView(TemplateView):
                     query['parliament'] = username
 
                 if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                         action='$set', query=query) is None:
+                                              action='$set', query=query) is None:
+                    return HttpResponse(status=500)
+
+                # Delete old account info
+                query = {f'users.{username}': ''}
+                if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                              action='$unset',
+                                              query=query) is None:
                     return HttpResponse(status=500)
             else:
                 return HttpResponse(status=500)
@@ -926,7 +934,7 @@ class EditUsernamePageView(TemplateView):
             #     response.cookies['username'] = new_username
 
             expires = datetime.now(tz=utc) + timedelta(days=7)
-            response.set_cookie(key='username', value=new_username, secure=True, samesite='None', expires=expires)
+            response.set_cookie(key='username', value=new_username, secure=True, samesite='Strict', expires=expires, httponly=True)
 
             return response
         else:
@@ -2275,10 +2283,14 @@ class AuthDiscordPageView(TemplateView):
                             else:
                                 if not user.get('telegram', {}):
                                     if not user.get('password', ''):
-                                        return HttpResponse(status=409)
+                                        response = HttpResponse(status=409)
+                                        return response.write(
+                                            'You should have password for your personal account in order to unlink discord')
                                     else:
                                         if any(char in "#/@" for char in username):
-                                            return HttpResponse(status=409)
+                                            response = HttpResponse(status=409)
+                                            return response.write(
+                                                'Your nickname should not contain special characters in order to unlink discord')
 
                                 query = {f'users.{username}.discord': ''}
 

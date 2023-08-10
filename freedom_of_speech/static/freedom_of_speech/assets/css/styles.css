@@ -55,7 +55,7 @@
     :root {
         --biggest-font-size: 3rem;
         --h1-font-size: 2.25rem;
-        --h2-font-size: 1.25rem;
+        --h2-font-size: 1.5rem;
         --h3-font-size: 1.25rem;
         --normal-font-size: 1rem;
         --small-font-size: .875rem;
@@ -406,7 +406,7 @@ input:-webkit-autofill:active{
 }
 
 .nav__list{
-    grid-template-columns: repeat(auto-fill, 100px);
+    grid-template-columns: repeat(auto-fit, 100px);
     justify-content: center;
     gap: 2rem 3rem;
 }
@@ -655,7 +655,8 @@ input:-webkit-autofill:active{
 .home__info-title{
     font-family: var(--body-font);
     font-size: var(--smaller-font-size);
-    font-weight: 400;
+    /*font-weight: var(--font-semi-bold);*/
+    font-weight: var(--font-medium);
     color: var(--title-color);
     margin-bottom: 1rem;
 }
@@ -706,9 +707,13 @@ input:-webkit-autofill:active{
 }
 
 .home__info-number{
-    font-size: var(--h2-font-size);
-    font-weight: var(--font-semi-bold);
+    font-size: var(--h3-font-size);
+    /*font-weight: var(--font-semi-bold);*/
     color: var(--text-color-light)
+}
+
+.home__info-description{
+    /*font-weight: var(--font-semi-bold);*/
 }
 
 .home__info-number a{
@@ -839,7 +844,7 @@ input:-webkit-autofill:active{
 .profile__info-title{
     font-family: var(--body-font);
     font-size: var(--smaller-font-size);
-    font-weight: 400;
+    font-weight: var(--font-medium);
     color: var(--title-color);
     margin-bottom: 1rem;
 }
@@ -861,11 +866,13 @@ input:-webkit-autofill:active{
 
 .profile__info-description{
     padding-right: 4rem;
+    /*font-size: var(--h2-font-size);*/
 }
 
 .profile__info-number{
-    font-size: var(--h2-font-size);
+    font-size: var(--h3-font-size);
     /*font-weight: var(--font-semi-bold);*/
+    color: var(--text-color-light)
 }
 
 /*=============== SKILLS ===============*/
