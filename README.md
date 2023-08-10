@@ -1,15 +1,17 @@
-[![Fly Deploy](https://github.com/freed0m0fspeech/s1te/actions/workflows/fly.yml/badge.svg)](https://github.com/freed0m0fspeech/s1te/actions/workflows/fly.yml)
+<p align="left"> 
+  <img src="https://github.com/freed0m0fspeech/s1te/actions/workflows/fly.yml/badge.svg" />
+</p>
 
 s1te
 ========================
 
 Personal site for different puprposes, HTML, CSS, JavaScript, Django Python project.
 
-`Learn more about s1te <https://github.com/pr0stre1/s1te/releases>`_.
+Learn more about [s1te](https://github.com/pr0stre1/s1te/releases).
 
 ---------------
 
-Additional info about ``s1te``, you can find `here <https://github.com/pr0stre1/s1te/releases>`_.
+Additional info about ``s1te``, you can find [here](https://github.com/pr0stre1/s1te/releases).
 
 ---------------
 
