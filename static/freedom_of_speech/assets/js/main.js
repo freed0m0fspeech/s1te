@@ -263,9 +263,11 @@ window.onload = function() {
     if (fun_value) {
         const fun_value_int = parseInt(fun_value.textContent);
 
+        // Run with interval
         setInterval(function () {
             animateValue(fun_value, parseInt(fun_value.textContent), getRandomInt(1, fun_value_int), 1500);
         }, 5000);
+        // Run once when page loaded
         setTimeout(function () {
             animateValue(fun_value, parseInt(fun_value.textContent), getRandomInt(1, fun_value_int), 1500);
         });
