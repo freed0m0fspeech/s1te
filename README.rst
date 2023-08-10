@@ -1,3 +1,5 @@
+[![Fly Deploy](https://github.com/freed0m0fspeech/s1te/actions/workflows/fly.yml/badge.svg)](https://github.com/freed0m0fspeech/s1te/actions/workflows/fly.yml)
+
 s1te
 ========================
 
