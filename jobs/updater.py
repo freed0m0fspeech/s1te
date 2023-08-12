@@ -31,12 +31,11 @@ mongoDataBase = dataBases.mongodb_client
 
 def listener(event):
     if event.exception:
-        # print('The job crashed :(')
+        print('The job crashed :(')
         # print(event.job_id)
-        pass
     else:
-        # print('The job worked :)')
-        pass
+        print('The job executed successfully :)')
+        sched.print_jobs()
 
 
 job_defaults = {

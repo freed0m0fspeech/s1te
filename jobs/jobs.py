@@ -111,7 +111,6 @@ def scheduled_start_voting():
     except Exception as e:
         print(e)
 
-    sched.print_jobs()
 
 def scheduled_end_voting():
     print('scheduled_end_voting()')
@@ -387,8 +386,6 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
     except Exception as e:
         print(e)
 
-    sched.print_jobs()
-
 
 def scheduled_discord_synching(start=0, stop=200, step=1):
     print('scheduled_discord_synching()')
@@ -434,8 +431,6 @@ def scheduled_discord_synching(start=0, stop=200, step=1):
     except Exception as e:
         print(e)
 
-    sched.print_jobs()
-
 
 def scheduled_voting():
     print('scheduled_voting()')
@@ -478,5 +473,3 @@ def scheduled_voting():
                                   misfire_grace_time=None, coalesce=True)
     except Exception as e:
         print(e)
-
-    sched.print_jobs()
