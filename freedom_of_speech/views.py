@@ -1911,7 +1911,7 @@ class UpdateChatPageView(TemplateView):
         if last_update_telegram:
             # update only every 30 minutes
             if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_telegram,
-                                                                              '%Y-%m-%d %H:%M:%S')).seconds >= 1800:
+                                                                              '%Y-%m-%d %H:%M:%S')).total_seconds() >= 1800:
                 chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
                 data = {
                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1935,7 +1935,7 @@ class UpdateChatPageView(TemplateView):
         if last_update_discord:
             # update only every 30 minutes
             if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_discord,
-                                                                              '%Y-%m-%d %H:%M:%S')).seconds >= 1800:
+                                                                              '%Y-%m-%d %H:%M:%S')).total_seconds() >= 1800:
                 guild_id = document.get('discord', {}).get('guild_parameters', {}).get('id', '')
                 data = {
                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),

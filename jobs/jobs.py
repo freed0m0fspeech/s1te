@@ -311,7 +311,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
 
         if last_update_chat:
             last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_chat,
-                                                                                                 '%Y-%m-%d %H:%M:%S')).seconds
+                                                                                                 '%Y-%m-%d %H:%M:%S')).total_seconds()
         else:
             last_update_seconds = 14400
 
@@ -408,7 +408,7 @@ def scheduled_discord_synching(start=0, stop=200, step=1):
 
         if last_update_guild:
             last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_guild,
-                                                                                                 '%Y-%m-%d %H:%M:%S')).seconds
+                                                                                                 '%Y-%m-%d %H:%M:%S')).total_seconds()
         else:
             last_update_seconds = 14400
 
