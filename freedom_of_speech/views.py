@@ -2212,7 +2212,7 @@ class DiscordMembersPageView(TemplateView):
                 member = (username, position, parameters, user_parameters.get('discord', {}))
                 members.append(member)
 
-        members.sort(reverse=True, key=lambda x: x[1])
+        members.sort(reverse=False, key=lambda x: x[1])
 
         # Max 100 members
         context['members'] = members[:100]
