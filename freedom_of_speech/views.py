@@ -1177,7 +1177,7 @@ class ProfilePageView(TemplateView):
                             # context['telegram_xp_have'] = xp_have
                             # context['telegram_xp_need'] = xp_need
                             # context['xp'] = member_parameters.get('xp', '')
-                            voicetime += round(member_parameters.get('voicetime', 0) / 3600, 1)
+                            voicetime += member_parameters.get('voicetime', 0) / 3600
                             context['telegram_role'] = member_parameters.get('custom_title', 'Участник')
                             context['telegram_position'] = member_parameters.get('position', '')
                             context['telegram_members_count'] = int(
@@ -1235,7 +1235,7 @@ class ProfilePageView(TemplateView):
                             xp += member_parameters.get('xp', 0)
 
                             # context['xp'] += member_parameters.get('xp', '')
-                            voicetime += round(member_parameters.get('voicetime', 0) / 3600, 1)
+                            voicetime += member_parameters.get('voicetime', 0) / 3600
                             # context['discord_role'] = member_parameters.get('custom_title', 'Участник')
                             context['discord_position'] = member_parameters.get('position', '')
                             context['discord_members_count'] = int(
@@ -1256,7 +1256,8 @@ class ProfilePageView(TemplateView):
 
                     # context['members_count'] = members_count
                     context['messages_count'] = messages_count
-                    context['voicetime'] = voicetime
+                    context['voicetime'] = round(voicetime, 1)
+                    print(voicetime)
                     xp_factor = document.get('xp', {}).get('xp_factor', 100)  # threshold
                     lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
 
@@ -2088,7 +2089,7 @@ class MembersPageView(TemplateView):
             parameters['lvl'] = lvl
             parameters['xp_have'] = xp_have
             parameters['xp_need'] = xp_need
-            parameters['voicetime'] = voicetime
+            parameters['voicetime'] = round(voicetime, 1)
             parameters['messages_count'] = messages_count
 
             # position = member_parameters.get('position', float('inf'))
