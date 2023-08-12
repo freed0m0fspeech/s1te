@@ -1257,7 +1257,6 @@ class ProfilePageView(TemplateView):
                     # context['members_count'] = members_count
                     context['messages_count'] = messages_count
                     context['voicetime'] = round(voicetime, 1)
-                    print(voicetime)
                     xp_factor = document.get('xp', {}).get('xp_factor', 100)  # threshold
                     lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
 

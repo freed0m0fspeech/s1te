@@ -9,7 +9,7 @@
 
       <div class="profile__blob grid">
         <!--        <div class="profile__perfil">-->
-        <img src="{% if telegram_photo_url %} {{telegram_photo_url}} {% else %} {% if discord_id and discord_avatar %} https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}} {% endif %} {% endif %}">
+        <img src="{% if telegram_photo_url %} {{telegram_photo_url}} {% else %} {% if discord_id and discord_avatar %} https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}}?size=320 {% endif %} {% endif %}">
         <!--        https://discord.com/developers/docs/reference#image-formatting-->
         <!--        https://cdn.discordapp.com/avatars/discord_id/discord_avatar?size=320-->
         <!--        </div>-->

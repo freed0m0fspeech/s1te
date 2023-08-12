@@ -101,7 +101,7 @@
       {% for username, position, parameters, discord_parameters in members %}
       <a href="/freedom_of_speech/profile/{{username}}/">
         {% if discord_parameters.id and discord_parameters.avatar %}
-          <img src="https://cdn.discordapp.com/avatars/{{discord_parameters.id}}/{{discord_parameters.avatar}}">&nbsp;
+          <img src="https://cdn.discordapp.com/avatars/{{discord_parameters.id}}/{{discord_parameters.avatar}}?size=320">&nbsp;
         {% endif %}
         @{{username}} ({{position}})
         <!--            forloop.counter0-->

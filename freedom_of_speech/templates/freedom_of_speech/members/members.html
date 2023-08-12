@@ -104,7 +104,7 @@
               <img src="{{telegram_parameters.photo_url}}">&nbsp;
             {% else %}
               {% if discord_parameters.id and discord_parameters.avatar %}
-                <img src="https://cdn.discordapp.com/avatars/{{discord_parameters.id}}/{{discord_parameters.avatar}}">
+                <img src="https://cdn.discordapp.com/avatars/{{discord_parameters.id}}/{{discord_parameters.avatar}}?size=320">&nbsp;
               {% endif %}
             {% endif %}
             @{{username}} ({{forloop.counter}})
