@@ -100,12 +100,13 @@
       <div class="members__container container">
         {% for username, xp, parameters, telegram_parameters, discord_parameters in members %}
           <a href="/freedom_of_speech/profile/{{username}}/">
-            {% if telegram_parameters.photo_url %}
-              <img src="{{telegram_parameters.photo_url}}">&nbsp;
+            {% if discord_parameters.id and discord_parameters.avatar %}
+              <img src="https://cdn.discordapp.com/avatars/{{discord_parameters.id}}/{{discord_parameters.avatar}}?size=320">&nbsp;
             {% else %}
-              {% if discord_parameters.id and discord_parameters.avatar %}
-                <img src="https://cdn.discordapp.com/avatars/{{discord_parameters.id}}/{{discord_parameters.avatar}}?size=320">&nbsp;
-              {% endif %}
+              {% if telegram_parameters.photo_url %}
+              <img src="{{telegram_parameters.photo_url}}">&nbsp;
+            {% endif %}
+
             {% endif %}
             @{{username}} ({{forloop.counter}})
 <!--            forloop.counter0-->
