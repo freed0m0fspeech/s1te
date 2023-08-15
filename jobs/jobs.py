@@ -1,7 +1,7 @@
 import json
 import os
 import random
-import time
+# import time
 import requests
 
 from datetime import datetime, timedelta
@@ -57,9 +57,13 @@ def scheduled_start_voting():
 
             query = {'start_vote': f'{start_vote}'}
 
-            if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                          action='$set', query=query) is None:
+            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                          action='$set', query=query)
+
+            if mongoUpdate is None:
                 return scheduled_start_voting_later()
+            else:
+                cache.freedom_of_speech = mongoUpdate
 
             text = f"**Недостаточно кандидатов на выборы [Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech | Выборы были перенесены**"
 
@@ -87,9 +91,13 @@ def scheduled_start_voting():
 
         query = {'end_vote': f'{end_vote}', 'start_vote': f'{start_vote}'}
 
-        if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                      action='$set', query=query) is None:
+        mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                      action='$set', query=query)
+
+        if mongoUpdate is None:
             return scheduled_start_voting_later()
+        else:
+            cache.freedom_of_speech = mongoUpdate
 
         job = sched.get_job('scheduled_end_voting')
         if job:
@@ -213,9 +221,13 @@ def scheduled_end_voting():
         judge = document.get('judge', {}).get('judge', '')
         if president == judge or parliament == judge:
             query = {'judge.judge': ''}
-            if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                          action='$unset', query=query) is None:
+            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                          action='$unset', query=query)
+
+            if mongoUpdate is None:
                 return scheduler_end_voting_later()
+            else:
+                cache.freedom_of_speech = mongoUpdate
 
         if president != document.get('president', ''):
             # Demote old president
@@ -266,15 +278,23 @@ def scheduled_end_voting():
 
         # Delete vote and votes information from database
         query = {'end_vote': '', 'votes': '', 'candidates': '', 'referendum.votes': ''}
-        if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                      action='$unset', query=query) is None:
+        mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                      action='$unset', query=query)
+
+        if mongoUpdate is None:
             return scheduler_end_voting_later()
+        else:
+            cache.freedom_of_speech = mongoUpdate
 
         # Set new president, parliament in database
         query = {"parliament": parliament, 'president': president}
-        if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                      action='$set', query=query) is None:
+        mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                      action='$set', query=query)
+
+        if mongoUpdate is None:
             print('New government not set in DataBase')
+        else:
+            cache.freedom_of_speech = mongoUpdate
 
         users = document.get('users', {})
         tpresident = users.get(president, {}).get('telegram', {}).get('id', '')
@@ -306,9 +326,13 @@ def scheduled_end_voting():
         referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
         # Set new referendum be valid only after 30 days after vote
         query = {"referendum.date": referendum_date}
-        if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                      query=query) is None:
+        mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
+                                      query=query)
+
+        if mongoUpdate is None:
             print('New referendum date not set in DataBase')
+        else:
+            cache.freedom_of_speech = mongoUpdate
 
         cache.freedom_of_speech = update_cached_data(mongoDataBase)
     except Exception as e:
@@ -354,9 +378,13 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
 
                 query = {'telegram.chat_parameters': chat.get('chat_parameters', {}),
                          'telegram.members_parameters': chat.get('members_parameters', {})}
-                if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                              action='$set', query=query) is None:
+                mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                              action='$set', query=query)
+
+                if mongoUpdate is None:
                     return
+                else:
+                    cache.freedom_of_speech = mongoUpdate
 
                 # Check for referendum
                 referendum_date = document.get('referendum', {}).get('date', '')
@@ -408,10 +436,13 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                                 referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
 
                                 query = {'referendum.votes': '', 'referendum.date': referendum_date}
-                                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                            action='$set', query=query)
 
-        cache.freedom_of_speech = update_cached_data(mongoDataBase)
+                                if mongoUpdate is None:
+                                    return
+                                else:
+                                    cache.freedom_of_speech = mongoUpdate
     except Exception as e:
         print(e)
 
@@ -453,10 +484,13 @@ def scheduled_discord_synching(start=0, stop=200, step=1):
 
                 query = {'discord.guild_parameters': guild.get('guild_parameters', {}),
                          'discord.members_parameters': guild.get('members_parameters', {})}
-                mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                            action='$set', query=query)
 
-        cache.freedom_of_speech = update_cached_data(mongoDataBase)
+                if mongoUpdate is None:
+                    return
+                else:
+                    cache.freedom_of_speech = mongoUpdate
     except Exception as e:
         print(e)
 
