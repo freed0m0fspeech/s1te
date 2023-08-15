@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from utils import dataBases
+from utils import dataBases, cache
 
 mongoDataBase = dataBases.mongodb_client
 
@@ -31,9 +31,9 @@ mongoDataBase = dataBases.mongodb_client
 
 def listener(event):
     if event.exception:
-        print('The job crashed :(')
+        print(f'The job {event.job_id} crashed :(')
     else:
-        print('The job executed successfully :)')
+        print(f'The job {event.job_id} executed successfully :)')
         sched.print_jobs()
 
 
@@ -55,8 +55,10 @@ def start():
         sched.add_job(scheduled_voting, 'date', run_date=date, id='scheduled_voting',
                       misfire_grace_time=None, coalesce=True)
     else:
-        query = {'_id': 0, 'start_vote': 1, 'end_vote': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+        # query = {'_id': 0, 'start_vote': 1, 'end_vote': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        document = cache.freedom_of_speech
 
         # Start vote job (on start_vote date in db)
         start_vote = document.get('start_vote', '')

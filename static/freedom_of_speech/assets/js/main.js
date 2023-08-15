@@ -1026,7 +1026,7 @@ $('#sign-discord_button').on('click', function(e) {
 
     let params = 'scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no'
     let url = "https://discord.com/api/oauth2/authorize?client_id=805497711264661565&redirect_uri=https%3A%2F%2Fs1te.fly.dev%2Ffreedom_of_speech%2Fsign%2Fdiscord%2F&response_type=code&scope=identify"
-
+    // let url = "https://discord.com/api/oauth2/authorize?client_id=805497711264661565&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Ffreedom_of_speech%2Fsign%2Fdiscord%2F&response_type=code&scope=identify"
     // const url = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=code&scope=${scopes}`
     const popup = createPopupWindow(url, 'AuthDiscord', 486, 802, params)
 

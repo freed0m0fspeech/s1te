@@ -1,6 +1,8 @@
 # import configparser
 import os
 
+import freedom_of_speech.utils
+import portfolio.utils
 from plugins.DataBase.mongo import (
     MongoDataBase
 )
@@ -39,5 +41,12 @@ class DataBases():
         return MongoDataBase(host=MONGODATABASE_HOST, user=MONGODATABASE_USER, passwd=MONGODATABASE_PASSWORD)
 
 
+class Cache():
+    def __init__(self, databases: DataBases):
+        self.freedom_of_speech = freedom_of_speech.utils.update_cached_data(databases.mongodb_client)
+        self.portfolio = portfolio.utils.update_cached_data(databases.mongodb_client)
+
+
 dataBases = DataBases()
+cache = Cache(dataBases)
 # mongoDataBase = dataBases.mongodb_client

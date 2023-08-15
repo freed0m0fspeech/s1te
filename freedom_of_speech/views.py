@@ -12,8 +12,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView
 from pytz import utc
-from utils import dataBases
-from freedom_of_speech.utils import is_url_image, exchange_code, calculate_lvl
+from utils import dataBases, cache
+from freedom_of_speech.utils import is_url_image, exchange_code, calculate_lvl, update_cached_data
 from datetime import (
     datetime,
     timedelta,
@@ -37,12 +37,14 @@ class HomePageView(TemplateView):
 
         }
 
-        query = {'_id': 0, 'constitution': 1, 'laws': 1, 'tlaws': 1, 'users': 1, 'testimonials': 1, 'president': 1,
-                 'parliament': 1, 'judge': 1, 'start_vote': 1, 'end_vote': 1, 'telegram': 1, 'candidates': 1,
-                 'votes': 1,
-                 'referendum': 1, 'social': 1, 'discord': 1}
+        # query = {'_id': 0, 'constitution': 1, 'laws': 1, 'tlaws': 1, 'users': 1, 'testimonials': 1, 'president': 1,
+        #          'parliament': 1, 'judge': 1, 'start_vote': 1, 'end_vote': 1, 'telegram': 1, 'candidates': 1,
+        #          'votes': 1,
+        #          'referendum': 1, 'social': 1, 'discord': 1}
+        #
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+        document = cache.freedom_of_speech
 
         if not document:
             # DataBase error
@@ -195,8 +197,10 @@ class SignInPageView(TemplateView):
         except UnicodeEncodeError:
             return HttpResponse(status=422)
 
-        query = {'_id': 0, 'users': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+        # query = {'_id': 0, 'users': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        document = cache.freedom_of_speech
 
         if not document:
             return HttpResponse(status=500)
@@ -262,8 +266,10 @@ class SignTelegramPageView(TemplateView):
 
         username = ''
 
-        query = {'_id': 0, 'users': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+        # query = {'_id': 0, 'users': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        document = cache.freedom_of_speech
 
         if not document:
             return HttpResponse(status=500)
@@ -285,8 +291,11 @@ class SignTelegramPageView(TemplateView):
         if sessionid:
             query = {f'users.{username}.telegram': data}
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                       query=query, upsert=False) is None:
+                                          query=query, upsert=False) is None:
                 return HttpResponse(status=500)
+            else:
+
+                cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
             context = {
 
@@ -296,8 +305,10 @@ class SignTelegramPageView(TemplateView):
 
             expires = datetime.now(tz=utc) + timedelta(days=7)
 
-            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires, httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires, httponly=True)
+            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires,
+                                httponly=True)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires,
+                                httponly=True)
 
             return response
         else:
@@ -313,9 +324,11 @@ class SignTelegramPageView(TemplateView):
             except UnicodeEncodeError:
                 return HttpResponse(status=422)
 
-            query = {'_id': 0, 'users': 1}
-            document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                                  query=query)
+            # query = {'_id': 0, 'users': 1}
+            # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+            #                                       query=query)
+
+            document = cache.freedom_of_speech
 
             if not document:
                 return HttpResponse(status=500)
@@ -333,13 +346,18 @@ class SignTelegramPageView(TemplateView):
             session_num_bytes = 24
             sessionid = secrets.token_urlsafe(session_num_bytes)
             expires = datetime.now(tz=utc) + timedelta(days=7)
-            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires, httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires, httponly=True)
+            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires,
+                                httponly=True)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires,
+                                httponly=True)
 
             query = {f'users.{username}.sessionid': sessionid, f'users.{username}.telegram': data}
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                           action='$set', query=query, upsert=False) is None:
                 return HttpResponse(status=500)
+            else:
+
+                cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
             return response
 
@@ -362,8 +380,10 @@ class SignDiscordPageView(TemplateView):
 
         username = ''
 
-        query = {'_id': 0, 'users': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+        # query = {'_id': 0, 'users': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        document = cache.freedom_of_speech
 
         if not document:
             return HttpResponse(status=500)
@@ -385,8 +405,11 @@ class SignDiscordPageView(TemplateView):
         if sessionid:
             query = {f'users.{username}.discord': data}
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                       query=query, upsert=False) is None:
+                                          query=query, upsert=False) is None:
                 return HttpResponse(status=500)
+            else:
+
+                cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
             context = {
 
@@ -396,8 +419,10 @@ class SignDiscordPageView(TemplateView):
 
             expires = datetime.now(tz=utc) + timedelta(days=7)
 
-            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires, httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires, httponly=True)
+            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires,
+                                httponly=True)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires,
+                                httponly=True)
 
             return response
         else:
@@ -413,9 +438,11 @@ class SignDiscordPageView(TemplateView):
             except UnicodeEncodeError:
                 return HttpResponse(status=422)
 
-            query = {'_id': 0, 'users': 1}
-            document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                                  query=query)
+            # query = {'_id': 0, 'users': 1}
+            # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+            #                                       query=query)
+
+            document = cache.freedom_of_speech
 
             if not document:
                 return HttpResponse(status=500)
@@ -433,13 +460,18 @@ class SignDiscordPageView(TemplateView):
             session_num_bytes = 24
             sessionid = secrets.token_urlsafe(session_num_bytes)
             expires = datetime.now(tz=utc) + timedelta(days=7)
-            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires, httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires, httponly=True)
+            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires,
+                                httponly=True)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires,
+                                httponly=True)
 
             query = {f'users.{username}.sessionid': sessionid, f'users.{username}.discord': data}
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                           action='$set', query=query, upsert=False) is None:
                 return HttpResponse(status=500)
+            else:
+
+                cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
             return response
 
@@ -492,8 +524,10 @@ class SignUpPageView(TemplateView):
         if any(char in "#/@" for char in username):
             return HttpResponse(status=422)
 
-        query = {'_id': 0, 'users': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+        # query = {'_id': 0, 'users': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        document = cache.freedom_of_speech
 
         if not document:
             return HttpResponse(status=500)
@@ -519,15 +553,18 @@ class SignUpPageView(TemplateView):
         session_num_bytes = 24
         sessionid = secrets.token_urlsafe(session_num_bytes)
         expires = datetime.now(tz=utc) + timedelta(days=7)
-        response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires, httponly=True)
-        response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires, httponly=True)
+        response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires,
+                            httponly=True)
+        response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires,
+                            httponly=True)
 
         query = {f'users.{username}.password': password, f'users.{username}.sessionid': sessionid}
-        updateMongo = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                 action='$set', query=query, upsert=False)
-
-        if updateMongo is None:
+        if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                      action='$set', query=query, upsert=False) is None:
             return HttpResponse(status=500)
+        else:
+
+            cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
         # try:
         #     user = document['users'][username]
@@ -589,8 +626,10 @@ class EditPasswordPageView(TemplateView):
         # if old_password == new_password:
         #     return HttpResponse(status=401)
 
-        query = {'_id': 0, 'users': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+        # query = {'_id': 0, 'users': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        document = cache.freedom_of_speech
 
         user = {}
         if cookies:
@@ -614,6 +653,9 @@ class EditPasswordPageView(TemplateView):
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                           action='$set', query=query) is None:
                 return HttpResponse(status=500)
+            else:
+
+                cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
             return HttpResponse(status=200)
         else:
@@ -645,8 +687,10 @@ class EditLawsPageView(TemplateView):
         else:
             return HttpResponse(status=422)
 
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                              query=query)
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+        #                                       query=query)
+
+        document = cache.freedom_of_speech
 
         parliament = document.get('parliament', '')
         president = document.get('president', '')
@@ -677,11 +721,12 @@ class EditLawsPageView(TemplateView):
             else:
                 query = {'laws': laws}
 
-            updateMongo = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                     action='$set', query=query)
-
-            if updateMongo is None:
+            if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                          action='$set', query=query) is None:
                 return HttpResponse(status=500)
+            else:
+
+                cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
             response = HttpResponse(laws)
 
@@ -740,11 +785,12 @@ class EditLawsPageView(TemplateView):
             if is_parliament:
                 query = {'tlaws': laws}
 
-                updateMongo = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                         action='$set', query=query)
-
-                if updateMongo is None:
+                if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                              action='$set', query=query) is None:
                     return HttpResponse(status=500)
+                else:
+
+                    cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
                 response = HttpResponse(laws)
 
@@ -773,12 +819,15 @@ class EditConstitutionPageView(TemplateView):
         username = cockies.get('username', '')
 
         if 'sessionid' and 'username' in cockies:
-            query = {'_id': 0, 'users': 1, 'constitution': 1}
+            pass
+            # query = {'_id': 0, 'users': 1, 'constitution': 1}
         else:
             return HttpResponse(status=422)
 
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                              query=query)
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+        #                                       query=query)
+
+        document = cache.freedom_of_speech
 
         users = document.get('users', {})
         if users.get(username, ''):
@@ -794,11 +843,12 @@ class EditConstitutionPageView(TemplateView):
         if permissions.get('administrator', False) or permissions.get('moderator', False):
             query = {'constitution': constitution}
 
-            updateMongo = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                     action='$set', query=query)
-
-            if updateMongo is None:
+            if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                          action='$set', query=query) is None:
                 return HttpResponse(status=500)
+            else:
+
+                cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
             response = HttpResponse(constitution)
 
@@ -874,8 +924,10 @@ class EditUsernamePageView(TemplateView):
         if not new_username:
             return HttpResponse(status=422)
 
-        query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+        # query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        document = cache.freedom_of_speech
 
         user = {}
         if cookies:
@@ -925,6 +977,9 @@ class EditUsernamePageView(TemplateView):
                                               action='$unset',
                                               query=query) is None:
                     return HttpResponse(status=500)
+                else:
+
+                    cache.freedom_of_speech = update_cached_data(mongoDataBase)
             else:
                 return HttpResponse(status=500)
 
@@ -934,7 +989,8 @@ class EditUsernamePageView(TemplateView):
             #     response.cookies['username'] = new_username
 
             expires = datetime.now(tz=utc) + timedelta(days=7)
-            response.set_cookie(key='username', value=new_username, secure=True, samesite='Strict', expires=expires, httponly=True)
+            response.set_cookie(key='username', value=new_username, secure=True, samesite='Strict', expires=expires,
+                                httponly=True)
 
             return response
         else:
@@ -963,10 +1019,12 @@ class AddTestimonialPageView(TemplateView):
             username = cookies.get('username', '')
 
             if 'sessionid' and 'username' in cookies:
-                query = {'_id': 0, 'users': 1, 'telegram': 1}
+                # query = {'_id': 0, 'users': 1, 'telegram': 1}
+                #
+                # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+                #                                       query=query)
 
-                document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                                      query=query)
+                document = cache.freedom_of_speech
 
                 if not document:
                     return HttpResponse(status=500)  # DataBase Error
@@ -993,11 +1051,12 @@ class AddTestimonialPageView(TemplateView):
 
         query = {'testimonials': {'text': testimonial, 'username': username, 'role': role}}
 
-        updateMongo = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                 action='$push', query=query)
-
-        if updateMongo is None:
+        if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                      action='$push', query=query) is None:
             return HttpResponse(status=500)
+        else:
+
+            cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
         return HttpResponse(status=200)
 
@@ -1026,11 +1085,13 @@ class AuthTelegramPageView(TemplateView):
             username = cookies.get('username', '')
 
             if 'sessionid' and 'username' in cookies:
-                query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'candidates': 1,
-                         'telegram': 1}
+                # query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'candidates': 1,
+                #          'telegram': 1}
+                #
+                # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+                #                                       query=query)
 
-                document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                                      query=query)
+                document = cache.freedom_of_speech
 
                 if not document:
                     return HttpResponse(status=500)  # DataBase Error
@@ -1074,6 +1135,9 @@ class AuthTelegramPageView(TemplateView):
                                 if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                               action='$unset', query=query) is None:
                                     return HttpResponse(status=500)
+                                else:
+
+                                    cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
                                 return HttpResponse(status=200)
 
@@ -1087,6 +1151,9 @@ class AuthTelegramPageView(TemplateView):
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                           query=query) is None:
                 return HttpResponse(status=500)
+            else:
+
+                cache.freedom_of_speech = update_cached_data(mongoDataBase)
         else:
             return HttpResponse(status=422)
 
@@ -1104,9 +1171,11 @@ class ProfilePageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'candidates': 1, 'telegram': 1, 'xp': 1, 'discord': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                              query=query)
+        # query = {'_id': 0, 'users': 1, 'candidates': 1, 'telegram': 1, 'xp': 1, 'discord': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+        #                                       query=query)
+
+        document = cache.freedom_of_speech
 
         if not document:
             # DataBase error
@@ -1288,9 +1357,11 @@ class VotePresidentPageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'votes': 1, 'candidates': 1, 'telegram': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                              query=query)
+        # query = {'_id': 0, 'users': 1, 'votes': 1, 'candidates': 1, 'telegram': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+        #                                       query=query)
+
+        document = cache.freedom_of_speech
 
         users = document.get('users', '')
         context = {
@@ -1361,6 +1432,9 @@ class VotePresidentPageView(TemplateView):
                                                       action='$set',
                                                       query=query) is None:
                             return HttpResponse(status=500)
+                        else:
+
+                            cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
                         response = HttpResponse(president)
 
@@ -1383,9 +1457,11 @@ class VoteParliamentPageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'votes': 1, 'candidates': 1, 'telegram': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                              query=query)
+        # query = {'_id': 0, 'users': 1, 'votes': 1, 'candidates': 1, 'telegram': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+        #                                       query=query)
+
+        document = cache.freedom_of_speech
 
         users = document.get('users', '')
         context = {
@@ -1456,6 +1532,9 @@ class VoteParliamentPageView(TemplateView):
                                                       action='$set',
                                                       query=query) is None:
                             return HttpResponse(status=500)
+                        else:
+
+                            cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
                         response = HttpResponse(parliament)
 
@@ -1478,9 +1557,11 @@ class VoteJudgePageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'telegram': 1, 'candidates': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                              query=query)
+        # query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'telegram': 1, 'candidates': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+        #                                       query=query)
+
+        document = cache.freedom_of_speech
 
         users = document.get('users', '')
         context = {
@@ -1669,6 +1750,9 @@ class VoteJudgePageView(TemplateView):
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                           query=query) is None:
                 return HttpResponse(status=500)
+            else:
+
+                cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
             response = HttpResponse(judge)
 
@@ -1692,6 +1776,9 @@ class VoteJudgePageView(TemplateView):
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                           query=query) is None:
                 return HttpResponse(status=500)
+            else:
+
+                cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
             response = HttpResponse(judge)
 
@@ -1710,9 +1797,11 @@ class VoteCandidatePageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'votes': 1, 'end_vote': 1, 'telegram': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                              query=query)
+        # query = {'_id': 0, 'users': 1, 'votes': 1, 'end_vote': 1, 'telegram': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+        #                                       query=query)
+
+        document = cache.freedom_of_speech
 
         users = document.get('users', {})
         context = {
@@ -1791,6 +1880,8 @@ class VoteCandidatePageView(TemplateView):
                                                               action='$unset', query=query) is None:
                                     return HttpResponse(status=500)
 
+                    cache.freedom_of_speech = update_cached_data(mongoDataBase)
+
                     response = HttpResponse(role)
                     return response
 
@@ -1809,8 +1900,10 @@ class VoteReferendumPageView(TemplateView):
 
         cockies = request.COOKIES
 
-        query = {'_id': 0, 'users': 1, 'end_vote': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'telegram': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+        # query = {'_id': 0, 'users': 1, 'end_vote': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'telegram': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        document = cache.freedom_of_speech
 
         users = document.get('users', {})
         context = {
@@ -1885,6 +1978,9 @@ class VoteReferendumPageView(TemplateView):
         if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                       query=query) is None:
             return HttpResponse(status=500)
+        else:
+
+            cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
         return HttpResponse(opinion)
 
@@ -1899,8 +1995,10 @@ class UpdateChatPageView(TemplateView):
         if not data:
             return HttpResponse(status=422)
 
-        query = {'_id': 0, 'telegram': 1, 'discord': 1}
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+        # query = {'_id': 0, 'telegram': 1, 'discord': 1}
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+
+        document = cache.freedom_of_speech
 
         if not document:
             return
@@ -1929,6 +2027,9 @@ class UpdateChatPageView(TemplateView):
                     if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                   action='$set', query=query) is None:
                         return HttpResponse(status=500)
+                    else:
+
+                        cache.freedom_of_speech = update_cached_data(mongoDataBase)
                 else:
                     return HttpResponse(status=422)
 
@@ -1953,6 +2054,9 @@ class UpdateChatPageView(TemplateView):
                     if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                   action='$set', query=query) is None:
                         return HttpResponse(status=500)
+                    else:
+
+                        cache.freedom_of_speech = update_cached_data(mongoDataBase)
                 else:
                     return HttpResponse(status=422)
 
@@ -2050,9 +2154,11 @@ class MembersPageView(TemplateView):
 
         }
 
-        query = {'_id': 0, 'users': 1, 'telegram': 1, 'xp': 1, 'discord': 1}
+        # query = {'_id': 0, 'users': 1, 'telegram': 1, 'xp': 1, 'discord': 1}
+        #
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+        document = cache.freedom_of_speech
 
         if not document:
             return HttpResponse(status=500)
@@ -2129,9 +2235,11 @@ class TelegramMembersPageView(TemplateView):
 
         }
 
-        query = {'_id': 0, 'users': 1, 'telegram': 1, 'xp': 1}
+        # query = {'_id': 0, 'users': 1, 'telegram': 1, 'xp': 1}
+        #
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+        document = cache.freedom_of_speech
 
         if not document:
             return HttpResponse(status=500)
@@ -2181,9 +2289,11 @@ class DiscordMembersPageView(TemplateView):
 
         }
 
-        query = {'_id': 0, 'users': 1, 'discord': 1, 'xp': 1}
+        # query = {'_id': 0, 'users': 1, 'discord': 1, 'xp': 1}
+        #
+        # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
 
-        document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
+        document = cache.freedom_of_speech
 
         if not document:
             return HttpResponse(status=500)
@@ -2246,11 +2356,13 @@ class AuthDiscordPageView(TemplateView):
             username = cookies.get('username', '')
 
             if 'sessionid' and 'username' in cookies:
-                query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'candidates': 1,
-                         'telegram': 1, 'discord': 1}
+                # query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'candidates': 1,
+                #          'telegram': 1, 'discord': 1}
+                #
+                # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+                #                                       query=query)
 
-                document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
-                                                      query=query)
+                document = cache.freedom_of_speech
 
                 if not document:
                     return HttpResponse(status=500)  # DataBase Error
@@ -2297,6 +2409,9 @@ class AuthDiscordPageView(TemplateView):
                                 if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                               action='$unset', query=query) is None:
                                     return HttpResponse(status=500)
+                                else:
+
+                                    cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
                                 return render(request=request, template_name='freedom_of_speech/popup_success.html',
                                               context={})
@@ -2310,5 +2425,8 @@ class AuthDiscordPageView(TemplateView):
             if mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
                                           query=query) is None:
                 return HttpResponse(status=500)
+            else:
+
+                cache.freedom_of_speech = update_cached_data(mongoDataBase)
 
         return render(request=request, template_name='freedom_of_speech/popup_success.html', context={})

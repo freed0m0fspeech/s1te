@@ -1,10 +1,11 @@
 import random
 
+from portfolio.utils import update_cached_data
 from django.shortcuts import render
 from django.http import HttpResponse
 # from django.template import loader
 from django.views.generic import TemplateView
-from utils import dataBases
+from utils import dataBases, cache
 
 mongoDataBase = dataBases.mongodb_client
 
@@ -14,9 +15,11 @@ class HomePageView(TemplateView):
 
         }
 
-        query = {'_id': 0, 'testimonials': 1}
+        # query = {'_id': 0, 'testimonials': 1}
+        #
+        # document = mongoDataBase.get_document(database_name='site', collection_name='portfolio', query=query)
 
-        document = mongoDataBase.get_document(database_name='site', collection_name='portfolio', query=query)
+        document = cache.portfolio
 
         if not document:
             testimonials = []
@@ -51,9 +54,9 @@ class AddTestimonialPageView(TemplateView):
 
         query = {'testimonials': {'text': testimonial}}
 
-        mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='portfolio', action='$push', query=query)
-
-        if mongoUpdate is None:
+        if mongoDataBase.update_field(database_name='site', collection_name='portfolio', action='$push', query=query) is None:
             return HttpResponse(status=500)
+        else:
+            cache.portfolio = update_cached_data(mongoDataBase)
 
         return HttpResponse(status=200)

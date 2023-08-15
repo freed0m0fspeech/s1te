@@ -55,3 +55,13 @@ def calculate_lvl(xp, xp_factor):
     xp_need = (lvl + 1) * xp_factor
 
     return lvl, xp_have, xp_need
+
+
+def update_cached_data(mongoDataBase):
+    query = {'_id': 0, 'constitution': 1, 'laws': 1, 'users': 1, 'president': 1, 'testimonials': 1,
+             'tlaws': 1,
+             'start_vote': 1, 'judge': 1, 'referendum': 1, 'social': 1, 'parliament': 1, 'telegram': 1,
+             'discord': 1,
+             'xp': 1}
+    return mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
+                                      query=query)
