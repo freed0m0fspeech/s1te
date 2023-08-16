@@ -83,6 +83,9 @@ body {
     color: var(--text-color);
     /*transition: background .4s; !* for dark mode animation *!*/
     scroll-behavior: smooth;
+
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
 }
 
 .body{

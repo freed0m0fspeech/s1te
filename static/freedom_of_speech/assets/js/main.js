@@ -1494,6 +1494,10 @@ $(document).on('click', function (e){
     $('#nav-menu').removeClass('show-menu')
 });
 
+document.addEventListener('dblclick', function(event) {
+    event.preventDefault();
+}, { passive: false });
+
 // $('#vote_button').on('click', function (e){
 //     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
 //     let confirm_text

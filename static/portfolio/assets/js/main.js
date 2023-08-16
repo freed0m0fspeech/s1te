@@ -409,3 +409,7 @@ $(document).on('click', function (e){
 
     $('#nav-menu').removeClass('show-menu')
 });
+
+document.addEventListener('dblclick', function(event) {
+    event.preventDefault();
+}, { passive: false });
