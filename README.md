@@ -1,5 +1,6 @@
-<p align="left"> 
-  <img src="https://github.com/freed0m0fspeech/s1te/actions/workflows/fly.yml/badge.svg" />
+<p align="left">
+    <img src="https://github.com/freed0m0fspeech/s1te/actions/workflows/fly.yml/badge.svg" />
+    <img src="https://uptime.betterstack.com/status-badges/v1/monitor/sjwa.svg" />
 </p>
 
 s1te
@@ -28,6 +29,9 @@ Functionality:
     - Testimonials system
     - DataBase
     - Themes
+    - Cached site information on server
+    - Multiple DataBases support
+
 
   * /freedom_of_speech:
 
@@ -43,3 +47,5 @@ Functionality:
     - Testimonials system
     - Themes
     - Top members by different categories
+    - Multiple DataBases support
+    - Cached site information on server
