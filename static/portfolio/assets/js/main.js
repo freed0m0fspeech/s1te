@@ -217,7 +217,7 @@ window.addEventListener('scroll', scrollHeader)
 
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 const sr = ScrollReveal({
-    origin: 'bottom',
+    // origin: 'bottom',
     distance: '50px',
     duration: 500,
     // delay: 400,
@@ -226,14 +226,16 @@ const sr = ScrollReveal({
 })
 
 // sr.reveal(`.home__data, .projects__container, .testimonial__container`, {origin: 'top'})
-sr.reveal(`.home__data`, {origin: 'top'})
-sr.reveal(`.footer__container`, {origin: 'top', reset: true})
-sr.reveal(`.home__info:nth-child(odd) div`, {origin: 'left', reset: true})
-sr.reveal(`.home__info:nth-child(even) div`, {origin: 'right', reset: true})
+sr.reveal(`.projects__container, .testimonial__container`, {scale: 0})
+sr.reveal(`.home__blob`, {scale: 0})
+sr.reveal(`.footer__container`, {origin: 'top'})
+sr.reveal(`.home__info:nth-child(odd) div`, {origin: 'left'})
+sr.reveal(`.home__info:nth-child(even) div`, {origin: 'right'})
 sr.reveal(`.skills__content:nth-child(odd), .contact__content:nth-child(odd)`, {origin: 'left'})
 sr.reveal(`.skills__content:nth-child(even), .contact__content:nth-child(even)`, {origin: 'right'})
-// sr.reveal(`.qualification__content`, {interval: 50})
-sr.reveal(`.services__card`, {interval: 50})
+sr.reveal(`.qualification__content:nth-child(odd)`, {origin: 'left'})
+sr.reveal(`.qualification__content:nth-child(even)`, {origin: 'right'})
+sr.reveal(`.services__card`, {interval: 50, scale: 0})
 
 window.onload = function() {
     // Month Day, Year Hour:Minute:Second, id-of-element-container
