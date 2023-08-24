@@ -175,18 +175,23 @@ window.addEventListener('scroll', scrollHeader)
 
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 const sr = ScrollReveal({
-    origin: 'top',
+    origin: 'bottom',
     distance: '50px',
     duration: 500,
-    // delay: 0,
+    // delay: 100,
     // interval: 100,
     // reset: true /* Animations repeat */
 })
 
-sr.reveal(`.home__data, .constitution__content, .laws__content, .testimonial__container, .profile__data, .entry__content`, {origin: 'top'})
-sr.reveal(`.footer__container`, {origin: 'bottom'})
-sr.reveal(`.home__info:nth-child(odd) div, .profile__info:nth-child(odd) div, .members__container a:nth-child(odd), .contact__content:nth-child(odd)`, {origin: 'left'})
-sr.reveal(`.home__info:nth-child(even) div, .profile__info:nth-child(even) div, .members__container a:nth-child(even), .contact__content:nth-child(even)`, {origin: 'right'})
+// sr.reveal(`.home__data, .constitution__content, .laws__content, .testimonial__container, .profile__data, .entry__content`, {origin: 'top'})
+sr.reveal(`.home__data, .profile__data`, {origin: 'top', reset: true})
+sr.reveal(`.footer__container`, {origin: 'top', reset: true})
+sr.reveal(`.home__info:nth-child(odd) div, .profile__info:nth-child(odd) div`, {origin: 'left', reset:true})
+sr.reveal(`.home__info:nth-child(even) div, .profile__info:nth-child(even) div`, {origin: 'right', reset: true})
+sr.reveal(`.contact__content:nth-child(odd)`, {origin: 'left'})
+sr.reveal(`.contact__content:nth-child(even)`, {origin: 'right'})
+sr.reveal(`.members__container a:nth-child(odd)`, {origin: 'left', interval: 100, reset: true})
+sr.reveal(`.members__container a:nth-child(even)`, {origin: 'right', interval: 100, delay: 100, reset: true})
 sr.reveal(`.government__card`, {interval: 50})
 
 // let number = 69;
@@ -1493,6 +1498,7 @@ $(document).on('click', function (e){
 
     $('#nav-menu').removeClass('show-menu')
 });
+
 
 document.addEventListener('dblclick', function(event) {
     event.preventDefault();
