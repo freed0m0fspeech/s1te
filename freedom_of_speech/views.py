@@ -228,9 +228,9 @@ class SignInPageView(TemplateView):
 
             expires = datetime.now(tz=utc) + timedelta(days=7)
 
-            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires,
+            response.set_cookie(key='username', value=username, secure=True, samesite='Lax', expires=expires,
                                 httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires,
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax', expires=expires,
                                 httponly=True)
 
             # expires = datetime.datetime.now() + datetime.timedelta(days=7)
@@ -306,9 +306,9 @@ class SignTelegramPageView(TemplateView):
 
             expires = datetime.now(tz=utc) + timedelta(days=7)
 
-            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires,
+            response.set_cookie(key='username', value=username, secure=True, samesite='Lax', expires=expires,
                                 httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires,
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax', expires=expires,
                                 httponly=True)
 
             return response
@@ -347,9 +347,9 @@ class SignTelegramPageView(TemplateView):
             session_num_bytes = 24
             sessionid = secrets.token_urlsafe(session_num_bytes)
             expires = datetime.now(tz=utc) + timedelta(days=7)
-            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires,
+            response.set_cookie(key='username', value=username, secure=True, samesite='Lax', expires=expires,
                                 httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires,
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax', expires=expires,
                                 httponly=True)
 
             query = {f'users.{username}.sessionid': sessionid, f'users.{username}.telegram': data}
@@ -422,9 +422,9 @@ class SignDiscordPageView(TemplateView):
 
             expires = datetime.now(tz=utc) + timedelta(days=7)
 
-            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires,
+            response.set_cookie(key='username', value=username, secure=True, samesite='Lax', expires=expires,
                                 httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires,
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax', expires=expires,
                                 httponly=True)
 
             return response
@@ -463,9 +463,9 @@ class SignDiscordPageView(TemplateView):
             session_num_bytes = 24
             sessionid = secrets.token_urlsafe(session_num_bytes)
             expires = datetime.now(tz=utc) + timedelta(days=7)
-            response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires,
+            response.set_cookie(key='username', value=username, secure=True, samesite='Lax', expires=expires,
                                 httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires,
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax', expires=expires,
                                 httponly=True)
 
             query = {f'users.{username}.sessionid': sessionid, f'users.{username}.discord': data}
@@ -556,9 +556,9 @@ class SignUpPageView(TemplateView):
         session_num_bytes = 24
         sessionid = secrets.token_urlsafe(session_num_bytes)
         expires = datetime.now(tz=utc) + timedelta(days=7)
-        response.set_cookie(key='username', value=username, secure=True, samesite='Strict', expires=expires,
+        response.set_cookie(key='username', value=username, secure=True, samesite='Lax', expires=expires,
                             httponly=True)
-        response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Strict', expires=expires,
+        response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax', expires=expires,
                             httponly=True)
 
         query = {f'users.{username}.password': password, f'users.{username}.sessionid': sessionid}
@@ -1004,7 +1004,7 @@ class EditUsernamePageView(TemplateView):
             #     response.cookies['username'] = new_username
 
             expires = datetime.now(tz=utc) + timedelta(days=7)
-            response.set_cookie(key='username', value=new_username, secure=True, samesite='Strict', expires=expires,
+            response.set_cookie(key='username', value=new_username, secure=True, samesite='Lax', expires=expires,
                                 httponly=True)
 
             return response
