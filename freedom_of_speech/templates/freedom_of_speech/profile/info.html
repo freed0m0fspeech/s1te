@@ -9,7 +9,13 @@
 
       <div class="profile__blob grid">
         <!--        <div class="profile__perfil">-->
-        <img src="{% if discord_id and discord_avatar %} https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}}?size=320 {% else %} {% if telegram_photo_url %} {{telegram_photo_url}} {% endif %} {% endif %}">
+        {% if discord_id and discord_avatar %}
+          <img src="https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}}?size=320" class="imgchange" change="{{telegram_photo_url}}">
+        {% else %}
+          {% if telegram_photo_url %}
+            <img src="{{telegram_photo_url}}">
+          {% endif %}
+        {% endif %}
         <!--        https://discord.com/developers/docs/reference#image-formatting-->
         <!--        https://cdn.discordapp.com/avatars/discord_id/discord_avatar?size=320-->
         <!--        </div>-->
@@ -51,23 +57,11 @@
         </h3>
 
         <p class="profile__info-description">
-          {% if telegram_first_name %}
-            {{telegram_first_name}} {{telegram_last_name}} <br>
-            <br>
-          {% endif %}
-
-          {% if discord_global_name %}
-            {{discord_global_name}} <br>
-            <br>
-          {% endif %}
-
-          {% if lvl %}
-            Уровень: {{lvl}} <br>
-          {% endif %}
-
-          {% if xp_have and xp_need %}
-            Опыт: {{xp_have}} | {{xp_need}} <br>
-          {% endif %}
+          <a class="change" change="{{discord_global_name}}">{{telegram_first_name}} {{telegram_last_name}}</a>
+          <br><br>
+          Уровень: {{lvl}}
+          <br>
+          Опыт: {{xp_have}} | {{xp_need}}
         </p>
       </div>
 
@@ -135,9 +129,7 @@
         </h3>
 
         <p class="profile__info-number">
-          {% if messages_count %}
-            {{messages_count}} <br>
-          {% endif %}
+          {{messages_count}}
           <!--          <div class="animated_number profile__info-number"></div>-->
         </p>
       </div>
@@ -148,9 +140,7 @@
         </h3>
 
         <p class="profile__info-number">
-          {% if voicetime %}
-            {{voicetime}}ч <br>
-          {% endif %}
+            {{voicetime}}ч
         </p>
       </div>
     </div>

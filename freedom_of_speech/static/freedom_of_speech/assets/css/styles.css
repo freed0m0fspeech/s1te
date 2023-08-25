@@ -93,6 +93,10 @@ body {
     align-items: center;
 }
 
+.change{
+    white-space: pre-line;
+}
+
 img{
     -webkit-user-drag: none;
     -khtml-user-drag: none;
@@ -485,6 +489,9 @@ input:-webkit-autofill:active{
 
 .home__blob img{
     border-radius: 50%;
+
+    width: 320px;
+    height: 320px;
     /*clip-path: circle();*/
 }
 
@@ -706,6 +713,7 @@ input:-webkit-autofill:active{
 
 .home__info-number a:hover,
 .home__info-description a:hover{
+    cursor: pointer;
     color: var(--title-color);
 }
 
@@ -719,10 +727,10 @@ input:-webkit-autofill:active{
     /*font-weight: var(--font-semi-bold);*/
 }
 
-.home__info-number a{
-    cursor: pointer;
-    color: var(--text-color-light)
-}
+/*.home__info-number a{*/
+/*    cursor: pointer;*/
+/*    color: var(--text-color-light)*/
+/*}*/
 
 /*=============== PROFILE ===============*/
 .profile__container{
@@ -861,6 +869,17 @@ input:-webkit-autofill:active{
 .profile__info-description span,
 .profile__info-description a{
     color: var(--text-color-light);
+}
+
+.profile__info-number a,
+.profile__info-description a {
+    color: var(--text-color-light);
+}
+
+.profile__info-number a:hover,
+.profile__info-description a:hover{
+    cursor: pointer;
+    color: var(--title-color);
 }
 
 .profile__info-description a:hover{
@@ -2425,6 +2444,18 @@ video::-webkit-media-controls {
         height: 400px;
         /*height: 580px;*/
         border-radius: 12.5rem;
+    }
+
+    .home__blob img{
+        width: 320px;
+        height: 320px;
+    }
+
+    .profile__blob img{
+        width: 320px;
+        height: 320px;
+
+        cursor: pointer;
     }
 
     .home__perfil{

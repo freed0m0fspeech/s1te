@@ -1143,6 +1143,30 @@ $('#members_value').on('click', function (e){
 
 })
 
+$('.change').on('click', function (e){
+    let temp = $(this)
+
+    let change = temp.text()
+    let new_change = temp.attr('change')
+
+    if (new_change) {
+        temp.attr('change', change)
+        temp.text(new_change)
+    }
+})
+
+$('.imgchange').on('click', function (e){
+    let temp = $(this)
+
+    let change = temp.attr('src')
+    let new_change = temp.attr('change')
+
+    if (new_change) {
+        temp.attr('change', change)
+        temp.attr('src', new_change)
+    }
+})
+
 $('#government__vote').on('click', function(e) {
     e.preventDefault();
     e.stopPropagation();

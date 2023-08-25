@@ -1234,10 +1234,11 @@ class ProfilePageView(TemplateView):
                     # context['candidate'] = document.get('candidates', {}).get(username, {})
                     user_telegram = user.get('telegram', {})
                     user_discord = user.get('discord', {})
-                    xp = 0
-                    messages_count = 0
+                    # xp = 0
+                    # messages_count = 0
                     # members_count = 0
-                    voicetime = 0
+                    # voicetime = 0
+                    telegram_xp = discord_xp = telegram_voicetime = discord_voicetime = telegram_messages_count = discord_messages_count = 0
                     if user_telegram:
                         context['telegram_id'] = user_telegram.get('id', '')
                         context['telegram_username'] = user_telegram.get('username', '')
@@ -1253,18 +1254,20 @@ class ProfilePageView(TemplateView):
                         member_parameters = telegram.get('members_parameters', {}).get(context.get('telegram_id', ''),
                                                                                        {})
                         if member_parameters:
-                            messages_count += member_parameters.get('messages_count', 0)
+                            telegram_messages_count = member_parameters.get('messages_count', 0)
 
-                            # xp_factor = telegram.get('xp_factor', 100)  # threshold
-                            xp += member_parameters.get('xp', 0)
+                            xp_factor = telegram.get('xp_factor', 100)  # threshold
+                            telegram_xp = member_parameters.get('xp', 0)
 
-                            # lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
+                            lvl, xp_have, xp_need = calculate_lvl(telegram_xp, xp_factor)
 
-                            # context['telegram_lvl'] = lvl
-                            # context['telegram_xp_have'] = xp_have
-                            # context['telegram_xp_need'] = xp_need
-                            # context['xp'] = member_parameters.get('xp', '')
-                            voicetime += member_parameters.get('voicetime', 0) / 3600
+                            context['telegram_messages_count'] = telegram_messages_count
+                            context['telegram_lvl'] = lvl
+                            context['telegram_xp_have'] = xp_have
+                            context['telegram_xp_need'] = xp_need
+                            # context['telegram_xp'] = member_parameters.get('xp', '')
+                            telegram_voicetime = round(member_parameters.get('voicetime', 0) / 3600, 1)
+                            context['telegram_voicetime'] = telegram_voicetime
                             context['telegram_role'] = member_parameters.get('custom_title', 'Участник')
                             context['telegram_position'] = member_parameters.get('position', '')
                             context['telegram_members_count'] = int(
@@ -1316,13 +1319,22 @@ class ProfilePageView(TemplateView):
 
                         member_parameters = discord.get('members_parameters', {}).get(context.get('discord_id', ''), {})
                         if member_parameters:
-                            messages_count += member_parameters.get('messages_count', 0)
+                            discord_messages_count = member_parameters.get('messages_count', 0)
 
-                            # xp_factor = discord.get('xp_factor', 100)  # threshold
-                            xp += member_parameters.get('xp', 0)
+                            xp_factor = discord.get('xp_factor', 100)  # threshold
+                            discord_xp = member_parameters.get('xp', 0)
 
-                            # context['xp'] += member_parameters.get('xp', '')
-                            voicetime += member_parameters.get('voicetime', 0) / 3600
+                            lvl, xp_have, xp_need = calculate_lvl(discord_xp, xp_factor)
+
+                            context['discord_messages_count'] = discord_messages_count
+                            context['discord_lvl'] = lvl
+                            context['discord_xp_have'] = xp_have
+                            context['discord_xp_need'] = xp_need
+                            # context['discord_xp'] = member_parameters.get('xp', '')
+                            discord_voicetime = round(member_parameters.get('voicetime', 0) / 3600, 1)
+                            context['discord_voicetime'] = discord_voicetime
+
+                            # context['discord_xp'] += member_parameters.get('xp', '')
                             # context['discord_role'] = member_parameters.get('custom_title', 'Участник')
                             context['discord_position'] = member_parameters.get('position', '')
                             context['discord_members_count'] = int(
@@ -1342,10 +1354,10 @@ class ProfilePageView(TemplateView):
                         context['discord_link_status'] = False
 
                     # context['members_count'] = members_count
-                    context['messages_count'] = messages_count
-                    context['voicetime'] = round(voicetime, 1)
+                    context['messages_count'] = telegram_messages_count + discord_messages_count
+                    context['voicetime'] = round(discord_voicetime + telegram_voicetime, 1)
                     xp_factor = document.get('xp', {}).get('xp_factor', 100)  # threshold
-                    lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
+                    lvl, xp_have, xp_need = calculate_lvl(telegram_xp + discord_xp, xp_factor)
 
                     context['lvl'] = lvl
                     context['xp_have'] = xp_have
