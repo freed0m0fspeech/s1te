@@ -1153,39 +1153,56 @@ $('.change').on('click', function (e){
     let new_parent_change = parent.attr('change')
 
     if (new_change) {
+        // temp.removeClass('change')
+        temp.css('animation', 'None')
+        void temp[0].offsetWidth
+
         temp.attr('change', change)
         temp.text(new_change)
+
+        // temp.addClass('change')
+        temp.css('animation', 'fly .5s')
     }
 
     if (new_parent_change){
+        // parent.removeClass('change')
+        parent.css('animation', 'None')
+        void parent[0].offsetWidth
+
         parent.attr('change', parent_change)
         parent.text(new_parent_change)
+
+        // parent.addClass('change')
+        parent.css('animation', 'fly .5s')
     }
 })
 
 $('.imgchange').on('click', function (e){
     let temp = $(this)
 
-    temp.removeClass('imgchange')
     // temp.css('transition','None')
     // temp.css('transform','None')
     // temp.css('display', 'None')
     // temp.css('animation', 'None')
-    void temp[0].offsetWidth
 
     let change = temp.attr('src')
     let new_change = temp.attr('change')
 
     if (new_change) {
+        temp.css('animation', 'None')
+        temp.removeClass('imgchange')
+        void temp[0].offsetWidth
+
         temp.attr('change', change)
         temp.attr('src', new_change)
+
+        temp.addClass('imgchange')
     }
 
     // temp.css('transition','.5s')
     // temp.css('transform','rotateY(360deg)')
     // temp.css('display', 'inline-block')
     // temp.css('animation', 'popup infinite 1s')
-    temp.addClass('imgchange')
 })
 
 $('#government__vote').on('click', function(e) {

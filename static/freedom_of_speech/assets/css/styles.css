@@ -94,7 +94,7 @@ body {
 }
 
 .change{
-    white-space: pre-line;
+    /*white-space: pre-line;*/
 
     /*animation: deeppink-deepskyblue infinite 3s;*/
     display: inline-block;
@@ -103,14 +103,38 @@ body {
     /*transition: transform .5s;*/
 }
 
+.change:hover{
+    animation-play-state: paused;
+}
+
 .imgchange{
     cursor: pointer;
     /*animation: deeppink-deepskyblue-border infinite 3s;*/
-    /*display: inline-block;*/
-    /*animation: popup infinite 1s;*/
+    display: inline-block;
+    animation: popup infinite 1s;
 
     transition: rotate .5s;
     rotate: y 360deg;
+}
+
+.imgchange:hover{
+    animation-play-state: paused;
+}
+
+@keyframes fly{
+    0%{
+        transform: translate(0px, 0px) rotate(0deg);
+        filter: blur(30px);
+        opacity: 0;
+    }
+    /*80%{*/
+    /*    transform: translate(150px, -150px) rotate(360deg);*/
+    /*}*/
+    100%{
+        transform: translate(0px, 0px) rotate(0deg);
+        filter: blur(0px);
+        opacity:1;
+    }
 }
 
 img{
@@ -511,7 +535,16 @@ input:-webkit-autofill:active{
     /*clip-path: circle();*/
 }
 
+.home__blob video{
+    border-radius: 50%;
+}
+
 .voting img{
+    border-style: solid;
+    animation: deeppink-deepskyblue-border infinite 3s;
+}
+
+.voting video{
     border-style: solid;
     animation: deeppink-deepskyblue-border infinite 3s;
 }
@@ -537,6 +570,10 @@ input:-webkit-autofill:active{
 
 .voting:hover i{
     /*animation: none;*/
+}
+
+.voting a:hover i{
+    animation-play-state: paused;
 }
 
 /*.home__blob_voting:hover i{*/
@@ -598,11 +635,6 @@ input:-webkit-autofill:active{
     100%{
         color: orangered;
     }
-}
-
-.home__blob video{
-    border-radius: 50%;
-    /*clip-path: circle();*/
 }
 
 .home__perfil{
@@ -1147,6 +1179,13 @@ input:-webkit-autofill:active{
     border-radius: 7.25rem;
     /*cursor: pointer;*/
     /*transition: background .4s; !* for dark mode animation *!*/
+
+    animation: popup infinite 1s;
+}
+
+.government__card:hover{
+    cursor: pointer;
+    animation-play-state: paused;
 }
 
 .government__card > i{
@@ -1232,8 +1271,8 @@ input:-webkit-autofill:active{
 
 .government__vote-animation i{
     font-size: 1rem;
-    /*transition: transform .3s;*/
-    /*animation: popup infinite 1s;*/
+    transition: transform .3s;
+    animation: popup infinite 1s;
 }
 
 .government__vote-default i{
@@ -1242,9 +1281,15 @@ input:-webkit-autofill:active{
     /*animation: popup infinite 1s;*/
 }
 
-.government__vote-selected:hover i{
+.government__vote-selected i{
     transition: transform .3s;
     animation: popup infinite 1s;
+}
+
+.government__vote-selected:hover i{
+    /*transition: transform .3s;*/
+    /*animation: popup infinite 1s;*/
+    animation-play-state: paused;
 }
 
 .government__caret{
@@ -2486,6 +2531,11 @@ video::-webkit-media-controls {
         height: 400px;
         /*height: 580px;*/
         border-radius: 12.5rem;
+    }
+
+    .home__blob video{
+        width: 320px;
+        height: 320px;
     }
 
     .home__blob img{
