@@ -99,6 +99,8 @@ body {
     /*animation: deeppink-deepskyblue infinite 3s;*/
     display: inline-block;
     animation: popup infinite 1s;
+
+    /*transition: transform .5s;*/
 }
 
 .imgchange{
@@ -107,7 +109,7 @@ body {
     /*display: inline-block;*/
     /*animation: popup infinite 1s;*/
 
-    transition: .5s;
+    transition: rotate .5s;
     rotate: y 360deg;
 }
 
@@ -797,10 +799,14 @@ input:-webkit-autofill:active{
 .profile__blob img{
     border-radius: 50%;
 
+    /*border-style: dashed;*/
     border-style: solid;
-    border-color: var(--title-color);
-    border-width: .1px;
+    padding: 3px;
     width: inherit;
+    /*padding: 3px;*/
+    border-color: var(--text-color);
+    /*border-width: 3px;*/
+    /*width: inherit;*/
     /*clip-path: circle();*/
 }
 
@@ -1112,7 +1118,7 @@ input:-webkit-autofill:active{
     left: -10px;
     margin: auto;
     z-index: -1;
-    transition: opacity .6s;
+    /*transition: opacity .6s;*/
     opacity: 0;
 }
 
