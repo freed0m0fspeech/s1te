@@ -9,11 +9,15 @@
 
       <div class="profile__blob grid">
         <!--        <div class="profile__perfil">-->
-        {% if discord_id and discord_avatar %}
+        {% if discord_id and discord_avatar and telegram_photo_url %}
           <img src="https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}}?size=320" class="imgchange" change="{{telegram_photo_url}}">
         {% else %}
           {% if telegram_photo_url %}
             <img src="{{telegram_photo_url}}">
+          {% else %}
+            {% if discord_id and discord_avatar %}
+              <img src="https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}}?size=320">
+            {% endif %}
           {% endif %}
         {% endif %}
         <!--        https://discord.com/developers/docs/reference#image-formatting-->
@@ -57,7 +61,17 @@
         </h3>
 
         <p class="profile__info-description">
-          <a class="change" change="{{discord_global_name}}">{{telegram_first_name}} {{telegram_last_name}}</a>
+
+          {% if discord_global_name and telegram_first_name %}
+            <a class="change" change="{{discord_global_name}}">{{telegram_first_name}} {{telegram_last_name}}</a>
+          {% else %}
+            {% if telegram_first_name %}
+              {{telegram_first_name}} {{telegram_last_name}}
+            {% else %}
+              {{discord_global_name}}
+            {% endif %}
+          {% endif %}
+
           <br><br>
           Уровень: {{lvl}}
           <br>

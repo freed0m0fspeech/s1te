@@ -1127,36 +1127,51 @@ $('#auth-discord_button').on('click', function(e) {
 
 });
 
-$('#members_value').on('click', function (e){
-    let members_value = $('#members_value')
-
-    let change = members_value.text()
-    let new_change = members_value.attr('change')
-    members_value.attr('change', change)
-    members_value.text(new_change)
-
-    let members_value_name = $('#members_value_name')
-    let name = members_value_name.text()
-    let new_name = members_value_name.attr('change')
-    members_value_name.attr('change', name)
-    members_value_name.text(new_name)
-
-})
+// $('#members_value').on('click', function (e){
+//     let members_value = $('#members_value')
+//
+//     let change = members_value.text()
+//     let new_change = members_value.attr('change')
+//     members_value.attr('change', change)
+//     members_value.text(new_change)
+//
+//     let members_value_name = $('#members_value_name')
+//     let name = members_value_name.text()
+//     let new_name = members_value_name.attr('change')
+//     members_value_name.attr('change', name)
+//     members_value_name.text(new_name)
+//
+// })
 
 $('.change').on('click', function (e){
     let temp = $(this)
+    let parent = temp.parent().parent('div').children('h3')
 
     let change = temp.text()
     let new_change = temp.attr('change')
+    let parent_change = parent.text()
+    let new_parent_change = parent.attr('change')
 
     if (new_change) {
         temp.attr('change', change)
         temp.text(new_change)
     }
+
+    if (new_parent_change){
+        parent.attr('change', parent_change)
+        parent.text(new_parent_change)
+    }
 })
 
 $('.imgchange').on('click', function (e){
     let temp = $(this)
+
+    temp.removeClass('imgchange')
+    // temp.css('transition','None')
+    // temp.css('transform','None')
+    // temp.css('display', 'None')
+    // temp.css('animation', 'None')
+    void temp[0].offsetWidth
 
     let change = temp.attr('src')
     let new_change = temp.attr('change')
@@ -1165,6 +1180,12 @@ $('.imgchange').on('click', function (e){
         temp.attr('change', change)
         temp.attr('src', new_change)
     }
+
+    // temp.css('transition','.5s')
+    // temp.css('transform','rotateY(360deg)')
+    // temp.css('display', 'inline-block')
+    // temp.css('animation', 'popup infinite 1s')
+    temp.addClass('imgchange')
 })
 
 $('#government__vote').on('click', function(e) {
