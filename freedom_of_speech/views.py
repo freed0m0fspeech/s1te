@@ -1246,8 +1246,8 @@ class ProfilePageView(TemplateView):
                         context['telegram_last_name'] = user_telegram.get('last_name', '')
 
                         telegram_photo_url = user_telegram.get('photo_url', '')
-                        # if is_url_image(telegram_photo_url):
-                        context['telegram_photo_url'] = telegram_photo_url
+                        if is_url_image(telegram_photo_url):
+                            context['telegram_photo_url'] = telegram_photo_url
 
                         context['telegram_link_status'] = True
 

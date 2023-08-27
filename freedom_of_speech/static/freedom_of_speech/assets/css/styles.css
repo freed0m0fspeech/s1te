@@ -832,13 +832,11 @@ input:-webkit-autofill:active{
     border-radius: 50%;
 
     /*border-style: dashed;*/
-    border-style: solid;
-    padding: 3px;
-    width: inherit;
+    /*border-style: solid;*/
     /*padding: 3px;*/
-    border-color: var(--text-color);
+    width: inherit;
+    /*border-color: var(--text-color);*/
     /*border-width: 3px;*/
-    /*width: inherit;*/
     /*clip-path: circle();*/
 }
 
