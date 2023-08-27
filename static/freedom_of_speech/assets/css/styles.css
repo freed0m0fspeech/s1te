@@ -529,9 +529,6 @@ input:-webkit-autofill:active{
 
 .home__blob img{
     border-radius: 50%;
-
-    width: 320px;
-    height: 320px;
     /*clip-path: circle();*/
 }
 
