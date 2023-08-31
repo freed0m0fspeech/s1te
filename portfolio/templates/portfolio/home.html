@@ -16,24 +16,11 @@
 <!--        <img src="{% static 'portfolio/assets/svg/shape-circle.svg' %}" alt="home circle" class="home__shape-circle">-->
       </div>
       <ul class="home__community">
-        <a href="https://github.com/pr0stre1" target="_blank" class="home__community-link">
-          <i class="ri-github-line"></i>
-        </a>
-        <a href="https://t.me/pr0stre1" target="_blank" class="home__community-link">
-          <i class="ri-telegram-line"></i>
-        </a>
-        <a href="https://www.instagram.com/pr0stre1/" target="_blank" class="home__community-link">
-          <i class="ri-instagram-line"></i>
-        </a>
-        <a href="https://twitter.com/pr0stre1" target="_blank" class="home__community-link">
-          <i class="ri-twitter-line"></i>
-        </a>
-        <a href="https://www.facebook.com/pr0stre1" target="_blank" class="home__community-link">
-          <i class="ri-facebook-circle-line"></i>
-        </a>
-<!--        <a href="https://steamcommunity.com/id/pr0stre1/" target="_blank" class="home__community-link">-->
-<!--          <i class="ri-steam-line"></i>-->
-<!--        </a>-->
+        {% for community in social %}
+          <a href="{{community.href}}" target="_blank" class="home__community-link">
+            <i class="{{community.class}}"></i>
+          </a>
+        {% endfor %}
       </ul>
     </div>
 
@@ -66,11 +53,9 @@
         </h3>
 
         <p class="home__info-description">
-          FullStack Developer <br>
-          Desktop Developer <br>
-          Bot Developer <br>
-          Web Developer <br>
-          DataBase Developer <br>
+          {% for skill in skills %}
+            {{skill}}<br>
+          {% endfor %}
         </p>
       </div>
     </div>
@@ -89,11 +74,11 @@
 
       <div>
         <h3 class="home__info-title">
-          COMPLETED PROJECTS
+          PROJECTS
         </h3>
 
         <p class="home__info-number">
-          4
+          {{projects_count}}
         </p>
       </div>
 
@@ -103,7 +88,7 @@
         </h3>
 
         <p class="home__info-number">
-          15
+          {{skills_count}}
         </p>
       </div>
     </div>

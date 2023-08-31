@@ -34,24 +34,11 @@
         </ul>
 
         <ul class="footer__community">
-            <a href="https://github.com/pr0stre1" target="_blank" class="footer__community-link">
-                <i class="ri-github-line"></i>
-            </a>
-            <a href="https://t.me/pr0stre1" target="_blank" class="footer__community-link">
-                <i class="ri-telegram-line"></i>
-            </a>
-            <a href="https://www.instagram.com/pr0stre1/" target="_blank" class="footer__community-link">
-                <i class="ri-instagram-line"></i>
-            </a>
-            <a href="https://twitter.com/pr0stre1" target="_blank" class="footer__community-link">
-                <i class="ri-twitter-line"></i>
-            </a>
-            <a href="https://www.facebook.com/pr0stre1" target="_blank" class="footer__community-link">
-                <i class="ri-facebook-circle-line"></i>
-            </a>
-<!--            <a href="https://steamcommunity.com/id/pr0stre1/" target="_blank" class="footer__community-link">-->
-<!--                <i class="ri-steam-line"></i>-->
-<!--            </a>-->
+            {% for community in social %}
+                <a href="{{community.href}}" target="_blank" class="footer__community-link">
+                    <i class="{{community.class}}"></i>
+                </a>
+            {% endfor %}
         </ul>
 
         <span class="footer__copy" id="footer__copy__years_value">

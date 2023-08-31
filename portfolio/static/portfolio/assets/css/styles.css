@@ -929,6 +929,8 @@ input:-webkit-autofill:active{
     font-weight: var(--font-medium);
     color: var(--title-color);
     margin-bottom: 1rem;
+
+    text-transform: uppercase
 }
 
 .profile__info-description,
@@ -1587,6 +1589,10 @@ input:-webkit-autofill:active{
     height: 150px;
     border-radius: .75rem;
     margin-bottom: 1.25rem;
+}
+
+.projects__project{
+    max-width: 250px;
 }
 
 .projects__subtitle{
@@ -2318,6 +2324,10 @@ video::-webkit-media-controls {
         height: 125px;
         justify-self: center;
     }
+
+    .projects__project{
+        max-width: 200px;
+    }
 }
 
 /* For medium devices */
@@ -2771,6 +2781,10 @@ video::-webkit-media-controls {
         width: 320px;
         height: 175px;
         margin-bottom: 2rem;
+    }
+
+    .projects__project{
+        max-width: 320px;
     }
 
     .testimonial__container{

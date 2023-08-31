@@ -13,7 +13,8 @@ from jobs.jobs import (
     scheduled_end_voting,
     scheduled_telegram_synching,
     scheduled_discord_synching,
-    scheduled_voting
+    scheduled_voting,
+    scheduled_sync
 )
 from pytz import utc
 from dotenv import load_dotenv
@@ -31,9 +32,9 @@ mongoDataBase = dataBases.mongodb_client
 
 def listener(event):
     if event.exception:
-        print(f'The job {event.job_id} crashed :(')
+        print(f'The job {event.job_id}() crashed :(')
     else:
-        print(f'The job {event.job_id} executed successfully :)')
+        print(f'The job {event.job_id}() executed successfully :)')
         sched.print_jobs()
 
 
@@ -83,6 +84,9 @@ def start():
     # Discord synch job (every 4 hours)
     sched.add_job(scheduled_discord_synching, 'interval', hours=4, id='scheduled_discord_synching',
                   misfire_grace_time=None, coalesce=True)
+
+    # DataBase info sync
+    sched.add_job(scheduled_sync, 'interval', days=1, id='scheduled_sync', misfire_grace_time=None, coalesce=True)
 
     sched.get_job('scheduled_telegram_synching').modify(next_run_time=datetime.now(tz=utc))
     sched.get_job('scheduled_discord_synching').modify(next_run_time=datetime.now(tz=utc))

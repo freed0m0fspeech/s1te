@@ -9,7 +9,9 @@ from apscheduler.jobstores.base import JobLookupError
 from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv
 from pytz import utc
-from freedom_of_speech.utils import update_cached_data
+
+import freedom_of_speech.utils
+import portfolio.utils
 
 load_dotenv()
 
@@ -127,12 +129,12 @@ def scheduled_start_voting():
         requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat_username}", data=data,
                       headers={'Origin': origin, 'Host': origin})
 
-        cache.freedom_of_speech = update_cached_data(mongoDataBase)
+        cache.freedom_of_speech = freedom_of_speech.utils.update_cached_data(mongoDataBase)
     except Exception as e:
         print(e)
 
 
-def scheduler_end_voting_later():
+def scheduled_end_voting_later():
     from jobs.updater import sched
 
     end_vote = datetime.now(tz=utc) + timedelta(hours=1)
@@ -225,7 +227,7 @@ def scheduled_end_voting():
                                           action='$unset', query=query)
 
             if mongoUpdate is None:
-                return scheduler_end_voting_later()
+                return scheduled_end_voting_later()
             else:
                 cache.freedom_of_speech = mongoUpdate
 
@@ -282,7 +284,7 @@ def scheduled_end_voting():
                                       action='$unset', query=query)
 
         if mongoUpdate is None:
-            return scheduler_end_voting_later()
+            return scheduled_end_voting_later()
         else:
             cache.freedom_of_speech = mongoUpdate
 
@@ -334,7 +336,7 @@ def scheduled_end_voting():
         else:
             cache.freedom_of_speech = mongoUpdate
 
-        cache.freedom_of_speech = update_cached_data(mongoDataBase)
+        cache.freedom_of_speech = freedom_of_speech.utils.update_cached_data(mongoDataBase)
     except Exception as e:
         print(e)
 
@@ -544,6 +546,14 @@ def scheduled_voting():
                     sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting',
                                   misfire_grace_time=None, coalesce=True)
 
-        cache.freedom_of_speech = update_cached_data(mongoDataBase)
+        cache.freedom_of_speech = freedom_of_speech.utils.update_cached_data(mongoDataBase)
+    except Exception as e:
+        print(e)
+
+
+def scheduled_sync():
+    try:
+        cache.portfolio = portfolio.utils.update_cached_data(mongoDataBase)
+        cache.freedom_of_speech = freedom_of_speech.utils.update_cached_data(mongoDataBase)
     except Exception as e:
         print(e)

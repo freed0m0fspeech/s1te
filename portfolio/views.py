@@ -1,5 +1,6 @@
 import random
 
+import requests
 # from portfolio.utils import update_cached_data
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -31,6 +32,11 @@ class HomePageView(TemplateView):
         testimonials = random.sample(testimonials, min(testimonials_count, max_testimonials))
 
         context['testimonials'] = testimonials
+        context['projects'] = document.get('projects', [])
+        context['skills'] = document.get('skills', {})
+        context['skills_count'] = document.get('skills_count', 0)
+        context['projects_count'] = document.get('projects_count', 0)
+        context['social'] = document.get('social', {})
 
         return render(request=request, template_name='portfolio/index.html', context=context)
 
@@ -59,6 +65,6 @@ class AddTestimonialPageView(TemplateView):
         if mongoUpdate is None:
             return HttpResponse(status=500)
         else:
-            cache.portfolio = mongoUpdate
+            cache.portfolio['testimonials'] = mongoUpdate.get('testimonials', {})
 
         return HttpResponse(status=200)
