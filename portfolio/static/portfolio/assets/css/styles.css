@@ -437,10 +437,11 @@ input:-webkit-autofill:active{
 
     .nav__menu{
         position: fixed;
+        display: none;
         /*width: 88%;*/
         left: 0;
         right: 0;
-        bottom: -60%;
+        /*bottom: -60%;*/
         /*margin: 0 auto;*/
         background-color: var(--body-color);
         box-shadow: 0 4px 20px hsla(207, 24%, 35%, .1);
@@ -487,6 +488,7 @@ input:-webkit-autofill:active{
 /* Show menu */
 
 .show-menu{
+    display: block;
     bottom: 2rem;
 }
 
@@ -1119,6 +1121,12 @@ input:-webkit-autofill:active{
     padding: 3.5rem 1rem;
     border-radius: 7.25rem;
     /*transition: background .4s; !* for dark mode animation *!*/
+
+    animation: popup infinite 1s;
+}
+
+.services__card:hover{
+    animation-play-state: paused;
 }
 
 .services__card i{
@@ -1145,7 +1153,7 @@ input:-webkit-autofill:active{
     left: -10px;
     margin: auto;
     z-index: -1;
-    /*transition: opacity .6s;*/
+    transition: opacity .6s;
     opacity: 0;
 }
 
@@ -1172,14 +1180,13 @@ input:-webkit-autofill:active{
     text-align: center;
     padding: 3.5rem 1rem;
     border-radius: 7.25rem;
-    /*cursor: pointer;*/
+    cursor: pointer;
     /*transition: background .4s; !* for dark mode animation *!*/
 
     animation: popup infinite 1s;
 }
 
 .government__card:hover{
-    cursor: pointer;
     animation-play-state: paused;
 }
 
@@ -1198,7 +1205,14 @@ input:-webkit-autofill:active{
 }
 
 .government__description a{
+    color: var(--text-color-light);
+    /*animation: popup infinite 1s;*/
+    /*display: inline-block;*/
+}
+
+.government__description a:hover{
     color: var(--title-color);
+    animation-play-state: paused;
 }
 
 .government__border{
@@ -1570,6 +1584,7 @@ input:-webkit-autofill:active{
 
 .projects__img{
     width: 250px;
+    height: 150px;
     border-radius: .75rem;
     margin-bottom: 1.25rem;
 }
@@ -1594,7 +1609,11 @@ input:-webkit-autofill:active{
 
 .projects__button{
     font-size: 1rem;
+}
+
+.projects__button i{
     transition: transform .3s;
+    display: inline-block;
 }
 
 .projects__button:hover i{
@@ -2207,10 +2226,12 @@ video::-webkit-media-controls {
     color: var(--title-color);
     z-index: var(--z-tooltip);
     transition: bottom .3s, transform .3s;
+    animation: popup infinite 1s;
 }
 
 .scrollup:hover{
     transform: translateY(-.25rem);
+    animation-play-state: paused;
 }
 
 /* Show Scroll Up*/
@@ -2294,6 +2315,7 @@ video::-webkit-media-controls {
 
     .projects__img{
         width: 200px;
+        height: 125px;
         justify-self: center;
     }
 }
@@ -2747,6 +2769,7 @@ video::-webkit-media-controls {
 
     .projects__img{
         width: 320px;
+        height: 175px;
         margin-bottom: 2rem;
     }
 

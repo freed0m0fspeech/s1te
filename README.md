@@ -48,4 +48,4 @@ Functionality:
     - Themes
     - Top members by different categories
     - Multiple DataBases support
-    - Cached site information on server
+    - Application cache

@@ -35,6 +35,7 @@ navLink.forEach(n => n.addEventListener('click', linkAction))
 const swiperProjects = new Swiper('.projects__container', {
     loop: true,
     spaceBetween: 24,
+    grabCursor: true,
 
     navigation: {
         nextEl: ".swiper-button-next",
@@ -217,7 +218,7 @@ window.addEventListener('scroll', scrollHeader)
 
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 const sr = ScrollReveal({
-    // origin: 'bottom',
+    origin: 'bottom',
     distance: '50px',
     duration: 500,
     // delay: 400,
@@ -233,6 +234,7 @@ sr.reveal(`.home__info:nth-child(odd) div`, {origin: 'left'})
 sr.reveal(`.home__info:nth-child(even) div`, {origin: 'right'})
 sr.reveal(`.skills__content:nth-child(odd), .contact__content:nth-child(odd)`, {origin: 'left'})
 sr.reveal(`.skills__content:nth-child(even), .contact__content:nth-child(even)`, {origin: 'right'})
+sr.reveal(`.skills__data`, {interval: 50, scale: 5})
 sr.reveal(`.qualification__content:nth-child(odd)`, {origin: 'left'})
 sr.reveal(`.qualification__content:nth-child(even)`, {origin: 'right'})
 sr.reveal(`.services__card`, {interval: 50, scale: 0})
