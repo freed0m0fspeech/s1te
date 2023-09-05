@@ -1463,6 +1463,12 @@ input:-webkit-autofill:active{
     hyphens: auto;
 }
 
+.constitution__message{
+    font-size: var(--small-font-size);
+    position: absolute;
+    left: 1.5rem;
+}
+
 .constitution__button{
     width: max-content;
     display: inline-flex;
@@ -1532,6 +1538,12 @@ input:-webkit-autofill:active{
     -moz-hyphens: auto;
     -ms-hyphens: auto;
     hyphens: auto;
+}
+
+.laws__message{
+    font-size: var(--small-font-size);
+    position: absolute;
+    left: 1.5rem;
 }
 
 .laws__button{

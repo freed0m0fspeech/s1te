@@ -690,7 +690,8 @@ class EditLawsPageView(TemplateView):
         username = cockies.get('username', '')
 
         if 'sessionid' and 'username' in cockies:
-            query = {'_id': 0, 'users': 1, 'parliament': 1, 'president': 1, 'laws': 1}
+            pass
+            # query = {'_id': 0, 'users': 1, 'parliament': 1, 'president': 1, 'laws': 1}
         else:
             return HttpResponse(status=422)
 

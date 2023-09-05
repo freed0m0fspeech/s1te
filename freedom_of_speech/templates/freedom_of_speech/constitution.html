@@ -4,16 +4,15 @@
 
     <div class="constitution__container container grid section__border">
         <div class="constitution__content">
-            <div class="constitution__text"
-                 contenteditable="{{administrator}}"
-                 id="constitution_text"><span id="constitution_text_span">{{constitution}}</span></div>
+            <div class="constitution__text" contenteditable="{{administrator}}" id="constitution_text"><span id="constitution_text_span">{{constitution}}</span></div>
+
+            <p class="constitution__message" id="constitution-message"></p>
         </div>
 
-        <p class="contact__message" id="constitution-message"></p>
         {% if administrator %}
-        <button class="constitution__button" id="constitution_button">
-            Изменить <i class="fa-regular fa-pen-to-square"></i>
-        </button>
+            <button class="constitution__button" id="constitution_button">
+                Изменить <i class="fa-regular fa-pen-to-square"></i>
+            </button>
         {% endif %}
     </div>
 </section>

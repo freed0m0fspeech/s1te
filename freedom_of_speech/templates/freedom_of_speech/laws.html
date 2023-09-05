@@ -4,12 +4,11 @@
 
     <div class="laws__container container grid section__border">
         <div class="laws__content">
-            <div class="laws__text"
-                 contenteditable="{% if administrator or moderator or is_parliament %}True{% else %}False{% endif %}"
-                 id="laws_text"><span id="laws_text_span">{{laws}}</span></div>
+            <div class="laws__text" contenteditable="{% if administrator or moderator or is_parliament %}True{% else %}False{% endif %}" id="laws_text"><span id="laws_text_span">{{laws}}</span></div>
+
+            <p class="laws__message" id="laws-message"></p>
         </div>
 
-        <p class="contact__message" id="laws-message"></p>
         {% if administrator or moderator or is_parliament %}
             <button class="laws__button" id="laws_button">
                 Изменить <i class="fa-regular fa-pen-to-square"></i>
