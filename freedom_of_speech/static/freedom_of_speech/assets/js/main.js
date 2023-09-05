@@ -410,7 +410,7 @@ const genNumber = () => {
 $('#constitution_button').on('click', function(e) {
     e.preventDefault();
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
-    const constitution = $('#constitution_text_span');
+    const constitution = $('#constitution_text');
     const constitutionMessage = $('#constitution-message')
 
     $.ajaxSetup({
@@ -427,7 +427,7 @@ $('#constitution_button').on('click', function(e) {
         },
         success: function(data, status, jqXHR) {
             // location.reload();
-            constitution.text(data);
+            $('#constitution_text_span').text(data);
 
             constitutionMessage.removeClass('color-red')
             constitutionMessage.addClass('color-green')
@@ -454,7 +454,7 @@ $('#constitution_button').on('click', function(e) {
 $('#laws_button').on('click', function(e) {
     e.preventDefault();
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
-    const laws = $('#laws_text_span');
+    const laws = $('#laws_text');
     const lawsMessage = $('#laws-message')
 
     $.ajaxSetup({
@@ -471,7 +471,7 @@ $('#laws_button').on('click', function(e) {
         },
         success: function(data, status, jqXHR) {
             // location.reload();
-            laws.text(data);
+            $('#laws_text_span').text(data);
 
             lawsMessage.removeClass('color-red')
             lawsMessage.addClass('color-green')

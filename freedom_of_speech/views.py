@@ -758,9 +758,11 @@ class EditLawsPageView(TemplateView):
                 return response
             else:
                 if added_lines:
-                    added_lines = f"||{added_lines[1::]}||"
+                    added_lines = f"||{added_lines[1:500]}..||" if len(added_lines) > 500 else f"||{added_lines[1:]}||"
+                    # added_lines = f"||{added_lines[1::]}||"
                 if deleted_lines:
-                    deleted_lines = f"||~~{deleted_lines[1::]}~~||"
+                    # added_lines = f"||~~{deleted_lines[1::]}~~||"
+                    deleted_lines = f"||~~{deleted_lines[1:500]}..~~||" if len(deleted_lines) > 500 else f"||~~{deleted_lines[1:]}~~||"
 
                 text = f"**Внесены изменения в [законы]({os.getenv('HOSTNAME', '')}freedom_of_speech/#laws) Freedom of speech:**"
 
@@ -771,8 +773,8 @@ class EditLawsPageView(TemplateView):
 
                 # 4096
                 # ttext = textwrap.shorten(ttext, width=300, placeholder='..', replace_whitespace=False)
-                if len(text) > 4096:
-                    text = f"{text[0:4093]}.."
+                # if len(text) > 4096:
+                #     text = f"{text[0:4093]}.."
 
                 # publicKeyReloaded = rsa.PublicKey.load_pkcs1(os.getenv('RSA_PUBLIC_KEY', '').encode('utf8'))
 
@@ -882,9 +884,11 @@ class EditConstitutionPageView(TemplateView):
                 return response
             else:
                 if added_lines:
-                    added_lines = f"||{added_lines[1::]}||"
+                    added_lines = f"||{added_lines[1:500]}..||" if len(added_lines) > 500 else f"||{added_lines[1:]}||"
+                    # added_lines = f"||{added_lines[1::]}||"
                 if deleted_lines:
-                    deleted_lines = f"||~~{deleted_lines[1::]}~~||"
+                    # added_lines = f"||~~{deleted_lines[1::]}~~||"
+                    deleted_lines = f"||~~{deleted_lines[1:500]}..~~||" if len(deleted_lines) > 500 else f"||~~{deleted_lines[1:]}~~||"
 
                 text = f"**Внесены изменения в [конституцию]({os.getenv('HOSTNAME', '')}freedom_of_speech/#constitution) Freedom of speech:**"
 
@@ -895,8 +899,8 @@ class EditConstitutionPageView(TemplateView):
 
                 # 4096
                 # ttext = textwrap.shorten(ttext, width=300, placeholder='..', replace_whitespace=False)
-                if len(text) > 4096:
-                    text = f"{text[0:4093]}.."
+                # if len(text) > 4096:
+                #     text = f"{text[0:4093]}.."
 
                 # publicKeyReloaded = rsa.PublicKey.load_pkcs1(os.getenv('RSA_PUBLIC_KEY', '').encode('utf8'))
 
