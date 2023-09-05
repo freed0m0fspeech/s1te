@@ -2,17 +2,19 @@
     <h2 class="section__title">Конституция</h2>
     <span class="section__subtitle">Легитимная конституция Freedom of speech</span>
 
-    <div class="constitution__container container grid section__border">
+    <div class="constitution__container container section__border">
         <div class="constitution__content">
-            <div class="constitution__text" contenteditable="{{administrator}}" id="constitution_text"><span id="constitution_text_span">{{constitution}}</span></div>
+<!--            <div contenteditable="{{administrator}}" id="constitution_text">-->
+            <textarea id="constitution_text" {% if not administrator %} disabled {% endif %}>{{constitution}}</textarea>
+<!--            </div>-->
 
             <p class="constitution__message" id="constitution-message"></p>
-        </div>
 
-        {% if administrator %}
-            <button class="constitution__button" id="constitution_button">
-                Изменить <i class="fa-regular fa-pen-to-square"></i>
-            </button>
-        {% endif %}
+            {% if administrator %}
+                <button class="constitution__button" id="constitution_button">
+                    Изменить <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+            {% endif %}
+        </div>
     </div>
 </section>

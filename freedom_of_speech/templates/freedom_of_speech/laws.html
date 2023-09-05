@@ -2,21 +2,23 @@
     <h2 class="section__title">Законы</h2>
     <span class="section__subtitle">Легитимные законы Freedom of speech</span>
 
-    <div class="laws__container container grid section__border">
+    <div class="laws__container container section__border">
         <div class="laws__content">
-            <div class="laws__text" contenteditable="{% if administrator or moderator or is_parliament %}True{% else %}False{% endif %}" id="laws_text"><span id="laws_text_span">{{laws}}</span></div>
+<!--            <div class="laws__text" contenteditable="{% if administrator or moderator or is_parliament %}True{% else %}False{% endif %}" id="laws_text">-->
+            <textarea id="laws_text" {% if not administrator and not moderator and not is_parliament %} disabled {% endif %}>{{laws}}</textarea>
+<!--            </div>-->
 
             <p class="laws__message" id="laws-message"></p>
-        </div>
 
-        {% if administrator or moderator or is_parliament %}
-            <button class="laws__button" id="laws_button">
-                Изменить <i class="fa-regular fa-pen-to-square"></i>
-            </button>
-        {% elif is_president and tlaws %}
-            <button class="laws__button" id="laws_button">
-                Подтвердить <i class="fa-regular fa-pen-to-square"></i>
-            </button>
-        {% endif %}
+            {% if administrator or moderator or is_parliament %}
+                <button class="laws__button" id="laws_button">
+                    Изменить <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+            {% elif is_president and tlaws %}
+                <button class="laws__button" id="laws_button">
+                    Подтвердить <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+            {% endif %}
+        </div>
     </div>
 </section>

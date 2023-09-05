@@ -423,11 +423,11 @@ $('#constitution_button').on('click', function(e) {
         type: 'post',
         url: '/freedom_of_speech/edit/constitution/',
         data: {
-            constitution: constitution.text()
+            constitution: constitution.val()
         },
         success: function(data, status, jqXHR) {
             // location.reload();
-            $('#constitution_text_span').text(data);
+            constitution.val(data);
 
             constitutionMessage.removeClass('color-red')
             constitutionMessage.addClass('color-green')
@@ -467,11 +467,11 @@ $('#laws_button').on('click', function(e) {
         type: 'post',
         url: '/freedom_of_speech/edit/laws/',
         data: {
-            laws: laws.text()
+            laws: laws.val()
         },
         success: function(data, status, jqXHR) {
             // location.reload();
-            $('#laws_text_span').text(data);
+            laws.val(data);
 
             lawsMessage.removeClass('color-red')
             lawsMessage.addClass('color-green')
