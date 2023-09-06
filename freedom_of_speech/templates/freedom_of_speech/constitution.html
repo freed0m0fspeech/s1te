@@ -5,7 +5,7 @@
     <div class="constitution__container container section__border">
         <div class="constitution__content">
 <!--            <div contenteditable="{{administrator}}" id="constitution_text">-->
-            <textarea id="constitution_text" {% if not administrator %} disabled {% endif %}>{{constitution}}</textarea>
+            <textarea id="constitution_text" {% if not administrator %} readonly {% endif %}>{{constitution}}</textarea>
 <!--            </div>-->
 
             <p class="constitution__message" id="constitution-message"></p>

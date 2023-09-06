@@ -1511,7 +1511,8 @@ input:-webkit-autofill:active{
     max-height: 500px;
 
     color: var(--text-color-light);
-    background: var(--body-color);
+    /*background: var(--body-color);*/
+    background: none;
     resize: none;
     border: none;
     /*outline: none;*/
@@ -1609,7 +1610,8 @@ input:-webkit-autofill:active{
     max-height: 500px;
 
     color: var(--text-color-light);
-    background: var(--body-color);
+    /*background: var(--body-color);*/
+    background: none;
     resize: none;
     border: none;
     /*outline: none;*/
