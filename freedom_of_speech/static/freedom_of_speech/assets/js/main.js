@@ -254,6 +254,14 @@ function getMinutesBetweenDates(startDate, endDate) {
 }
 
 window.onload = function() {
+    let constitution_text = $('#constitution_text')[0]
+    constitution_text.style.height = "5px";
+    constitution_text.style.height = (constitution_text.scrollHeight) + "px";
+
+    let laws_text = $('#laws_text')[0]
+    laws_text.style.height = "5px";
+    laws_text.style.height = (laws_text.scrollHeight) + "px";
+
     // Month Day, Year Hour:Minute:Second, id-of-element-container
     if (document.getElementById('home__date_counter')) {
         date = document.getElementById('home__info__years_value').textContent;
@@ -406,6 +414,11 @@ const genNumber = () => {
     // number += Math.random()
     document.querySelector('.animated_number').style.setProperty("--number", Math.random());
 };
+
+function text_area_auto_change(element) {
+    element.style.height = "5px";
+    element.style.height = (element.scrollHeight) + "px";
+}
 
 $('#constitution_button').on('click', function(e) {
     e.preventDefault();

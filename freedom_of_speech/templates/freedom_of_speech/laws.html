@@ -5,7 +5,7 @@
     <div class="laws__container container section__border">
         <div class="laws__content">
 <!--            <div class="laws__text" contenteditable="{% if administrator or moderator or is_parliament %}True{% else %}False{% endif %}" id="laws_text">-->
-            <textarea id="laws_text" {% if not administrator and not moderator and not is_parliament %} readonly {% endif %}>{{laws}}</textarea>
+            <textarea id="laws_text" oninput="text_area_auto_change(this)" {% if not administrator and not moderator and not is_parliament %} readonly style="outline: none" {% endif %}>{{laws}}</textarea>
 <!--            </div>-->
 
             <p class="laws__message" id="laws-message"></p>
