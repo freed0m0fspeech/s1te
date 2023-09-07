@@ -69,6 +69,8 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+
+    transition: background .5s; /* for dark mode animation */
 }
 
 html {
@@ -81,7 +83,7 @@ body {
     font-size: var(--normal-font-size);
     background-color: var(--body-color);
     color: var(--text-color);
-    /*transition: background .4s; !* for dark mode animation *!*/
+    /*transition: background .5s; !* for dark mode animation *!*/
     scroll-behavior: smooth;
 
     -ms-touch-action: manipulation;
@@ -266,7 +268,6 @@ body.dark-theme {
 .dark-theme::-webkit-scrollbar-thumb{
     background-color: hsl(0, 0%, 100%);
     border-radius: .5rem;
-
 }
 
 .dark-theme::-webkit-scrollbar-thumb:hover{
@@ -454,7 +455,7 @@ input:-webkit-autofill:active{
     box-shadow: 0 4px 20px hsla(207, 24%, 35%, .1);
     padding-inline: 1.5rem;
     border-radius: 3rem;
-    /*transition: background .4s; !* for dark mode animation *!*/
+    /*transition: background .5s; !* for dark mode animation *!*/
 }
 
 .nav__logo,
@@ -570,7 +571,7 @@ input:-webkit-autofill:active{
     /*overflow: hidden;*/
     place-items: center;
     align-content: center;
-    /*transition: background .4s; !* for dark mode animation *!*/
+    /*transition: background .5s; !* for dark mode animation *!*/
 }
 
 .home__blob img{
@@ -868,7 +869,7 @@ input:-webkit-autofill:active{
     border-radius: 6.25rem !important;
     /*overflow: hidden;*/
     place-items: center;
-    /*transition: background .4s; !* for dark mode animation *!*/
+    /*transition: background .5s; !* for dark mode animation *!*/
 }
 
 .profile__blob img{
@@ -1058,7 +1059,7 @@ input:-webkit-autofill:active{
     border-radius: 3rem;
     place-items: center;
     margin-bottom: 1rem;
-    /*transition: background .4s; !* for dark mode animation *!*/
+    /*transition: background .5s; !* for dark mode animation *!*/
 }
 
 .skills__blob img{
@@ -1166,7 +1167,7 @@ input:-webkit-autofill:active{
     text-align: center;
     padding: 3.5rem 1rem;
     border-radius: 7.25rem;
-    /*transition: background .4s; !* for dark mode animation *!*/
+    /*transition: background .5s; !* for dark mode animation *!*/
 
     animation: popup infinite 1s;
 }
@@ -1227,7 +1228,7 @@ input:-webkit-autofill:active{
     padding: 3.5rem 1rem;
     border-radius: 7.25rem;
     cursor: pointer;
-    /*transition: background .4s; !* for dark mode animation *!*/
+    /*transition: background .5s; !* for dark mode animation *!*/
 
     animation: popup infinite 1s;
 }
@@ -1950,7 +1951,7 @@ input:-webkit-autofill:active{
     font-size: var(--smaller-font-size);
     font-weight: var(--font-medium);
     padding: .35rem;
-    /*transition: background .4s; !* for dark mode animation *!*/
+    /*transition: background .5s; !* for dark mode animation *!*/
 }
 
 .contact__form-area{
@@ -2178,7 +2179,7 @@ input:-webkit-autofill:active{
     font-size: var(--smaller-font-size);
     font-weight: var(--font-medium);
     padding: .35rem;
-    /*transition: background .4s; !* for dark mode animation *!*/
+    /*transition: background .5s; !* for dark mode animation *!*/
 }
 
 .entry__form-area{

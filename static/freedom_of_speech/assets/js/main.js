@@ -254,13 +254,19 @@ function getMinutesBetweenDates(startDate, endDate) {
 }
 
 window.onload = function() {
-    let constitution_text = $('#constitution_text')[0]
-    constitution_text.style.height = "5px";
-    constitution_text.style.height = (constitution_text.scrollHeight) + "px";
+    if (document.getElementById('constitution_text')) {
+        text_area_auto_change(document.getElementById('constitution_text'))
+        // let constitution_text = document.getElementById('constitution_text');
+        // constitution_text.style.height = "5px";
+        // constitution_text.style.height = (constitution_text.scrollHeight) + "px";
+    }
 
-    let laws_text = $('#laws_text')[0]
-    laws_text.style.height = "5px";
-    laws_text.style.height = (laws_text.scrollHeight) + "px";
+    if (document.getElementById('laws_text')) {
+        text_area_auto_change(document.getElementById('laws_text'))
+        // let laws_text = document.getElementById('laws_text');
+        // laws_text.style.height = "5px";
+        // laws_text.style.height = (laws_text.scrollHeight) + "px";
+    }
 
     // Month Day, Year Hour:Minute:Second, id-of-element-container
     if (document.getElementById('home__date_counter')) {
