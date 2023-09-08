@@ -1703,6 +1703,11 @@ input:-webkit-autofill:active{
     color: var(--text-color-light);
 }
 
+.projects_pushed-at{
+    font-size: var(--smaller-font-size);
+    color: var(--text-color-light);
+}
+
 .projects__title{
     font-size: var(--h2-font-size);
     margin: .5rem 0 1.25rem;

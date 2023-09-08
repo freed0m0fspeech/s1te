@@ -240,6 +240,11 @@ sr.reveal(`.qualification__content:nth-child(even)`, {origin: 'right'})
 sr.reveal(`.services__card`, {interval: 50, scale: 0})
 
 window.onload = function() {
+    // if (document.getElementById('project_pushed-at')) {
+    //     console.log(document.getElementById('project_pushed-at').textContent.replace(/-/g, "/").replace('T', ' ').replace('Z', ''))
+    //     document.getElementById('project_pushed-at').textContent = 'Обновлено '.concat(new Date(document.getElementById('project_pushed-at').textContent.replace(/-/g, "/").replace('T', ' ').replace('Z', '')).toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}))
+    // }
+
     // Month Day, Year Hour:Minute:Second, id-of-element-container
     countUpFromTime("Sep 1, 2017 12:00:00", 'home__date_counter'); // ****** Change this line!
     document.getElementById('home__info__years_value').textContent = ''.concat('2017-', new Date().getFullYear());
@@ -247,6 +252,10 @@ window.onload = function() {
 };
 
 $(document).ready(function () {
+    $('.projects_pushed-at').each(function () {
+        let pushed_at = $(this)[0]
+        pushed_at.textContent = 'pushed at '.concat(new Date(pushed_at.textContent.replace(/-/g, "/").replace('T', ' ').replace('Z', '')).toLocaleString('en', {month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}))
+    })
 // Add smooth scrolling to all links
 //     $("a").on('click', function(event) {
 //         // Make sure this.hash has a value before overriding default behavior
