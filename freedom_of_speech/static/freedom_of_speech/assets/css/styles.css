@@ -70,7 +70,7 @@
     padding: 0;
     margin: 0;
 
-    transition: background .5s; /* for dark mode animation */
+    /*transition: background .5s; !* for dark mode animation *!*/
 }
 
 html {

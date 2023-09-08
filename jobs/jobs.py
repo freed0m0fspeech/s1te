@@ -356,95 +356,96 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
         if not document:
             return
 
-        last_update_chat = document.get('telegram', {}).get('chat_parameters', {}).get('date', '')
+        # last_update_chat = document.get('telegram', {}).get('chat_parameters', {}).get('date', '')
+        #
+        # if last_update_chat:
+        #     last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_chat,
+        #                                                                                          '%Y-%m-%d %H:%M:%S')).total_seconds()
+        # else:
+        #     last_update_seconds = 14400
+        #
+        # # update only every 4 hours
+        # if last_update_seconds >= 14400:
 
-        if last_update_chat:
-            last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_chat,
-                                                                                                 '%Y-%m-%d %H:%M:%S')).total_seconds()
-        else:
-            last_update_seconds = 14400
+        chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+        data = {
+            'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+        }
+        data = json.dumps(data)
+        origin = os.getenv('HOSTNAME', '')
+        chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat_username}", data=data,
+                            headers={'Origin': origin, 'Host': origin})
 
-        # update only every 4 hours
-        if last_update_seconds >= 14400:
-            chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
-            data = {
-                'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
-            }
-            data = json.dumps(data)
-            origin = os.getenv('HOSTNAME', '')
-            chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat_username}", data=data,
-                                headers={'Origin': origin, 'Host': origin})
+        if chat and chat.status_code == 200:
+            chat = chat.json()
 
-            if chat and chat.status_code == 200:
-                chat = chat.json()
+            query = {'telegram.chat_parameters': chat.get('chat_parameters', {}),
+                     'telegram.members_parameters': chat.get('members_parameters', {})}
+            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                          action='$set', query=query)
 
-                query = {'telegram.chat_parameters': chat.get('chat_parameters', {}),
-                         'telegram.members_parameters': chat.get('members_parameters', {})}
-                mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                              action='$set', query=query)
+            if mongoUpdate is None:
+                return
+            else:
+                cache.freedom_of_speech = mongoUpdate
 
-                if mongoUpdate is None:
-                    return
-                else:
-                    cache.freedom_of_speech = mongoUpdate
+            # Check for referendum
+            referendum_date = document.get('referendum', {}).get('date', '')
 
-                # Check for referendum
-                referendum_date = document.get('referendum', {}).get('date', '')
+            if referendum_date:
+                # timedelta in referendum must be more than 30 days
+                if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(referendum_date,
+                                                                                  '%Y-%m-%d %H:%M:%S')).days >= 30:
+                    president = document.get('president', '')
+                    parliament = document.get('parliament', '')
+                    judge = document.get('judge', {}).get('judge', '')
 
-                if referendum_date:
-                    # timedelta in referendum must be more than 30 days
-                    if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(referendum_date,
-                                                                                      '%Y-%m-%d %H:%M:%S')).days >= 30:
-                        president = document.get('president', '')
-                        parliament = document.get('parliament', '')
-                        judge = document.get('judge', {}).get('judge', '')
+                    # Count of government now
+                    government = []
 
-                        # Count of government now
-                        government = []
+                    if president:
+                        government.append(president)
+                    if parliament:
+                        government.append(parliament)
+                    if judge:
+                        government.append(judge)
 
-                        if president:
-                            government.append(president)
-                        if parliament:
-                            government.append(parliament)
-                        if judge:
-                            government.append(judge)
+                    referendum_usernames = [username for username, opinion in
+                                            document.get('referendum', {}).get('votes', {}).items() if
+                                            opinion and username not in government]
 
-                        referendum_usernames = [username for username, opinion in
-                                                document.get('referendum', {}).get('votes', {}).items() if
-                                                opinion and username not in government]
+                    members_count = chat.get('chat_parameters', {}).get('members_count', '')
 
-                        members_count = chat.get('chat_parameters', {}).get('members_count', '')
+                    if members_count:
+                        # Count of referendum_true values
+                        if (100 * float(len(referendum_usernames)) / float(
+                                members_count - len(government))) >= document.get('referendum', {}).get('percent',
+                                                                                                        75):
 
-                        if members_count:
-                            # Count of referendum_true values
-                            if (100 * float(len(referendum_usernames)) / float(
-                                    members_count - len(government))) >= document.get('referendum', {}).get('percent',
-                                                                                                            75):
+                            try:
+                                sched.remove_job('scheduled_start_voting')
+                            except JobLookupError:
+                                # job not found
+                                pass
 
-                                try:
-                                    sched.remove_job('scheduled_start_voting')
-                                except JobLookupError:
-                                    # job not found
-                                    pass
+                            job = sched.get_job('scheduled_start_voting')
+                            if job:
+                                job.modify(next_run_time=datetime.now(tz=utc))
+                            else:
+                                sched.add_job(scheduled_start_voting, 'date', run_date=datetime.now(tz=utc),
+                                              id='scheduled_start_voting')
 
-                                job = sched.get_job('scheduled_start_voting')
-                                if job:
-                                    job.modify(next_run_time=datetime.now(tz=utc))
-                                else:
-                                    sched.add_job(scheduled_start_voting, 'date', run_date=datetime.now(tz=utc),
-                                                  id='scheduled_start_voting')
+                            referendum_date = datetime.now(tz=utc)
+                            referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
 
-                                referendum_date = datetime.now(tz=utc)
-                                referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
+                            query = {'referendum.votes': '', 'referendum.date': referendum_date}
+                            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                       action='$set', query=query)
 
-                                query = {'referendum.votes': '', 'referendum.date': referendum_date}
-                                mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                           action='$set', query=query)
-
-                                if mongoUpdate is None:
-                                    return
-                                else:
-                                    cache.freedom_of_speech = mongoUpdate
+                            if mongoUpdate is None:
+                                return
+                            else:
+                                cache.freedom_of_speech = mongoUpdate
     except Exception as e:
         print(e)
 
@@ -462,37 +463,38 @@ def scheduled_discord_synching(start=0, stop=200, step=1):
         if not document:
             return
 
-        last_update_guild = document.get('discord', {}).get('guild_parameters', {}).get('date', '')
+        # last_update_guild = document.get('discord', {}).get('guild_parameters', {}).get('date', '')
+        #
+        # if last_update_guild:
+        #     last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_guild,
+        #                                                                                          '%Y-%m-%d %H:%M:%S')).total_seconds()
+        # else:
+        #     last_update_seconds = 14400
+        #
+        # # update only every 4 hours
+        # if last_update_seconds >= 14400:
 
-        if last_update_guild:
-            last_update_seconds = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_guild,
-                                                                                                 '%Y-%m-%d %H:%M:%S')).total_seconds()
-        else:
-            last_update_seconds = 14400
+        guild_id = document.get('discord', {}).get('guild_parameters', {}).get('id', '')
+        data = {
+            'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+        }
+        data = json.dumps(data)
+        origin = os.getenv('HOSTNAME', '')
+        guild = requests.get(f"https://discord-bot-freed0m0fspeech.fly.dev/guild/{guild_id}", data=data,
+                             headers={'Origin': origin, 'Host': origin})
 
-        # update only every 4 hours
-        if last_update_seconds >= 14400:
-            guild_id = document.get('discord', {}).get('guild_parameters', {}).get('id', '')
-            data = {
-                'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
-            }
-            data = json.dumps(data)
-            origin = os.getenv('HOSTNAME', '')
-            guild = requests.get(f"https://discord-bot-freed0m0fspeech.fly.dev/guild/{guild_id}", data=data,
-                                 headers={'Origin': origin, 'Host': origin})
+        if guild and guild.status_code == 200:
+            guild = guild.json()
 
-            if guild and guild.status_code == 200:
-                guild = guild.json()
+            query = {'discord.guild_parameters': guild.get('guild_parameters', {}),
+                     'discord.members_parameters': guild.get('members_parameters', {})}
+            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                       action='$set', query=query)
 
-                query = {'discord.guild_parameters': guild.get('guild_parameters', {}),
-                         'discord.members_parameters': guild.get('members_parameters', {})}
-                mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                           action='$set', query=query)
-
-                if mongoUpdate is None:
-                    return
-                else:
-                    cache.freedom_of_speech = mongoUpdate
+            if mongoUpdate is None:
+                return
+            else:
+                cache.freedom_of_speech = mongoUpdate
     except Exception as e:
         print(e)
 
