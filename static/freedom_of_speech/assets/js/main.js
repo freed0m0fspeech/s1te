@@ -1435,7 +1435,7 @@ $('#government__votes').on('click', function (e){
     let confirm_text;
     let government__votes = e.target;
 
-    confirm_text = opinion.concat('?');
+    confirm_text = 'Проголосовать '.concat(opinion.concat('?'));
 
     opinion = opinion === 'Поддерживаю';
 
@@ -1456,6 +1456,11 @@ $('#government__votes').on('click', function (e){
                 $('#government__votes').removeClass('government__votes-open')
                 $('#government__votes .government__votes-active').removeClass('government__votes-active')
                 $(government__votes).addClass('government__votes-active')
+
+                if (data === 'True')
+                    alert('Вы изменили свой голос за Референдум')
+                else
+                    alert('Вы изменили свой голос против Референдума')
             },
             error(xhr,status,error){
                 $('#government__votes').removeClass('government__votes-open')
