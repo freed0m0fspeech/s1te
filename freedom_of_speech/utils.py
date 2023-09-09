@@ -5,13 +5,18 @@ from math import sqrt
 
 
 def is_url_image(image_url):
-    image_formats = ("image/png", "image/jpeg", "image/jpg")
-    r = requests.get(image_url)
+    try:
+        image_formats = ("image/png", "image/jpeg", "image/jpg")
+        r = requests.get(image_url, timeout=1)
+        # timeout=(0.5, 1)
 
-    if r.headers["content-type"] in image_formats:
-        return True
+        if r.headers["content-type"] in image_formats:
+            return True
 
-    return False
+        return False
+    except Exception as e:
+        print(e)
+        return False
 
 
 def exchange_code(code: str, redirect_uri: str):
