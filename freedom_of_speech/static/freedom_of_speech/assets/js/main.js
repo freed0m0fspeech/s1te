@@ -1602,6 +1602,9 @@ $('#date__updated_admin').on('click', function (e){
     });
 });
 
+$('#nav-menu').on('click', function (e){
+    e.stopPropagation()
+});
 
 $(document).on('click', function (e){
     // Close all popup menus

@@ -254,7 +254,7 @@ window.onload = function() {
 $(document).ready(function () {
     $('.projects_pushed-at').each(function () {
         let pushed_at = $(this)[0]
-        pushed_at.textContent = 'pushed at '.concat(new Date(pushed_at.textContent.replace(/-/g, "/").replace('T', ' ').replace('Z', '')).toLocaleString('en', {month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}))
+        pushed_at.textContent = 'pushed on '.concat(new Date(pushed_at.textContent.replace(/-/g, "/").replace('T', ' ').replace('Z', '')).toLocaleString('en', {month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}))
     })
 // Add smooth scrolling to all links
 //     $("a").on('click', function(event) {

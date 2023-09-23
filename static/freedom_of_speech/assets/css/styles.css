@@ -2407,6 +2407,14 @@ video::-webkit-media-controls {
 /* For small devices */
 /*340px*/
 @media screen and (max-width: 380px){
+    .constitution__content textarea{
+        max-height: 400px;
+    }
+
+    .laws__content textarea{
+        max-height: 400px;
+    }
+
     .container{
         margin-inline: 1rem;
     }
@@ -2553,6 +2561,16 @@ video::-webkit-media-controls {
     .entry__container{
         justify-content: center;
         column-gap: 8rem;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .constitution__content textarea {
+        max-height: 450px;
+    }
+
+    .laws__content textarea {
+        max-height: 450px;
     }
 }
 

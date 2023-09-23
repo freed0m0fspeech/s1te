@@ -2407,6 +2407,14 @@ video::-webkit-media-controls {
 /* For small devices */
 /*340px*/
 @media screen and (max-width: 380px){
+    .constitution__content textarea{
+        max-height: 400px;
+    }
+
+    .laws__content textarea{
+        max-height: 400px;
+    }
+
     .container{
         margin-inline: 1rem;
     }
