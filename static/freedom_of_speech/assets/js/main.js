@@ -1602,6 +1602,7 @@ $('#date__updated_admin').on('click', function (e){
     });
 });
 
+// Prevent menu from closing by clicking inside of it
 $('#nav-menu').on('click', function (e){
     e.stopPropagation()
 });
