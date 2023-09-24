@@ -419,6 +419,11 @@ $('#contact_button').on('click', function(e) {
     testimonial.val('')
 });
 
+// Prevent menu from closing by clicking inside of it
+$('#nav-menu').on('click', function (e){
+    e.stopPropagation()
+});
+
 $(document).on('click', function (e){
     // Close all popup menus
 
