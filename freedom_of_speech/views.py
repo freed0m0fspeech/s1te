@@ -2323,20 +2323,30 @@ class TelegramMembersPageView(TemplateView):
 
             try:
                 username = json.loads(telegram_member_parameters.get('user_parameters', {}).get('username', ''))
-                first_name = json.loads(telegram_member_parameters.get('user_parameters', {}).get('first_name', ''))
-                last_name = json.loads(telegram_member_parameters.get('user_parameters', {}).get('last_name', ''))
 
                 if not username:
                     username = ''
 
+                parameters['user_parameters']['username'] = username
+            except Exception as e:
+                pass
+
+            try:
+                first_name = json.loads(telegram_member_parameters.get('user_parameters', {}).get('first_name', ''))
+
                 if not first_name:
                     first_name = ''
+
+                parameters['user_parameters']['first_name'] = first_name
+            except Exception as e:
+                pass
+
+            try:
+                last_name = json.loads(telegram_member_parameters.get('user_parameters', {}).get('last_name', ''))
 
                 if not last_name:
                     last_name = ''
 
-                parameters['user_parameters']['username'] = username
-                parameters['user_parameters']['first_name'] = first_name
                 parameters['user_parameters']['last_name'] = last_name
             except Exception as e:
                 pass
@@ -2411,6 +2421,10 @@ class DiscordMembersPageView(TemplateView):
 
             try:
                 parameters['name'] = json.loads(discord_member_parameters.get('name', ''))
+            except Exception as e:
+                pass
+
+            try:
                 parameters['display_name'] = json.loads(discord_member_parameters.get('display_name', ''))
             except Exception as e:
                 pass

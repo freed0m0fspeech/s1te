@@ -103,7 +103,7 @@
         {% if discord_parameters.id and discord_parameters.avatar %}
           <img src="https://cdn.discordapp.com/avatars/{{discord_parameters.id}}/{{discord_parameters.avatar}}?size=320">&nbsp;
         {% endif %}
-        {% if username %} @{{parameters.name}} | {% endif %} {{parameters.display_name}} ({{position}})
+        {% if parameters.name %} @{{parameters.name}} | {% endif %} {{parameters.display_name}} ({{position}})
         <!--            forloop.counter0-->
         Уровень: {{parameters.lvl}}
         Cообщений: {{parameters.messages_count}}
