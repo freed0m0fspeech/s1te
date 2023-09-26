@@ -99,9 +99,9 @@
 
     <div class="members__container container">
       {% for username, position, parameters, telegram_parameters in members %}
-      <a href="/freedom_of_speech/profile/{{username}}/">
+      <a {% if username %} href="/freedom_of_speech/profile/{{username}}/" {% endif %}>
         <img src="{{telegram_parameters.photo_url}}">&nbsp;
-        @{{username}} ({{position}})
+        {% if username %} @{{parameters.user_parameters.username}} | {% endif %} {{parameters.user_parameters.first_name}} {{parameters.user_parameters.last_name}} ({{position}})
         <!--            forloop.counter0-->
         Уровень: {{parameters.lvl}}
         Cообщений: {{parameters.messages_count}}

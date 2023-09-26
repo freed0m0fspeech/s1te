@@ -218,8 +218,8 @@ sr.reveal(`.home__info:nth-child(odd) div, .profile__info:nth-child(odd) div`, {
 sr.reveal(`.home__info:nth-child(even) div, .profile__info:nth-child(even) div`, {origin: 'right'})
 sr.reveal(`.contact__content:nth-child(odd)`, {origin: 'left'})
 sr.reveal(`.contact__content:nth-child(even)`, {origin: 'right'})
-sr.reveal(`.members__container a:nth-child(odd)`, {origin: 'left', interval: 100, reset: true})
-sr.reveal(`.members__container a:nth-child(even)`, {origin: 'right', interval: 100, delay: 100, reset: true})
+sr.reveal(`.members__container a:nth-child(odd)`, {origin: 'left', interval: 100, reset: false})
+sr.reveal(`.members__container a:nth-child(even)`, {origin: 'right', interval: 100, delay: 100, reset: false})
 sr.reveal(`.government__card`, {interval: 50, scale: 0})
 
 // let number = 69;

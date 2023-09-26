@@ -1061,7 +1061,7 @@ class AddTestimonialPageView(TemplateView):
             member_parameters = document.get('telegram', {}).get('members_parameters', {}).get(
                 users.get(username, {}).get('telegram', {}).get('id', ''), {})
             if member_parameters:
-                role = member_parameters.get('custom_title', 'Участник')
+                role = json.loads(member_parameters.get('custom_title', 'Участник'))
 
                 # If user has no role in chat
                 if not role:
@@ -1273,7 +1273,7 @@ class ProfilePageView(TemplateView):
                             # context['telegram_xp'] = member_parameters.get('xp', '')
                             telegram_voicetime = round(member_parameters.get('voicetime', 0) / 3600, 1)
                             context['telegram_voicetime'] = telegram_voicetime
-                            context['telegram_role'] = member_parameters.get('custom_title', 'Участник')
+                            context['telegram_role'] = json.loads(member_parameters.get('custom_title', 'Участник'))
                             context['telegram_position'] = member_parameters.get('position', '')
                             context['telegram_members_count'] = int(
                                 telegram.get('chat_parameters', {}).get('members_count', 0))
@@ -1669,7 +1669,7 @@ class VoteJudgePageView(TemplateView):
                         text = f"{text}Судья [{judge_info.get('judge', '')}](tg://user?id={tjudge}) был(а) снят(а) со своего поста"
 
                         # Demote judge in chat
-                        chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+                        chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                         origin = os.getenv('HOSTNAME', '')
                         data = {
                             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1687,7 +1687,7 @@ class VoteJudgePageView(TemplateView):
                         text = f"{text}Новый Судья: [{judge}](tg://user?id={tjudge})"
 
                         # Promote new judge (tjudge)
-                        chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+                        chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                         origin = os.getenv('HOSTNAME', '')
                         data = {
                             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1702,7 +1702,7 @@ class VoteJudgePageView(TemplateView):
                         if ojudge:
                             tojudge = users.get(ojudge, {}).get('telegram', {}).get('id', '')
                             # Demote old judge
-                            chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+                            chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                             origin = os.getenv('HOSTNAME', '')
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1730,7 +1730,7 @@ class VoteJudgePageView(TemplateView):
                         if tjudge:
                             text = f"{text}Судья [{judge_info.get('judge', '')}](tg://user?id={tjudge}) был(а) снят(а) со своего поста"
 
-                            chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+                            chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                             origin = os.getenv('HOSTNAME', '')
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1749,7 +1749,7 @@ class VoteJudgePageView(TemplateView):
                             text = f"{text}Новый Судья: [{judge}](t.me/{tjudge})"
 
                             # Promote new judge (tjudge)
-                            chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+                            chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                             origin = os.getenv('HOSTNAME', '')
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1765,8 +1765,7 @@ class VoteJudgePageView(TemplateView):
                             if ojudge:
                                 tojudge = users.get(ojudge, {}).get('telegram', {}).get('id', '')
                                 # Demote old judge
-                                chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username',
-                                                                                                            '')
+                                chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                                 origin = os.getenv('HOSTNAME', '')
                                 data = {
                                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1799,7 +1798,7 @@ class VoteJudgePageView(TemplateView):
             if not query:
                 query = {f'judge.{role}': judge}
             else:
-                chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+                chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                 origin = os.getenv('HOSTNAME', '')
                 data = {
                     "text": text,
@@ -2060,7 +2059,7 @@ class UpdateChatPageView(TemplateView):
             # update only every 30 minutes
             if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_telegram,
                                                                               '%Y-%m-%d %H:%M:%S')).total_seconds() >= 1800:
-                chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+                chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                 data = {
                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                 }
@@ -2155,7 +2154,7 @@ class UpdateChatPageView(TemplateView):
 #             # No telegram username to update member info
 #             return HttpResponse(status=422)
 #
-#         chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+#         chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
 #         data = {
 #             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
 #         }
@@ -2298,26 +2297,59 @@ class TelegramMembersPageView(TemplateView):
         members = []
 
         telegram_members_parameters = document.get('telegram', {}).get('members_parameters', {})
+        telegram_user_parameters = {}
+        usernames = {}
         xp_factor = document.get('xp', {}).get('xp_factor', 100)  # threshold
 
         for username, user_parameters in document.get('users', {}).items():
-            telegram_member_parameters = telegram_members_parameters.get(
-                user_parameters.get('telegram', {}).get('id', ''), {})
+            try:
+                user_telegram = user_parameters.get('telegram', {})
+                telegram_user_parameters[user_telegram.get('id', '')] = {'photo_url': user_telegram.get('photo_url', '')}
+                if user_telegram.get('id', ''):
+                    usernames[user_telegram.get('id', '')] = username
+            except Exception as e:
+                pass
 
-            if telegram_member_parameters:
-                xp = telegram_member_parameters.get('xp', 0)
-                lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
+        # for username, user_parameters in document.get('users', {}).items():
+        #     telegram_member_parameters = telegram_members_parameters.get(
+        #         user_parameters.get('telegram', {}).get('id', ''), {})
 
-                parameters = {}
-                parameters['lvl'] = lvl
-                parameters['xp_have'] = xp_have
-                parameters['xp_need'] = xp_need
-                parameters['voicetime'] = round(telegram_member_parameters.get('voicetime', 0) / 3600, 1)
-                parameters['messages_count'] = telegram_member_parameters.get('messages_count', 0)
+        for telegram_id, telegram_member_parameters in telegram_members_parameters.items():
+            # if telegram_member_parameters.get('user_parameters', {}).get('is_bot', 'false') == 'false':
+            xp = telegram_member_parameters.get('xp', 0)
+            lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
 
-                position = telegram_member_parameters.get('position', float('inf'))
-                member = (username, position, parameters, user_parameters.get('telegram', {}))
-                members.append(member)
+            parameters = telegram_member_parameters.copy()
+
+            try:
+                username = json.loads(telegram_member_parameters.get('user_parameters', {}).get('username', ''))
+                first_name = json.loads(telegram_member_parameters.get('user_parameters', {}).get('first_name', ''))
+                last_name = json.loads(telegram_member_parameters.get('user_parameters', {}).get('last_name', ''))
+
+                if not username:
+                    username = ''
+
+                if not first_name:
+                    first_name = ''
+
+                if not last_name:
+                    last_name = ''
+
+                parameters['user_parameters']['username'] = username
+                parameters['user_parameters']['first_name'] = first_name
+                parameters['user_parameters']['last_name'] = last_name
+            except Exception as e:
+                pass
+
+            parameters['lvl'] = lvl
+            parameters['xp_have'] = xp_have
+            parameters['xp_need'] = xp_need
+            parameters['voicetime'] = round(telegram_member_parameters.get('voicetime', 0) / 3600, 1)
+            parameters['messages_count'] = telegram_member_parameters.get('messages_count', 0)
+
+            position = telegram_member_parameters.get('position', float('inf'))
+            member = (usernames.get(telegram_id, ''), position, parameters, telegram_user_parameters.get(telegram_id, {}))
+            members.append(member)
 
         members.sort(reverse=False, key=lambda x: x[1])
 
@@ -2352,26 +2384,47 @@ class DiscordMembersPageView(TemplateView):
         members = []
 
         discord_members_parameters = document.get('discord', {}).get('members_parameters', {})
+        discord_user_parameters = {}
+        usernames = {}
         xp_factor = document.get('xp', {}).get('xp_factor', 100)  # threshold
 
+        # for username, user_parameters in document.get('users', {}).items():
+        #     discord_member_parameters = discord_members_parameters.get(user_parameters.get('discord', {}).get('id', ''),
+        #                                                                {})
+
         for username, user_parameters in document.get('users', {}).items():
-            discord_member_parameters = discord_members_parameters.get(user_parameters.get('discord', {}).get('id', ''),
-                                                                       {})
+            try:
+                user_discord = user_parameters.get('discord', {})
+                discord_user_parameters[user_discord.get('id', '')] = {'id': user_discord.get('id', ''),
+                                                                       'avatar': user_discord.get('avatar', '')}
+                if user_discord.get('id', ''):
+                    usernames[user_discord.get('id', '')] = username
+            except Exception as e:
+                pass
 
-            if discord_member_parameters:
-                xp = discord_member_parameters.get('xp', 0)
-                lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
+        for discord_member_parameters in discord_members_parameters.values():
+            # if discord_member_parameters.get('bot', 'false') == 'false':
+            parameters = discord_member_parameters.copy()
 
-                parameters = {}
-                parameters['lvl'] = lvl
-                parameters['xp_have'] = xp_have
-                parameters['xp_need'] = xp_need
-                parameters['voicetime'] = round(discord_member_parameters.get('voicetime', 0) / 3600, 1)
-                parameters['messages_count'] = discord_member_parameters.get('messages_count', 0)
+            xp = discord_member_parameters.get('xp', 0)
+            lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
 
-                position = discord_member_parameters.get('position', float('inf'))
-                member = (username, position, parameters, user_parameters.get('discord', {}))
-                members.append(member)
+            try:
+                parameters['name'] = json.loads(discord_member_parameters.get('name', ''))
+                parameters['display_name'] = json.loads(discord_member_parameters.get('display_name', ''))
+            except Exception as e:
+                pass
+
+            parameters['lvl'] = lvl
+            parameters['xp_have'] = xp_have
+            parameters['xp_need'] = xp_need
+            parameters['voicetime'] = round(discord_member_parameters.get('voicetime', 0) / 3600, 1)
+            parameters['messages_count'] = discord_member_parameters.get('messages_count', 0)
+
+            position = discord_member_parameters.get('position', float('inf'))
+
+            member = (usernames.get(parameters.get('id', ''), ''), position, parameters, discord_user_parameters.get(parameters.get('id', ''), {}))
+            members.append(member)
 
         members.sort(reverse=False, key=lambda x: x[1])
 

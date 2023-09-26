@@ -69,7 +69,7 @@ def scheduled_start_voting():
 
             text = f"**Недостаточно кандидатов на выборы [Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech | Выборы были перенесены**"
 
-            chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+            chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
             origin = os.getenv('HOSTNAME', '')
 
             data = {
@@ -115,7 +115,7 @@ def scheduled_start_voting():
 
         text = f"**В данный момент на [официальном сайте]({os.getenv('HOSTNAME', '')}freedom_of_speech) проходят [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
 
-        chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+        chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
         origin = os.getenv('HOSTNAME', '')
 
         data = {
@@ -217,7 +217,7 @@ def scheduled_end_voting():
             president = document.get('president', '')
             parliament = document.get('parliament', '')
 
-        chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+        chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
         origin = os.getenv('HOSTNAME', '')
 
         judge = document.get('judge', {}).get('judge', '')
@@ -367,7 +367,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
         # # update only every 4 hours
         # if last_update_seconds >= 14400:
 
-        chat_username = document.get('telegram', {}).get('chat_parameters', {}).get('username', '')
+        chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
         data = {
             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
         }
