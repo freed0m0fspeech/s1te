@@ -508,10 +508,12 @@ input:-webkit-autofill:active{
     display: flex;
     flex-direction: column;
     align-items: center;
-    row-gap: .25rem;
+    row-gap: .5rem;
     font-size: var(--small-font-size);
     color: var(--text-color-light);
     /*transition: color .3s;*/
+
+    text-align: center;
 }
 
 .nav__link:hover{
@@ -2561,6 +2563,16 @@ video::-webkit-media-controls {
     .entry__container{
         justify-content: center;
         column-gap: 8rem;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .constitution__content textarea {
+        max-height: 450px;
+    }
+
+    .laws__content textarea {
+        max-height: 450px;
     }
 }
 
