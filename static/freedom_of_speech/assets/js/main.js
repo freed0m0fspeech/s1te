@@ -209,17 +209,20 @@ const sr = ScrollReveal({
 })
 
 // sr.reveal(`.home__data, .constitution__content, .laws__content, .testimonial__container, .profile__data, .entry__content`, {origin: 'top'})
-sr.reveal(`.home__blob, .profile__blob, .entry__form`, {scale: 0})
-sr.reveal(`.constitution__content, .laws__content`, {scale: 0})
-sr.reveal(`.testimonial__container`, {scale: 0})
+// sr.reveal(`.home__blob, .profile__blob, .entry__form`, {scale: 0})
+// sr.reveal(`.constitution__content, .laws__content`, {scale: 0})
+// sr.reveal(`.testimonial__container`, {scale: 0})
 // sr.reveal(`.home__data, .profile__data`, {origin: 'top'})
 sr.reveal(`.footer__container`, {origin: 'top'})
 sr.reveal(`.home__info:nth-child(odd) div, .profile__info:nth-child(odd) div`, {origin: 'left'})
 sr.reveal(`.home__info:nth-child(even) div, .profile__info:nth-child(even) div`, {origin: 'right'})
 sr.reveal(`.contact__content:nth-child(odd)`, {origin: 'left'})
 sr.reveal(`.contact__content:nth-child(even)`, {origin: 'right'})
-sr.reveal(`.members__container a:nth-child(odd)`, {origin: 'left', interval: 100, reset: false})
-sr.reveal(`.members__container a:nth-child(even)`, {origin: 'right', interval: 100, delay: 100, reset: false})
+// sr.reveal(`.members__container a:nth-child(odd)`, {origin: 'left', interval: 100, reset: false})
+// sr.reveal(`.members__container a:nth-child(even)`, {origin: 'right', interval: 100, delay: 100, reset: false})
+sr.reveal(`.members__container a:nth-child(odd)`, {origin: 'left', opacity: 0})
+sr.reveal(`.members__container a:nth-child(even)`, {origin: 'right', opacity: 0})
+// sr.reveal(`.members__container`)
 sr.reveal(`.government__card`, {interval: 50, scale: 0})
 
 // let number = 69;
@@ -1601,6 +1604,19 @@ $('#date__updated_admin').on('click', function (e){
         },
     });
 });
+
+// $('.members__container').on('click', function (event){
+//     var items = $(this).children('a').sort(function(a, b) {
+//         var compA = $('span.voicetime', a).text();
+//         var compB = $('span.voicetime', b).text();
+//
+//         // return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+//
+//         return compB - compA
+//     });
+//
+//     $(this).append(items);
+// })
 
 // Prevent menu from closing by clicking inside of it
 $('#nav-menu').on('click', function (e){

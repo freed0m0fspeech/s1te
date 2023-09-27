@@ -101,8 +101,9 @@
       {% for username, position, parameters, telegram_parameters in members %}
       <a {% if username %} href="/freedom_of_speech/profile/{{username}}/" {% endif %}>
         <img src="{{telegram_parameters.photo_url}}">&nbsp;
-        {% if parameters.user_parameters.username %} @{{parameters.user_parameters.username}} | {% endif %} {{parameters.user_parameters.first_name}} {{parameters.user_parameters.last_name}} ({{position}})
+        {% if parameters.user_parameters.username %} @{{parameters.user_parameters.username}} | {% endif %} {{parameters.user_parameters.first_name}} {{parameters.user_parameters.last_name}}
         <!--            forloop.counter0-->
+        ({{position}})
         Уровень: {{parameters.lvl}}
         Cообщений: {{parameters.messages_count}}
         Время: {{parameters.voicetime}}ч
