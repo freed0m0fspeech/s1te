@@ -97,13 +97,24 @@
     <h2 class="section__title">Discord</h2>
     <span class="section__subtitle">Топ участников Freedom of speech</span>
 
+    <div class="members__filters">
+      <div id="search">
+        <i class="ri-search-2-line"></i>
+        <input type="text" id="members-search" placeholder="Поиск" maxlength="255">
+      </div>
+
+      <div id="members-sort">
+        <i class="ri-filter-3-line"></i> Уровень
+      </div>
+    </div>
+
     <div class="members__container container">
       {% for username, position, parameters, discord_parameters in members %}
-      <a {% if username %} href="/freedom_of_speech/profile/{{username}}/" {% endif %}>
+      <a {% if username %} href="/freedom_of_speech/profile/{{username}}/" {% endif %} position="{{position}}" lvl="{{parameters.lvl}}" messages_count="{{parameters.messages_count}}" voicetime="{{parameters.voicetime}}">
         {% if discord_parameters.id and discord_parameters.avatar %}
           <img src="https://cdn.discordapp.com/avatars/{{discord_parameters.id}}/{{discord_parameters.avatar}}?size=320">&nbsp;
         {% endif %}
-        {% if parameters.name %} @{{parameters.name}} | {% endif %} {{parameters.display_name}} ({{position}})
+        ({{position}}) {% if parameters.name %} @{{parameters.name}} | {% endif %} {{parameters.display_name}}
         <!--            forloop.counter0-->
         Уровень: {{parameters.lvl}}
         Cообщений: {{parameters.messages_count}}

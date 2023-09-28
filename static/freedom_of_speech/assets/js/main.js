@@ -220,9 +220,9 @@ sr.reveal(`.contact__content:nth-child(odd)`, {origin: 'left'})
 sr.reveal(`.contact__content:nth-child(even)`, {origin: 'right'})
 // sr.reveal(`.members__container a:nth-child(odd)`, {origin: 'left', interval: 100, reset: false})
 // sr.reveal(`.members__container a:nth-child(even)`, {origin: 'right', interval: 100, delay: 100, reset: false})
-sr.reveal(`.members__container a:nth-child(odd)`, {origin: 'left', opacity: 0})
-sr.reveal(`.members__container a:nth-child(even)`, {origin: 'right', opacity: 0})
-// sr.reveal(`.members__container`)
+// sr.reveal(`.members__container a:nth-child(odd)`, {origin: 'left', opacity: 0})
+// sr.reveal(`.members__container a:nth-child(even)`, {origin: 'right', opacity: 0})
+sr.reveal(`.members__container`, {opacity: 0})
 sr.reveal(`.government__card`, {interval: 50, scale: 0})
 
 // let number = 69;
@@ -1605,18 +1605,85 @@ $('#date__updated_admin').on('click', function (e){
     });
 });
 
-// $('.members__container').on('click', function (event){
-//     var items = $(this).children('a').sort(function(a, b) {
-//         var compA = $('span.voicetime', a).text();
-//         var compB = $('span.voicetime', b).text();
-//
-//         // return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
-//
-//         return compB - compA
-//     });
-//
-//     $(this).append(items);
-// })
+$('#members-sort').on('click', function (event){
+    var iter_sort = {'lvl': 'messages_count', 'messages_count': 'voicetime', 'voicetime': 'lvl'}
+    var iter_sort_text = {'Уровень': 'Сообщений', 'Сообщений': 'Время', 'Время': 'Уровень'}
+
+    var members = $('.members__container')
+
+    var text = $(this).text().trim()
+    var sort = ''
+    var reverse = true
+
+    // if ($(this).children('i').css('transform') === 'none'){
+    //     reverse = false
+    //
+    //     if (text === 'Уровень'){
+    //         sort = 'lvl'
+    //     } else if (text === 'Сообщений'){
+    //         sort = 'messages_count'
+    //     } else if (text === 'Время'){
+    //         sort = 'voicetime'
+    //     }
+    //
+    //     $(this).children('i').css({'transform': 'rotate(180deg)'})
+    // }else {
+    //     if (text === 'Уровень'){
+    //         sort = iter_sort['lvl']
+    //     } else if (text === 'Сообщений'){
+    //         sort = iter_sort['messages_count']
+    //     } else if (text === 'Время'){
+    //         sort = iter_sort['voicetime']
+    //     }
+    //
+    //     $(this).html(`<i class="ri-filter-3-line"></i> ${iter_sort_text[text]}`)
+    // }
+
+    if (text === 'Уровень'){
+        sort = iter_sort['lvl']
+    } else if (text === 'Сообщений'){
+        sort = iter_sort['messages_count']
+    } else if (text === 'Время'){
+        sort = iter_sort['voicetime']
+    }
+
+    $(this).html(`<i class="ri-filter-3-line"></i> ${iter_sort_text[text]}`)
+
+    var items = members.children('a').sort(function(a, b) {
+        var compA = $(a).attr(sort);
+        var compB = $(b).attr(sort);
+
+        // return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+
+        if (reverse)
+            return compB - compA
+        else
+            return compA - compB
+    });
+
+    members.append(items);
+})
+
+$('#members-search').on('keyup', function (event){
+    var filter = $(this)[0].value.toLowerCase();
+    var nodes = $('.members__container').children('a');
+
+    for (i = 0; i < nodes.length; i++) {
+        if (nodes[i].innerText.toLowerCase().includes(filter)) {
+            nodes[i].style.display = "flex";
+        } else {
+            nodes[i].style.display = "none";
+        }
+    }
+})
+
+$('#members-search').on('focusout', function (event) {
+    $(this).animate({width: '0vw'}, {easing: 'linear', duration: 100});
+})
+
+$('.members__filters #search').on('click', function (event) {
+    $('#members-search').animate({width: '50vw'}, {easing: 'linear', duration: 100}).focus();
+})
 
 // Prevent menu from closing by clicking inside of it
 $('#nav-menu').on('click', function (e){

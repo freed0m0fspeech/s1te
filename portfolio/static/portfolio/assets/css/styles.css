@@ -1434,18 +1434,21 @@ input:-webkit-autofill:active{
 
     margin: 1rem 1rem 4rem;
 
+    row-gap: 1rem;
+
     /*max-height: 66vh;*/
     /*overflow-y: scroll;*/
     /*overflow-x: hidden;*/
 }
 
 .members__container a{
-    min-height: 7.5vh;
+    min-height: 3rem;
+
     color: var(--text-color-light);
     /*padding: 1rem 1rem;*/
     /*margin: 0.5rem 0.5rem;*/
     border-radius: 0.5em;
-    cursor: pointer;
+    /*cursor: pointer;*/
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: center;
@@ -1471,14 +1474,86 @@ input:-webkit-autofill:active{
     /*justify-items: center;*/
 }
 
-.members__container a:hover{
+.members__container a[href]:hover{
     color: var(--title-color);
+    cursor: pointer;
     /*background: var(--text-color-light);*/
 }
 
 .members__container a img{
     border-radius: 50%;
-    max-width: 5vh;
+    max-width: 50px;
+}
+
+.members__filters{
+    display: grid;
+
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+
+    margin-bottom: 2rem;
+
+    color: var(--text-color-light);
+}
+
+.members__search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.members__filters input{
+    border-radius: 1rem;
+    background: none;
+    border: 1px solid var(--text-color-light);
+    color: var(--title-color);
+    padding: 0.5rem;
+    outline: none;
+    resize: none;
+    text-align: center;
+
+    width: 55px;
+
+    max-width: 500px;
+    /*width: -webkit-fill-available;*/
+    /*height: -webkit-fill-available;*/
+    /*max-height: 5vh;*/
+    min-width: 100px;
+}
+
+.members__filters{
+    gap: 0.5rem;
+}
+
+.members__filters div{
+    gap: 0.5rem;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.members__filters div:hover input{
+    /*cursor: pointer;*/
+    color: var(--title-color);
+    border: 1px solid var(--title-color);
+}
+
+.members__filters div:hover{
+    cursor: pointer;
+    color: var(--title-color);
+}
+
+.members__filters div:focus-within input{
+    color: var(--title-color);
+    border: 1px solid var(--title-color);
+}
+
+.members__filters div:focus-within{
+    color: var(--title-color);
 }
 
 /*=============== CONSTITUTION ===============*/
@@ -2562,8 +2637,12 @@ video::-webkit-media-controls {
 }
 
 @media screen and (max-width: 1024px) {
-    .members__container a{
-        min-height: 10vh;
+    .members__container{
+        row-gap: 2rem;
+    }
+
+    .members__filters{
+        gap: 1rem;
     }
 
     .constitution__content textarea {
