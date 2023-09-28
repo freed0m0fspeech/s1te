@@ -1449,7 +1449,7 @@ input:-webkit-autofill:active{
     /*margin: 0.5rem 0.5rem;*/
     border-radius: 0.5em;
     /*cursor: pointer;*/
-    overflow: hidden;
+    /*overflow: hidden;*/
     text-overflow: ellipsis;
     text-align: center;
     /*min-height: 33px;*/
