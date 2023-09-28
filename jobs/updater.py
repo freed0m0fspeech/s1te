@@ -35,7 +35,7 @@ def listener(event):
         print(f'The job {event.job_id}() crashed :(')
     else:
         print(f'The job {event.job_id}() executed successfully :)')
-        sched.print_jobs()
+        # sched.print_jobs()
 
 
 job_defaults = {
