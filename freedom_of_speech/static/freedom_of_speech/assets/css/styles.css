@@ -547,7 +547,7 @@ input:-webkit-autofill:active{
 /*=============== HOME ===============*/
 .home__container{
     row-gap: 4rem;
-    padding-top: 2rem;
+    /*padding-top: 2rem;*/
 }
 
 .home__data{
@@ -849,7 +849,7 @@ input:-webkit-autofill:active{
 /*=============== PROFILE ===============*/
 .profile__container{
     row-gap: 4rem;
-    padding-top: 2rem;
+    /*padding-top: 2rem;*/
 }
 
 .profile__data{
@@ -1448,12 +1448,10 @@ input:-webkit-autofill:active{
     align-content: center;
     flex-direction: column;
 
-    margin: 1rem 1rem 4rem;
-
     row-gap: 1rem;
 
-    max-height: 50vh;
-    /*max-height: 50vh;*/
+    max-height: calc(100vh - 22rem);
+
     overflow-y: scroll;
     overflow-x: hidden;
     padding: 1rem;

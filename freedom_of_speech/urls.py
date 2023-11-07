@@ -13,6 +13,7 @@ urlpatterns = [
     re_path(r'^freedom_of_speech/sign/discord/$', views.SignDiscordPageView.as_view(), name='SignDiscordPageView'),
     re_path(r'^freedom_of_speech/signup/$', views.SignUpPageView.as_view(), name='SignUpPageView'),
     re_path(r'^freedom_of_speech/signout/$', views.SignOutPageView.as_view(), name='SignOutPageView'),
+    re_path(r'^freedom_of_speech/logout/$', views.LogOutPageView.as_view(), name='LogOutPageView'),
     re_path(r'^freedom_of_speech/add/testimonial/$', views.AddTestimonialPageView.as_view(), name='AddTestimonialPageView'),
     re_path(r'^freedom_of_speech/edit/constitution/$', views.EditConstitutionPageView.as_view(), name='EditConstitutionPageView'),
     re_path(r'^freedom_of_speech/edit/laws/$', views.EditLawsPageView.as_view(), name='EditLawsPageView'),

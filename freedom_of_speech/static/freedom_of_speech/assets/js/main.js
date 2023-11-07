@@ -840,6 +840,38 @@ $('#signout-button').on('click', function(e) {
     });
 });
 
+$('#logout-button').on('click', function(e) {
+    e.preventDefault();
+    const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            xhr.setRequestHeader('X-CSRFToken', csrf_token)
+        }
+    });
+
+    $.ajax({
+        type: 'post',
+        url: '/freedom_of_speech/logout/',
+        data: {
+
+        },
+        success: function (data, status, jqXHR) {
+            alert('Вы успешно завершили все другие сеансы')
+
+            // setTimeout(() => {
+            //     window.location.replace('/freedom_of_speech/profile/')
+            // }, 0);
+        },
+        error(xhr,status,error){
+            if (error)
+                alert(error)
+            else
+                alert("status=".concat(xhr.status))
+        }
+    });
+});
+
 $(document).ready(function () {
 // Add smooth scrolling to all links
 //     $("a").on('click', function(event) {

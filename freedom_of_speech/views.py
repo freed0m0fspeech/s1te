@@ -77,6 +77,7 @@ class HomePageView(TemplateView):
                 if users.get(username, ''):
                     if users[username].get('sessionid', ''):
                         if sessionid == users[username]['sessionid']:
+                            context['authorized'] = True
                             user = users[username]
 
                             if username == president:
@@ -150,7 +151,13 @@ class HomePageView(TemplateView):
 
         response = render(request=request, template_name='freedom_of_speech/index.html', context=context)
 
-        return response
+        if context.get('authorized', False):
+            return response
+        else:
+            response.delete_cookie('username')
+            response.delete_cookie('sessionid')
+
+            return response
 
 
 class SignInPageView(TemplateView):
@@ -226,11 +233,11 @@ class SignInPageView(TemplateView):
 
             response = HttpResponse(status=200)
 
-            expires = datetime.now(tz=utc) + timedelta(days=7)
+            # expires = datetime.now(tz=utc) + timedelta(days=7)
 
-            response.set_cookie(key='username', value=username, secure=True, samesite='Lax', expires=expires,
+            response.set_cookie(key='username', value=username, secure=True, samesite='Lax',
                                 httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax', expires=expires,
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax',
                                 httponly=True)
 
             # expires = datetime.datetime.now() + datetime.timedelta(days=7)
@@ -290,8 +297,9 @@ class SignTelegramPageView(TemplateView):
 
         if sessionid:
             query = {f'users.{username}.telegram': data}
-            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                          query=query, upsert=False)
+            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                     action='$set',
+                                                     query=query, upsert=False)
 
             if mongoUpdate is None:
                 return HttpResponse(status=500)
@@ -304,11 +312,11 @@ class SignTelegramPageView(TemplateView):
 
             response = HttpResponse(status=200)
 
-            expires = datetime.now(tz=utc) + timedelta(days=7)
+            # expires = datetime.now(tz=utc) + timedelta(days=7)
 
-            response.set_cookie(key='username', value=username, secure=True, samesite='Lax', expires=expires,
+            response.set_cookie(key='username', value=username, secure=True, samesite='Lax',
                                 httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax', expires=expires,
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax',
                                 httponly=True)
 
             return response
@@ -346,15 +354,15 @@ class SignTelegramPageView(TemplateView):
 
             session_num_bytes = 24
             sessionid = secrets.token_urlsafe(session_num_bytes)
-            expires = datetime.now(tz=utc) + timedelta(days=7)
-            response.set_cookie(key='username', value=username, secure=True, samesite='Lax', expires=expires,
+            # expires = datetime.now(tz=utc) + timedelta(days=7)
+            response.set_cookie(key='username', value=username, secure=True, samesite='Lax',
                                 httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax', expires=expires,
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax',
                                 httponly=True)
 
             query = {f'users.{username}.sessionid': sessionid, f'users.{username}.telegram': data}
             mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                          action='$set', query=query, upsert=False)
+                                                     action='$set', query=query, upsert=False)
 
             if mongoUpdate is None:
                 return HttpResponse(status=500)
@@ -406,8 +414,9 @@ class SignDiscordPageView(TemplateView):
 
         if sessionid:
             query = {f'users.{username}.discord': data}
-            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                          query=query, upsert=False)
+            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                     action='$set',
+                                                     query=query, upsert=False)
 
             if mongoUpdate is None:
                 return HttpResponse(status=500)
@@ -420,11 +429,11 @@ class SignDiscordPageView(TemplateView):
 
             response = render(request=request, template_name='freedom_of_speech/popup_success.html', context={})
 
-            expires = datetime.now(tz=utc) + timedelta(days=7)
+            # expires = datetime.now(tz=utc) + timedelta(days=7)
 
-            response.set_cookie(key='username', value=username, secure=True, samesite='Lax', expires=expires,
+            response.set_cookie(key='username', value=username, secure=True, samesite='Lax',
                                 httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax', expires=expires,
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax',
                                 httponly=True)
 
             return response
@@ -462,15 +471,15 @@ class SignDiscordPageView(TemplateView):
 
             session_num_bytes = 24
             sessionid = secrets.token_urlsafe(session_num_bytes)
-            expires = datetime.now(tz=utc) + timedelta(days=7)
-            response.set_cookie(key='username', value=username, secure=True, samesite='Lax', expires=expires,
+            # expires = datetime.now(tz=utc) + timedelta(days=7)
+            response.set_cookie(key='username', value=username, secure=True, samesite='Lax',
                                 httponly=True)
-            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax', expires=expires,
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax',
                                 httponly=True)
 
             query = {f'users.{username}.sessionid': sessionid, f'users.{username}.discord': data}
             mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                          action='$set', query=query, upsert=False)
+                                                     action='$set', query=query, upsert=False)
             if mongoUpdate is None:
                 return HttpResponse(status=500)
             else:
@@ -555,15 +564,15 @@ class SignUpPageView(TemplateView):
 
         session_num_bytes = 24
         sessionid = secrets.token_urlsafe(session_num_bytes)
-        expires = datetime.now(tz=utc) + timedelta(days=7)
-        response.set_cookie(key='username', value=username, secure=True, samesite='Lax', expires=expires,
+        # expires = datetime.now(tz=utc) + timedelta(days=7)
+        response.set_cookie(key='username', value=username, secure=True, samesite='Lax',
                             httponly=True)
-        response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax', expires=expires,
+        response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax',
                             httponly=True)
 
         query = {f'users.{username}.password': password, f'users.{username}.sessionid': sessionid}
         mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                      action='$set', query=query, upsert=False)
+                                                 action='$set', query=query, upsert=False)
 
         if mongoUpdate is None:
             return HttpResponse(status=500)
@@ -605,6 +614,54 @@ class SignOutPageView(TemplateView):
 
             response.delete_cookie('username')
             response.delete_cookie('sessionid')
+
+            return response
+        else:
+            return HttpResponse(status=422)
+
+
+class LogOutPageView(TemplateView):
+    async def get(self, request, *args, **kwargs):
+        return HttpResponse(status=404)
+
+    async def post(self, request, *args, **kwargs):
+        cookies = request.COOKIES
+
+        document = cache.freedom_of_speech
+
+        user = {}
+        if cookies:
+            sessionid = cookies.get('sessionid', '')
+            username = cookies.get('username', '')
+
+            if 'sessionid' and 'username' in cookies:
+                users = document.get('users', {})
+                if users.get(username, ''):
+                    if users[username].get('sessionid', ''):
+                        if sessionid == users[username]['sessionid']:
+                            user = users.get(username, {})
+        else:
+            return HttpResponse(status=422)
+
+        if user:
+            response = HttpResponse(status=201)
+
+            session_num_bytes = 24
+            sessionid = secrets.token_urlsafe(session_num_bytes)
+            # expires = datetime.now(tz=utc) + timedelta(days=7)
+            response.set_cookie(key='username', value=username, secure=True, samesite='Lax',
+                                httponly=True)
+            response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax',
+                                httponly=True)
+
+            query = {f'users.{username}.sessionid': sessionid}
+            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                     action='$set', query=query)
+
+            if mongoUpdate is None:
+                return HttpResponse(status=500)
+            else:
+                cache.freedom_of_speech = mongoUpdate
 
             return response
         else:
@@ -656,7 +713,7 @@ class EditPasswordPageView(TemplateView):
         if user:
             query = {f'users.{username}.password': new_password}
             mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                          action='$set', query=query)
+                                                     action='$set', query=query)
 
             if mongoUpdate is None:
                 return HttpResponse(status=500)
@@ -730,7 +787,7 @@ class EditLawsPageView(TemplateView):
                 query = {'laws': laws}
 
             mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                          action='$set', query=query)
+                                                     action='$set', query=query)
 
             if mongoUpdate is None:
                 return HttpResponse(status=500)
@@ -762,7 +819,8 @@ class EditLawsPageView(TemplateView):
                     # added_lines = f"||{added_lines[1::]}||"
                 if deleted_lines:
                     # added_lines = f"||~~{deleted_lines[1::]}~~||"
-                    deleted_lines = f"||~~{deleted_lines[1:500]}..~~||" if len(deleted_lines) > 500 else f"||~~{deleted_lines[1:]}~~||"
+                    deleted_lines = f"||~~{deleted_lines[1:500]}..~~||" if len(
+                        deleted_lines) > 500 else f"||~~{deleted_lines[1:]}~~||"
 
                 text = f"**Внесены изменения в [законы]({os.getenv('HOSTNAME', '')}freedom_of_speech/#laws) Freedom of speech:**"
 
@@ -797,7 +855,7 @@ class EditLawsPageView(TemplateView):
                 query = {'tlaws': laws}
 
                 mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                              action='$set', query=query)
+                                                         action='$set', query=query)
 
                 if mongoUpdate is None:
                     return HttpResponse(status=500)
@@ -856,7 +914,7 @@ class EditConstitutionPageView(TemplateView):
             query = {'constitution': constitution}
 
             mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                          action='$set', query=query)
+                                                     action='$set', query=query)
 
             if mongoUpdate is None:
                 return HttpResponse(status=500)
@@ -888,7 +946,8 @@ class EditConstitutionPageView(TemplateView):
                     # added_lines = f"||{added_lines[1::]}||"
                 if deleted_lines:
                     # added_lines = f"||~~{deleted_lines[1::]}~~||"
-                    deleted_lines = f"||~~{deleted_lines[1:500]}..~~||" if len(deleted_lines) > 500 else f"||~~{deleted_lines[1:]}~~||"
+                    deleted_lines = f"||~~{deleted_lines[1:500]}..~~||" if len(
+                        deleted_lines) > 500 else f"||~~{deleted_lines[1:]}~~||"
 
                 text = f"**Внесены изменения в [конституцию]({os.getenv('HOSTNAME', '')}freedom_of_speech/#constitution) Freedom of speech:**"
 
@@ -983,7 +1042,7 @@ class EditUsernamePageView(TemplateView):
                     query['parliament'] = username
 
                 mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                              action='$set', query=query)
+                                                         action='$set', query=query)
 
                 if mongoUpdate is None:
                     return HttpResponse(status=500)
@@ -993,8 +1052,8 @@ class EditUsernamePageView(TemplateView):
                 # Delete old account info
                 query = {f'users.{username}': ''}
                 mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                              action='$unset',
-                                              query=query)
+                                                         action='$unset',
+                                                         query=query)
 
                 if mongoUpdate is None:
                     return HttpResponse(status=500)
@@ -1008,8 +1067,8 @@ class EditUsernamePageView(TemplateView):
             # if 'username' in cookies:
             #     response.cookies['username'] = new_username
 
-            expires = datetime.now(tz=utc) + timedelta(days=7)
-            response.set_cookie(key='username', value=new_username, secure=True, samesite='Lax', expires=expires,
+            # expires = datetime.now(tz=utc) + timedelta(days=7)
+            response.set_cookie(key='username', value=new_username, secure=True, samesite='Lax',
                                 httponly=True)
 
             return response
@@ -1072,7 +1131,7 @@ class AddTestimonialPageView(TemplateView):
         query = {'testimonials': {'text': testimonial, 'username': username, 'role': role}}
 
         mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                      action='$push', query=query)
+                                                 action='$push', query=query)
 
         if mongoUpdate is None:
             return HttpResponse(status=500)
@@ -1153,8 +1212,9 @@ class AuthTelegramPageView(TemplateView):
 
                                 query = {f'users.{username}.telegram': '', f'referendum.votes.{username}': ''}
 
-                                mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                              action='$unset', query=query)
+                                mongoUpdate = mongoDataBase.update_field(database_name='site',
+                                                                         collection_name='freedom_of_speech',
+                                                                         action='$unset', query=query)
 
                                 if mongoUpdate is None:
                                     return HttpResponse(status=500)
@@ -1170,8 +1230,9 @@ class AuthTelegramPageView(TemplateView):
 
             query = {f'users.{username}.telegram': data}
 
-            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                          query=query)
+            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                     action='$set',
+                                                     query=query)
 
             if mongoUpdate is None:
                 return HttpResponse(status=500)
@@ -1463,9 +1524,10 @@ class VotePresidentPageView(TemplateView):
                     freedom = datetime.now() - date
                     if freedom.days >= 30:
                         query = {f'votes.president.{username}': president}
-                        mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                      action='$set',
-                                                      query=query)
+                        mongoUpdate = mongoDataBase.update_field(database_name='site',
+                                                                 collection_name='freedom_of_speech',
+                                                                 action='$set',
+                                                                 query=query)
 
                         if mongoUpdate is None:
                             return HttpResponse(status=500)
@@ -1564,9 +1626,10 @@ class VoteParliamentPageView(TemplateView):
                     freedom = datetime.now() - date
                     if freedom.days >= 30:
                         query = {f'votes.parliament.{username}': parliament}
-                        mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                      action='$set',
-                                                      query=query)
+                        mongoUpdate = mongoDataBase.update_field(database_name='site',
+                                                                 collection_name='freedom_of_speech',
+                                                                 action='$set',
+                                                                 query=query)
 
                         if mongoUpdate is None:
                             return HttpResponse(status=500)
@@ -1669,7 +1732,8 @@ class VoteJudgePageView(TemplateView):
                         text = f"{text}Судья [{judge_info.get('judge', '')}](tg://user?id={tjudge}) был(а) снят(а) со своего поста"
 
                         # Demote judge in chat
-                        chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                        chat_username = json.loads(
+                            document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                         origin = os.getenv('HOSTNAME', '')
                         data = {
                             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1687,7 +1751,8 @@ class VoteJudgePageView(TemplateView):
                         text = f"{text}Новый Судья: [{judge}](tg://user?id={tjudge})"
 
                         # Promote new judge (tjudge)
-                        chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                        chat_username = json.loads(
+                            document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                         origin = os.getenv('HOSTNAME', '')
                         data = {
                             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1702,7 +1767,8 @@ class VoteJudgePageView(TemplateView):
                         if ojudge:
                             tojudge = users.get(ojudge, {}).get('telegram', {}).get('id', '')
                             # Demote old judge
-                            chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                            chat_username = json.loads(
+                                document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                             origin = os.getenv('HOSTNAME', '')
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1730,7 +1796,8 @@ class VoteJudgePageView(TemplateView):
                         if tjudge:
                             text = f"{text}Судья [{judge_info.get('judge', '')}](tg://user?id={tjudge}) был(а) снят(а) со своего поста"
 
-                            chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                            chat_username = json.loads(
+                                document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                             origin = os.getenv('HOSTNAME', '')
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1749,7 +1816,8 @@ class VoteJudgePageView(TemplateView):
                             text = f"{text}Новый Судья: [{judge}](t.me/{tjudge})"
 
                             # Promote new judge (tjudge)
-                            chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                            chat_username = json.loads(
+                                document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                             origin = os.getenv('HOSTNAME', '')
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1765,7 +1833,8 @@ class VoteJudgePageView(TemplateView):
                             if ojudge:
                                 tojudge = users.get(ojudge, {}).get('telegram', {}).get('id', '')
                                 # Demote old judge
-                                chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                                chat_username = json.loads(
+                                    document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
                                 origin = os.getenv('HOSTNAME', '')
                                 data = {
                                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1783,8 +1852,9 @@ class VoteJudgePageView(TemplateView):
         if judge_info.get('judge', '') == judge:
             query = {f'judge.{role}': judge}
 
-            mongoUpdate =  mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                          query=query)
+            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                     action='$set',
+                                                     query=query)
 
             if mongoUpdate is None:
                 return HttpResponse(status=500)
@@ -1810,8 +1880,9 @@ class VoteJudgePageView(TemplateView):
                 requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat_username}", data=data,
                               headers={'Origin': origin, 'Host': origin})
 
-            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                          query=query)
+            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                     action='$set',
+                                                     query=query)
 
             if mongoUpdate is None:
                 return HttpResponse(status=500)
@@ -1894,9 +1965,10 @@ class VoteCandidatePageView(TemplateView):
                 if freedom.days >= 30:
                     if role == 'president':
                         query = {f'candidates.{username}': 'president'}
-                        mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                      action='$set',
-                                                      query=query)
+                        mongoUpdate = mongoDataBase.update_field(database_name='site',
+                                                                 collection_name='freedom_of_speech',
+                                                                 action='$set',
+                                                                 query=query)
                         if mongoUpdate is None:
                             return HttpResponse(status=500)
                         else:
@@ -1904,9 +1976,10 @@ class VoteCandidatePageView(TemplateView):
                     else:
                         if role == 'parliament':
                             query = {f'candidates.{username}': 'parliament'}
-                            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                          action='$set',
-                                                          query=query)
+                            mongoUpdate = mongoDataBase.update_field(database_name='site',
+                                                                     collection_name='freedom_of_speech',
+                                                                     action='$set',
+                                                                     query=query)
                             if mongoUpdate is None:
                                 return HttpResponse(status=500)
                             else:
@@ -1914,17 +1987,19 @@ class VoteCandidatePageView(TemplateView):
                         else:
                             if role == 'judge':
                                 query = {f'candidates.{username}': 'judge'}
-                                mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                              action='$set',
-                                                              query=query)
+                                mongoUpdate = mongoDataBase.update_field(database_name='site',
+                                                                         collection_name='freedom_of_speech',
+                                                                         action='$set',
+                                                                         query=query)
                                 if mongoUpdate is None:
                                     return HttpResponse(status=500)
                                 else:
                                     cache.freedom_of_speech = mongoUpdate
                             else:
                                 query = {f'candidates.{username}': ''}
-                                mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                              action='$unset', query=query)
+                                mongoUpdate = mongoDataBase.update_field(database_name='site',
+                                                                         collection_name='freedom_of_speech',
+                                                                         action='$unset', query=query)
                                 if mongoUpdate is None:
                                     return HttpResponse(status=500)
                                 else:
@@ -2023,8 +2098,9 @@ class VoteReferendumPageView(TemplateView):
             opinion = False
 
         query = {f'referendum.votes.{username}': opinion}
-        mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                      query=query)
+        mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                 action='$set',
+                                                 query=query)
 
         if mongoUpdate is None:
             return HttpResponse(status=500)
@@ -2074,7 +2150,7 @@ class UpdateChatPageView(TemplateView):
                     query = {'telegram.chat_parameters': chat.get('chat_parameters', {}),
                              'telegram.members_parameters': chat.get('members_parameters', {})}
                     mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                  action='$set', query=query)
+                                                             action='$set', query=query)
                     if mongoUpdate is None:
                         return HttpResponse(status=500)
                     else:
@@ -2101,7 +2177,7 @@ class UpdateChatPageView(TemplateView):
                     query = {'discord.guild_parameters': guild.get('guild_parameters', {}),
                              'discord.members_parameters': guild.get('members_parameters', {})}
                     mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                  action='$set', query=query)
+                                                             action='$set', query=query)
 
                     if mongoUpdate is None:
                         return HttpResponse(status=500)
@@ -2304,7 +2380,8 @@ class TelegramMembersPageView(TemplateView):
         for username, user_parameters in document.get('users', {}).items():
             try:
                 user_telegram = user_parameters.get('telegram', {})
-                telegram_user_parameters[user_telegram.get('id', '')] = {'photo_url': user_telegram.get('photo_url', '')}
+                telegram_user_parameters[user_telegram.get('id', '')] = {
+                    'photo_url': user_telegram.get('photo_url', '')}
                 if user_telegram.get('id', ''):
                     usernames[user_telegram.get('id', '')] = username
             except Exception as e:
@@ -2370,7 +2447,8 @@ class TelegramMembersPageView(TemplateView):
             parameters['messages_count'] = telegram_member_parameters.get('messages_count', 0)
 
             position = telegram_member_parameters.get('position', float('inf'))
-            member = (usernames.get(telegram_id, ''), position, parameters, telegram_user_parameters.get(telegram_id, {}))
+            member = (
+            usernames.get(telegram_id, ''), position, parameters, telegram_user_parameters.get(telegram_id, {}))
             members.append(member)
 
         members.sort(reverse=False, key=lambda x: x[1])
@@ -2460,7 +2538,8 @@ class DiscordMembersPageView(TemplateView):
 
             position = discord_member_parameters.get('position', float('inf'))
 
-            member = (usernames.get(parameters.get('id', ''), ''), position, parameters, discord_user_parameters.get(parameters.get('id', ''), {}))
+            member = (usernames.get(parameters.get('id', ''), ''), position, parameters,
+                      discord_user_parameters.get(parameters.get('id', ''), {}))
             members.append(member)
 
         members.sort(reverse=False, key=lambda x: x[1])
@@ -2547,8 +2626,9 @@ class AuthDiscordPageView(TemplateView):
 
                                 query = {f'users.{username}.discord': ''}
 
-                                mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
-                                                              action='$unset', query=query)
+                                mongoUpdate = mongoDataBase.update_field(database_name='site',
+                                                                         collection_name='freedom_of_speech',
+                                                                         action='$unset', query=query)
 
                                 if mongoUpdate is None:
                                     return HttpResponse(status=500)
@@ -2564,8 +2644,9 @@ class AuthDiscordPageView(TemplateView):
 
             query = {f'users.{username}.discord': data}
 
-            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                          query=query)
+            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                     action='$set',
+                                                     query=query)
 
             if mongoUpdate is None:
                 return HttpResponse(status=500)
