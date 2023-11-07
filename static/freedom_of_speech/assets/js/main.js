@@ -222,7 +222,7 @@ sr.reveal(`.contact__content:nth-child(even)`, {origin: 'right'})
 // sr.reveal(`.members__container a:nth-child(even)`, {origin: 'right', interval: 100, delay: 100, reset: false})
 // sr.reveal(`.members__container a:nth-child(odd)`, {origin: 'left', opacity: 0})
 // sr.reveal(`.members__container a:nth-child(even)`, {origin: 'right', opacity: 0})
-sr.reveal(`.members__container`, {opacity: 0})
+// sr.reveal(`.members__container`, {opacity: 0})
 sr.reveal(`.government__card`, {interval: 50, scale: 0})
 
 // let number = 69;
@@ -257,19 +257,20 @@ function getMinutesBetweenDates(startDate, endDate) {
 }
 
 window.onload = function() {
-    if (document.getElementById('constitution_text')) {
-        text_area_auto_change(document.getElementById('constitution_text'))
-        // let constitution_text = document.getElementById('constitution_text');
-        // constitution_text.style.height = "5px";
-        // constitution_text.style.height = (constitution_text.scrollHeight) + "px";
-    }
-
-    if (document.getElementById('laws_text')) {
-        text_area_auto_change(document.getElementById('laws_text'))
-        // let laws_text = document.getElementById('laws_text');
-        // laws_text.style.height = "5px";
-        // laws_text.style.height = (laws_text.scrollHeight) + "px";
-    }
+    // Resize text areas onlaod
+    // if (document.getElementById('constitution_text')) {
+    //     text_area_auto_change(document.getElementById('constitution_text'))
+    //     // let constitution_text = document.getElementById('constitution_text');
+    //     // constitution_text.style.height = "5px";
+    //     // constitution_text.style.height = (constitution_text.scrollHeight) + "px";
+    // }
+    //
+    // if (document.getElementById('laws_text')) {
+    //     text_area_auto_change(document.getElementById('laws_text'))
+    //     // let laws_text = document.getElementById('laws_text');
+    //     // laws_text.style.height = "5px";
+    //     // laws_text.style.height = (laws_text.scrollHeight) + "px";
+    // }
 
     // Month Day, Year Hour:Minute:Second, id-of-element-container
     if (document.getElementById('home__date_counter')) {
@@ -1664,11 +1665,11 @@ $('#members-sort').on('click', function (event){
     members.append(items);
 })
 
-$('#members-search').on('keyup', function (event){
-    var filter = $(this)[0].value.toLowerCase();
-    var nodes = $('.members__container').children('a');
+$('#members-search').on('input', function (event){
+    let filter = $(this)[0].value.toLowerCase();
+    let nodes = $('.members__container').children('a');
 
-    for (i = 0; i < nodes.length; i++) {
+    for (let i = 0; i < nodes.length; i++) {
         if (nodes[i].innerText.toLowerCase().includes(filter)) {
             nodes[i].style.display = "flex";
         } else {
@@ -1682,7 +1683,17 @@ $('#members-search').on('focusout', function (event) {
 })
 
 $('.members__filters #search').on('click', function (event) {
-    $('#members-search').animate({width: '50vw'}, {easing: 'linear', duration: 100}).focus();
+    let search_input = $('#members-search')
+
+    search_input.val('')
+
+    let nodes = $('.members__container').children('a');
+
+    for (let i = 0; i < nodes.length; i++) {
+        nodes[i].style.display = "flex";
+    }
+
+    search_input.animate({width: '50vw'}, {easing: 'linear', duration: 100}).focus();
 })
 
 // Prevent menu from closing by clicking inside of it

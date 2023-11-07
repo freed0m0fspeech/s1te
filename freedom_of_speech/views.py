@@ -2355,6 +2355,18 @@ class TelegramMembersPageView(TemplateView):
             parameters['xp_have'] = xp_have
             parameters['xp_need'] = xp_need
             parameters['voicetime'] = round(telegram_member_parameters.get('voicetime', 0) / 3600, 1)
+
+            # role = json.loads(telegram_member_parameters.get('custom_title', 'Участник'))
+            #
+            # if not role:
+            #     candidate = document.get('candidates', {}).get(username, '')
+            #     if candidate:
+            #         role = 'Кандидат'
+            #     else:
+            #         role = 'Участник'
+            #
+            # parameters['role'] = role
+
             parameters['messages_count'] = telegram_member_parameters.get('messages_count', 0)
 
             position = telegram_member_parameters.get('position', float('inf'))
@@ -2428,6 +2440,17 @@ class DiscordMembersPageView(TemplateView):
                 parameters['display_name'] = json.loads(discord_member_parameters.get('display_name', ''))
             except Exception as e:
                 pass
+
+            # try:
+            #     display_avatar = json.loads(discord_member_parameters.get('display_avatar', ''))
+            #
+            #     if display_avatar:
+            #         if display_avatar.isnumeric():
+            #             parameters['display_avatar'] = f"https://cdn.discordapp.com/embed/avatars/{display_avatar}"
+            #         else:
+            #             parameters['display_avatar'] = f"https://cdn.discordapp.com/avatars/{parameters.get('id', '')}/{display_avatar}?size=320"
+            # except Exception as e:
+            #     pass
 
             parameters['lvl'] = lvl
             parameters['xp_have'] = xp_have

@@ -227,8 +227,8 @@ const sr = ScrollReveal({
 })
 
 // sr.reveal(`.home__data, .projects__container, .testimonial__container`, {origin: 'top'})
-sr.reveal(`.projects__container, .testimonial__container`, {scale: 0})
-sr.reveal(`.home__blob`, {scale: 0})
+// sr.reveal(`.projects__container, .testimonial__container`, {scale: 0})
+// sr.reveal(`.home__blob`, {scale: 0})
 sr.reveal(`.footer__container`, {origin: 'top'})
 sr.reveal(`.home__info:nth-child(odd) div`, {origin: 'left'})
 sr.reveal(`.home__info:nth-child(even) div`, {origin: 'right'})

@@ -112,7 +112,9 @@
       {% for username, position, parameters, telegram_parameters in members %}
       <a {% if username %} href="/freedom_of_speech/profile/{{username}}/" {% endif %} position="{{position}}" lvl="{{parameters.lvl}}" messages_count="{{parameters.messages_count}}" voicetime="{{parameters.voicetime}}">
         <img src="{{telegram_parameters.photo_url}}">&nbsp;
-        ({{position}}) {% if parameters.user_parameters.username %} @{{parameters.user_parameters.username}} | {% endif %} {{parameters.user_parameters.first_name}} {{parameters.user_parameters.last_name}}
+<!--        ({{position}})-->
+<!--        ({{parameters.role}})-->
+        {% if parameters.user_parameters.username %} @{{parameters.user_parameters.username}} | {% endif %} {{parameters.user_parameters.first_name}} {{parameters.user_parameters.last_name}}
         <!--            forloop.counter0-->
         Уровень: {{parameters.lvl}}
         Cообщений: {{parameters.messages_count}}

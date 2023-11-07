@@ -20,25 +20,25 @@ from utils import dataBases, cache
 mongoDataBase = dataBases.mongodb_client
 
 
-def scheduled_start_voting_later():
+def start_voting_later():
     from jobs.updater import sched
     start_vote = datetime.now(tz=utc) + timedelta(hours=1)
     start_vote = start_vote.strftime('%Y-%m-%d %H:%M:%S')
 
-    job = sched.get_job('scheduled_start_voting')
+    job = sched.get_job('start_voting')
     if job:
         job.modify(next_run_time=start_vote)
     else:
-        sched.add_job(scheduled_start_voting, 'date', run_date=start_vote, id='scheduled_start_voting',
+        sched.add_job(start_voting, 'date', run_date=start_vote, id='start_voting',
                       misfire_grace_time=None, coalesce=True)
     return
 
 
-def scheduled_start_voting():
+def start_voting():
     from jobs.updater import sched
 
     if not mongoDataBase.check_connection():
-        return scheduled_start_voting_later()
+        return start_voting_later()
 
     # query = {'_id': 0, 'candidates': 1, 'telegram': 1}
     # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech', query=query)
@@ -63,7 +63,7 @@ def scheduled_start_voting():
                                       action='$set', query=query)
 
         if mongoUpdate is None:
-            return scheduled_start_voting_later()
+            return start_voting_later()
         else:
             cache.freedom_of_speech = mongoUpdate
 
@@ -97,21 +97,21 @@ def scheduled_start_voting():
                                   action='$set', query=query)
 
     if mongoUpdate is None:
-        return scheduled_start_voting_later()
+        return start_voting_later()
     else:
         cache.freedom_of_speech = mongoUpdate
 
-    job = sched.get_job('scheduled_end_voting')
+    job = sched.get_job('end_voting')
     if job:
         job.modify(next_run_time=end_vote)
     else:
-        sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting')
+        sched.add_job(end_voting, 'date', run_date=end_vote, id='end_voting')
 
-    job = sched.get_job('scheduled_start_voting')
+    job = sched.get_job('start_voting')
     if job:
         job.modify(next_run_time=start_vote)
     else:
-        sched.add_job(scheduled_start_voting, 'date', run_date=start_vote, id='scheduled_start_voting')
+        sched.add_job(start_voting, 'date', run_date=start_vote, id='start_voting')
 
     text = f"**В данный момент на [официальном сайте]({os.getenv('HOSTNAME', '')}freedom_of_speech) проходят [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
 
@@ -132,17 +132,17 @@ def scheduled_start_voting():
     cache.freedom_of_speech = freedom_of_speech.utils.update_cached_data(mongoDataBase)
 
 
-def scheduled_end_voting_later():
+def end_voting_later():
     from jobs.updater import sched
 
     end_vote = datetime.now(tz=utc) + timedelta(hours=1)
     end_vote = end_vote.strftime('%Y-%m-%d %H:%M:%S')
 
-    job = sched.get_job('scheduled_end_voting')
+    job = sched.get_job('end_voting')
     if job:
         job.modify(next_run_time=end_vote)
     else:
-        sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting',
+        sched.add_job(end_voting, 'date', run_date=end_vote, id='end_voting',
                       misfire_grace_time=None, coalesce=True)
 
     sched.print_jobs()
@@ -150,9 +150,9 @@ def scheduled_end_voting_later():
     return
 
 
-def scheduled_end_voting():
+def end_voting():
     if not mongoDataBase.check_connection():
-        return scheduled_start_voting_later()
+        return start_voting_later()
 
     # query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'start_vote': 1, 'end_vote': 1,
     #          'votes': 1, 'candidates': 1, 'telegram': 1}
@@ -224,7 +224,7 @@ def scheduled_end_voting():
                                       action='$unset', query=query)
 
         if mongoUpdate is None:
-            return scheduled_end_voting_later()
+            return end_voting_later()
         else:
             cache.freedom_of_speech = mongoUpdate
 
@@ -281,7 +281,7 @@ def scheduled_end_voting():
                                   action='$unset', query=query)
 
     if mongoUpdate is None:
-        return scheduled_end_voting_later()
+        return end_voting_later()
     else:
         cache.freedom_of_speech = mongoUpdate
 
@@ -336,7 +336,7 @@ def scheduled_end_voting():
     cache.freedom_of_speech = freedom_of_speech.utils.update_cached_data(mongoDataBase)
 
 
-def scheduled_telegram_synching(start=0, stop=200, step=1):
+def telegram_synching(start=0, stop=200, step=1):
     from jobs.updater import sched
 
     if not mongoDataBase.check_connection():
@@ -419,17 +419,17 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                                                                                                     75):
 
                         try:
-                            sched.remove_job('scheduled_start_voting')
+                            sched.remove_job('start_voting')
                         except JobLookupError:
                             # job not found
                             pass
 
-                        job = sched.get_job('scheduled_start_voting')
+                        job = sched.get_job('start_voting')
                         if job:
                             job.modify(next_run_time=datetime.now(tz=utc))
                         else:
-                            sched.add_job(scheduled_start_voting, 'date', run_date=datetime.now(tz=utc),
-                                          id='scheduled_start_voting')
+                            sched.add_job(start_voting, 'date', run_date=datetime.now(tz=utc),
+                                          id='start_voting')
 
                         referendum_date = datetime.now(tz=utc)
                         referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
@@ -444,7 +444,7 @@ def scheduled_telegram_synching(start=0, stop=200, step=1):
                             cache.freedom_of_speech = mongoUpdate
 
 
-def scheduled_discord_synching(start=0, stop=200, step=1):
+def discord_synching(start=0, stop=200, step=1):
     if not mongoDataBase.check_connection():
         return
 
@@ -490,26 +490,26 @@ def scheduled_discord_synching(start=0, stop=200, step=1):
             cache.freedom_of_speech = mongoUpdate
 
 
-def scheduled_voting_later():
+def voting_later():
     from jobs.updater import sched
 
     date = datetime.now(tz=utc) + timedelta(minutes=15)
     date = date.strftime('%Y-%m-%d %H:%M:%S')
 
-    job = sched.get_job('scheduled_voting')
+    job = sched.get_job('voting')
     if job:
         job.modify(next_run_time=date)
     else:
-        sched.add_job(scheduled_voting, 'date', run_date=date, id='scheduled_voting', misfire_grace_time=None,
+        sched.add_job(voting, 'date', run_date=date, id='voting', misfire_grace_time=None,
                       coalesce=True)
     return
 
 
-def scheduled_voting():
+def voting():
     from jobs.updater import sched
 
     if not mongoDataBase.check_connection():
-        return scheduled_voting_later()
+        return voting_later()
     else:
         # query = {'_id': 0, 'start_vote': 1, 'end_vote': 1}
         # document = mongoDataBase.get_document(database_name='site', collection_name='freedom_of_speech',
@@ -522,25 +522,25 @@ def scheduled_voting():
         end_vote = document.get('end_vote', '')
 
         if start_vote:
-            job = sched.get_job('scheduled_start_voting')
+            job = sched.get_job('start_voting')
             if job:
                 job.modify(next_run_time=start_vote)
             else:
-                sched.add_job(scheduled_start_voting, 'date', run_date=start_vote, id='scheduled_start_voting',
+                sched.add_job(start_voting, 'date', run_date=start_vote, id='start_voting',
                               misfire_grace_time=None, coalesce=True)
 
         # End vote job (on end_vote date in db)
         if end_vote:
-            job = sched.get_job('scheduled_end_voting')
+            job = sched.get_job('end_voting')
             if job:
                 job.modify(next_run_time=end_vote)
             else:
-                sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting',
+                sched.add_job(end_voting, 'date', run_date=end_vote, id='end_voting',
                               misfire_grace_time=None, coalesce=True)
 
     cache.freedom_of_speech = freedom_of_speech.utils.update_cached_data(mongoDataBase)
 
 
-def scheduled_sync():
+def sync():
     cache.portfolio = portfolio.utils.update_cached_data(mongoDataBase)
     cache.freedom_of_speech = freedom_of_speech.utils.update_cached_data(mongoDataBase)

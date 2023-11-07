@@ -9,12 +9,12 @@ from apscheduler.events import (
 from apscheduler.schedulers.background import BackgroundScheduler
 # from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from jobs.jobs import (
-    scheduled_start_voting,
-    scheduled_end_voting,
-    scheduled_telegram_synching,
-    scheduled_discord_synching,
-    scheduled_voting,
-    scheduled_sync
+    start_voting,
+    end_voting,
+    telegram_synching,
+    discord_synching,
+    voting,
+    sync
 )
 from pytz import utc
 from dotenv import load_dotenv
@@ -53,7 +53,7 @@ def start():
         date = datetime.now(tz=utc) + timedelta(minutes=15)
         date = date.strftime('%Y-%m-%d %H:%M:%S')
 
-        sched.add_job(scheduled_voting, 'date', run_date=date, id='scheduled_voting',
+        sched.add_job(voting, 'date', run_date=date, id='voting',
                       misfire_grace_time=None, coalesce=True)
     else:
         # query = {'_id': 0, 'start_vote': 1, 'end_vote': 1}
@@ -66,31 +66,31 @@ def start():
         end_vote = document.get('end_vote', '')
 
         if start_vote:
-            sched.add_job(scheduled_start_voting, 'date', run_date=start_vote, id='scheduled_start_voting',
+            sched.add_job(start_voting, 'date', run_date=start_vote, id='start_voting',
                           misfire_grace_time=None, coalesce=True)
 
         # End vote job (on end_vote date in db)
         if end_vote:
-            sched.add_job(scheduled_end_voting, 'date', run_date=end_vote, id='scheduled_end_voting',
+            sched.add_job(end_voting, 'date', run_date=end_vote, id='end_voting',
                           misfire_grace_time=None, coalesce=True)
 
     # Referendum check job (every day)
-    # sched.add_job(scheduled_referendum_check, 'interval', days=1, id='scheduled_referendum_check')
+    # sched.add_job(referendum_check, 'interval', days=1, id='referendum_check')
 
     # Telegram synch job and referendum check (every 4 hours)
-    sched.add_job(scheduled_telegram_synching, 'interval', hours=4, id='scheduled_telegram_synching',
+    sched.add_job(telegram_synching, 'interval', hours=4, id='telegram_synching',
                   misfire_grace_time=None, coalesce=True)
 
     # Discord synch job (every 4 hours)
-    sched.add_job(scheduled_discord_synching, 'interval', hours=4, id='scheduled_discord_synching',
+    sched.add_job(discord_synching, 'interval', hours=4, id='discord_synching',
                   misfire_grace_time=None, coalesce=True)
 
     # DataBase info sync
-    sched.add_job(scheduled_sync, 'interval', days=1, id='scheduled_sync', misfire_grace_time=None, coalesce=True)
+    sched.add_job(sync, 'interval', days=1, id='sync', misfire_grace_time=None, coalesce=True)
 
-    sched.get_job('scheduled_telegram_synching').modify(next_run_time=datetime.now(tz=utc))
-    sched.get_job('scheduled_discord_synching').modify(next_run_time=datetime.now(tz=utc))
-    # sched.get_job('scheduled_sync').modify(next_run_time=datetime.now(tz=utc))
+    # sched.get_job('telegram_synching').modify(next_run_time=datetime.now(tz=utc))
+    # sched.get_job('discord_synching').modify(next_run_time=datetime.now(tz=utc))
+    # sched.get_job('sync').modify(next_run_time=datetime.now(tz=utc))
     # schduler.add_job(test, 'date', run_date=datetime.now(tz=utc), args=['1', '2'])
 
     sched.start()
