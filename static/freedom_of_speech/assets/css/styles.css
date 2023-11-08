@@ -1450,7 +1450,8 @@ input:-webkit-autofill:active{
 
     row-gap: 1rem;
 
-    max-height: calc(100vh - 22rem);
+    max-height: calc(100vh - 20rem);
+    /*max-height: calc(100vh - 375px);*/
 
     overflow-y: scroll;
     overflow-x: hidden;
@@ -2657,6 +2658,8 @@ video::-webkit-media-controls {
 @media screen and (max-width: 1024px) {
     .members__container{
         row-gap: 2rem;
+
+        max-height: calc(100vh - 27rem);
         /*max-height: 40vh;*/
     }
 
