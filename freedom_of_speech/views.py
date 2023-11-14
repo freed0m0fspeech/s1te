@@ -153,13 +153,15 @@ class HomePageView(TemplateView):
 
         response = render(request=request, template_name='freedom_of_speech/index.html', context=context)
 
-        if context.get('authorized', False):
-            return response
-        else:
-            response.delete_cookie('username')
-            response.delete_cookie('sessionid')
+        return response
 
-            return response
+        # if context.get('authorized', False):
+        #     return response
+        # else:
+        #     response.delete_cookie('username')
+        #     response.delete_cookie('sessionid')
+        #
+        #     return response
 
 
 class SignInPageView(TemplateView):

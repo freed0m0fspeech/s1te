@@ -1450,8 +1450,10 @@ input:-webkit-autofill:active{
 
     row-gap: 1rem;
 
+    min-height: 5rem;
     max-height: calc(100vh - 20rem);
     /*max-height: calc(100vh - 375px);*/
+    /*height: 50vh;*/
 
     overflow-y: scroll;
     overflow-x: hidden;
