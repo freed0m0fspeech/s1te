@@ -1452,6 +1452,7 @@ input:-webkit-autofill:active{
 
     min-height: 5rem;
     max-height: calc(100vh - 20rem);
+    max-height: calc(100svh - 20rem);
     /*max-height: calc(100vh - 375px);*/
     /*height: 50vh;*/
 
@@ -2662,6 +2663,7 @@ video::-webkit-media-controls {
         row-gap: 2rem;
 
         max-height: calc(100vh - 27rem);
+        max-height: calc(100svh - 22rem);
         /*max-height: 40vh;*/
     }
 
