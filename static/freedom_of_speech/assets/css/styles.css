@@ -14,6 +14,7 @@
     --text-color-light: hsl(207, 4%, 56%);
     --body-color: hsl(207, 4%, 99%);
     --container-color: hsl(207, 4%, 95%);
+    --webkit-scrollbar-background-color: hsl(207, 4%, 95%);
 
     /* Change the first number */
     /* Blue: 207 - Purple: 250 - Pink: 356 - Teal: 174 */
@@ -261,13 +262,13 @@ body.dark-theme {
 .dark-theme::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--body-color);
+    background-color: var(--webkit-scrollbar-background-color);
 }
 
 .dark-theme::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--body-color)
+    background-color: var(--webkit-scrollbar-background-color);
 }
 
 .dark-theme::-webkit-scrollbar-thumb{
@@ -282,13 +283,13 @@ body.dark-theme {
 .dark-theme .constitution__content textarea::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--body-color);
+    background-color: var(--webkit-scrollbar-background-color);
 }
 
 .dark-theme .constitution__content textarea::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--body-color)
+    background-color: var(--webkit-scrollbar-background-color);
 }
 
 .dark-theme .constitution__content textarea::-webkit-scrollbar-thumb{
@@ -303,13 +304,13 @@ body.dark-theme {
 .dark-theme .laws__content textarea::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--body-color);
+    background-color: var(--webkit-scrollbar-background-color);
 }
 
 .dark-theme .laws__content textarea::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--body-color)
+    background-color: var(--webkit-scrollbar-background-color);
 }
 
 .dark-theme .laws__content textarea::-webkit-scrollbar-thumb{
@@ -324,45 +325,43 @@ body.dark-theme {
 .dark-theme .government__votes::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--container-color);
+    background-color: var(--webkit-scrollbar-background-color);
 }
 
 .dark-theme .government__votes::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--container-color)
+    background-color: var(--webkit-scrollbar-background-color)
 }
 
 .dark-theme .government__votes::-webkit-scrollbar-thumb{
     background-color: hsl(0, 0%, 100%);
     border-radius: .5rem;
-
 }
 
 .dark-theme .government__votes::-webkit-scrollbar-thumb:hover{
     background-color: hsl(171, 100%, 50%) /* Scrollbar-thumb color pink - hsl(328, 100%, 54%); */
 }
 
-.dark-theme .members__container ::-webkit-scrollbar{
+.dark-theme .members__container::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--container-color);
+    background-color: var(--webkit-scrollbar-background-color);
 }
 
 .dark-theme .members__container::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--container-color)
+    background-color: var(--webkit-scrollbar-background-color);
 }
 
 .dark-theme .members__container::-webkit-scrollbar-thumb{
     background-color: hsl(0, 0%, 100%);
     border-radius: .5rem;
-
 }
 
 .dark-theme .members__container::-webkit-scrollbar-thumb:hover{
-    background-color: hsl(171, 100%, 50%) /* Scrollbar-thumb color pink - hsl(328, 100%, 54%); */
+    background-color: hsl(171, 100%, 50%); /* Scrollbar-thumb color pink - hsl(328, 100%, 54%); */
 }
 
 /*=============== REUSABLE CSS CLASSES ===============*/
@@ -2371,14 +2370,14 @@ input:-webkit-autofill:active{
 ::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--body-color);
+    background-color: var(--webkit-scrollbar-background-color);
 }
 
 ::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
     /*background-color: hsl(0, 0%, 100%);*/
-    background-color: var(--body-color);
+    background-color: var(--webkit-scrollbar-background-color);
 }
 
 ::-webkit-scrollbar-thumb{
@@ -2410,13 +2409,13 @@ video::-webkit-media-controls {
 .government__votes::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--container-color);
+    background-color: var(--webkit-scrollbar-background-color);
 }
 
 .government__votes::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--container-color);
+    background-color: var(--webkit-scrollbar-background-color);
 }
 
 .government__votes::-webkit-scrollbar-thumb{
