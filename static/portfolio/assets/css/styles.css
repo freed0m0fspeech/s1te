@@ -151,8 +151,8 @@ img{
     -o-user-drag: none;
     user-drag: none;
 
-    /*filter: drop-shadow(2px 4px 6px black);*/
-    filter: drop-shadow(0 0 .1rem black);
+    filter: drop-shadow(2px 4px 6px black);
+    /*filter: drop-shadow(0 0 .1rem black);*/
 }
 
 a{
@@ -186,7 +186,8 @@ video{
     max-width: 100%;
     height: auto;
 
-    filter: drop-shadow(0 0 0.1rem black);
+    /*filter: drop-shadow(0 0 0.1rem black);*/
+    filter: drop-shadow(2px 4px 6px black);
 }
 
 /*=============== THEME ===============*/
