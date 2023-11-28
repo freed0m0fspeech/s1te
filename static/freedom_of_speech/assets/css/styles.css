@@ -14,7 +14,9 @@
     --text-color-light: hsl(207, 4%, 56%);
     --body-color: hsl(207, 4%, 99%);
     --container-color: hsl(207, 4%, 95%);
-    --webkit-scrollbar-background-color: hsl(207, 4%, 95%);
+    --webkit-scrollbar-background-color-light: hsl(207, 4%, 95%);
+    --webkit-scrollbar-background-color-dark: hsl(207, 4%, 15%);
+
 
     /* Change the first number */
     /* Blue: 207 - Purple: 250 - Pink: 356 - Teal: 174 */
@@ -262,13 +264,13 @@ body.dark-theme {
 .dark-theme::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--webkit-scrollbar-background-color);
+    /*background-color: var(--webkit-scrollbar-background-color-dark);*/
 }
 
 .dark-theme::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--webkit-scrollbar-background-color);
+    background-color: var(--webkit-scrollbar-background-color-dark);
 }
 
 .dark-theme::-webkit-scrollbar-thumb{
@@ -283,13 +285,13 @@ body.dark-theme {
 .dark-theme .constitution__content textarea::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--webkit-scrollbar-background-color);
+    /*background-color: var(--webkit-scrollbar-background-color-dark);*/
 }
 
 .dark-theme .constitution__content textarea::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--webkit-scrollbar-background-color);
+    background-color: var(--webkit-scrollbar-background-color-dark);
 }
 
 .dark-theme .constitution__content textarea::-webkit-scrollbar-thumb{
@@ -304,13 +306,13 @@ body.dark-theme {
 .dark-theme .laws__content textarea::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--webkit-scrollbar-background-color);
+    /*background-color: var(--webkit-scrollbar-background-color-dark);*/
 }
 
 .dark-theme .laws__content textarea::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--webkit-scrollbar-background-color);
+    background-color: var(--webkit-scrollbar-background-color-dark);
 }
 
 .dark-theme .laws__content textarea::-webkit-scrollbar-thumb{
@@ -325,13 +327,13 @@ body.dark-theme {
 .dark-theme .government__votes::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--webkit-scrollbar-background-color);
+    /*background-color: var(--webkit-scrollbar-background-color-dark);*/
 }
 
 .dark-theme .government__votes::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--webkit-scrollbar-background-color)
+    background-color: var(--webkit-scrollbar-background-color-dark);
 }
 
 .dark-theme .government__votes::-webkit-scrollbar-thumb{
@@ -346,13 +348,13 @@ body.dark-theme {
 .dark-theme .members__container::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--webkit-scrollbar-background-color);
+    /*background-color: var(--webkit-scrollbar-background-color-dark);*/
 }
 
 .dark-theme .members__container::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--webkit-scrollbar-background-color);
+    background-color: var(--webkit-scrollbar-background-color-dark);
 }
 
 .dark-theme .members__container::-webkit-scrollbar-thumb{
@@ -2370,14 +2372,14 @@ input:-webkit-autofill:active{
 ::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--webkit-scrollbar-background-color);
+    /*background-color: var(--webkit-scrollbar-background-color-light);*/
 }
 
 ::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
     /*background-color: hsl(0, 0%, 100%);*/
-    background-color: var(--webkit-scrollbar-background-color);
+    background-color: var(--webkit-scrollbar-background-color-light);
 }
 
 ::-webkit-scrollbar-thumb{
@@ -2409,13 +2411,13 @@ video::-webkit-media-controls {
 .government__votes::-webkit-scrollbar{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--webkit-scrollbar-background-color);
+    /*background-color: var(--webkit-scrollbar-background-color-light);*/
 }
 
 .government__votes::-webkit-scrollbar:hover{
     width: .5rem;
     border-radius: .5rem;
-    background-color: var(--webkit-scrollbar-background-color);
+    background-color: var(--webkit-scrollbar-background-color-light);
 }
 
 .government__votes::-webkit-scrollbar-thumb{
