@@ -281,7 +281,8 @@ body.dark-theme {
     box-shadow: 0px 0px 4px black;
 }
 
-.dark-theme .services__card{
+.dark-theme .services__card,
+.dark-theme .skills__blob{
     box-shadow: 0px 0px 4px black;
 }
 
@@ -1100,6 +1101,8 @@ input:-webkit-autofill:active{
 
     cursor: pointer;
     /*transition: background .5s; !* for dark mode animation *!*/
+
+    box-shadow: 0px 0px 4px grey;
 }
 
 .skills__blob img{
