@@ -14,8 +14,8 @@
     --text-color-light: hsl(207, 4%, 56%);
     --body-color: hsl(207, 4%, 99%);
     --container-color: hsl(207, 4%, 95%);
-    --webkit-scrollbar-background-color-light: hsl(207, 4%, 95%);
-    --webkit-scrollbar-background-color-dark: hsl(207, 4%, 15%);
+    --webkit-scrollbar-background-color-light: hsl(0, 0%, 85%);
+    --webkit-scrollbar-background-color-dark: hsl(0, 0%, 15%);
 
 
     /* Change the first number */
@@ -151,8 +151,10 @@ img{
     -o-user-drag: none;
     user-drag: none;
 
-    filter: drop-shadow(2px 4px 6px black);
+    /*filter: drop-shadow(2px 2px 4px grey);*/
     /*filter: drop-shadow(0 0 .1rem black);*/
+    /*box-shadow: 0px 0px 4px grey;*/
+    filter: drop-shadow(0px 0px 4px grey);
 }
 
 a{
@@ -187,7 +189,9 @@ video{
     height: auto;
 
     /*filter: drop-shadow(0 0 0.1rem black);*/
-    filter: drop-shadow(2px 4px 6px black);
+    /*filter: drop-shadow(2px 2px 4px grey);*/
+    box-shadow: 0px 0px 4px grey;
+    /*box-shadow: 0px 0px 4px black;*/
 }
 
 /*=============== THEME ===============*/
@@ -226,12 +230,14 @@ body.dark-theme {
 .dark-theme .nav,
 .dark-theme .nav__menu{
     background-color: var(--container-color);
-    box-shadow: 0 4px 20px hsla(207, 24%, 8%, .4);
+    /*box-shadow: 0 4px 20px hsla(207, 24%, 8%, .4);*/
+    /*box-shadow: 0px 0px 4px black;*/
 }
 
 .dark-theme .scrollup{
     background-color: var(--container-color);
-    box-shadow: 0 4px 20px hsla(0, 0%, 0%);
+    /*box-shadow: 0 4px 20px hsla(0, 0%, 0%);*/
+    /*box-shadow: 0px 0px 4px black;*/
 }
 
 .dark-theme .home__shape-waves,
@@ -254,11 +260,25 @@ body.dark-theme {
 }
 
 .dark-theme .government__votes{
-    box-shadow: 0 4px 20px hsla(0, 0%, 0%);
+    /*box-shadow: 0 4px 20px hsla(0, 0%, 0%);*/
 }
 
 .dark-theme .members__container{
     /*box-shadow: 0 4px 20px hsla(0, 0%, 0%);*/
+}
+
+.dark-theme img{
+    filter: drop-shadow(0px 0px 4px black);
+}
+
+.dark-theme video,
+.dark-theme .government__card,
+.dark-theme .nav,
+.dark-theme .nav__menu,
+.dark-theme .government__votes,
+.dark-theme .scrollup
+{
+    box-shadow: 0px 0px 4px black;
 }
 
 /*=============== SCROLL BAR ===============*/
@@ -459,7 +479,8 @@ input:-webkit-autofill:active{
     justify-content: space-between;
     align-items: center;
     background-color: var(--body-color);
-    box-shadow: 0 4px 20px hsla(207, 24%, 35%, .1);
+    /*box-shadow: 0 4px 20px hsla(207, 24%, 35%, .1);*/
+    box-shadow: 0px 0px 4px grey;
     padding-inline: 1.5rem;
     border-radius: 3rem;
     /*transition: background .5s; !* for dark mode animation *!*/
@@ -496,7 +517,8 @@ input:-webkit-autofill:active{
         /*bottom: -60%;*/
         /*margin: 0 auto;*/
         background-color: var(--body-color);
-        box-shadow: 0 4px 20px hsla(207, 24%, 35%, .1);
+        /*box-shadow: 0 4px 20px hsla(207, 24%, 35%, .1);*/
+        box-shadow: 0px 0px 4px grey;
         padding: 2rem 1.5rem 5rem;
         border-radius: 2rem;
         /*transition: bottom .1s;*/
@@ -1253,6 +1275,9 @@ input:-webkit-autofill:active{
     /*transition: background .5s; !* for dark mode animation *!*/
 
     animation: popup infinite 1s;
+
+    box-shadow: 0px 0px 4px grey;
+    /*filter: drop-shadow(2px 2px 4px grey);*/
 }
 
 .government__card:hover{
@@ -1391,8 +1416,9 @@ input:-webkit-autofill:active{
 
 .government__votes{
     /*box-shadow: 0 0.5rem 1em rgba(0, 0, 0, 0.2);*/
-    box-shadow: 0 4px 12px hsla(207, 24%, 35%, 15);
     /*box-shadow: 0 4px 12px hsla(207, 24%, 35%, 15);*/
+    /*box-shadow: 0 4px 12px hsla(207, 24%, 35%, 15);*/
+    box-shadow: 0px 0px 4px grey;
     border-radius: 0.5em;
     opacity: 0;
     display: none;
@@ -2445,7 +2471,8 @@ video::-webkit-media-controls {
     right: 1rem;
     bottom: -30%;
     background-color: var(--body-color);
-    box-shadow: 0 4px 12px hsla(207, 24%, 35%, 15);
+    /*box-shadow: 0 4px 12px hsla(207, 24%, 35%, 15);*/
+    box-shadow: 0px 0px 4px grey;
     display: inline-flex;
     padding: .35rem;
     border-radius: .25rem;
@@ -2764,12 +2791,14 @@ video::-webkit-media-controls {
 
     /*Change background header*/
     .bg-header{
-        box-shadow: 0 4px 20px hsla(207, 24%, 35%, .1);
+        /*box-shadow: 0 4px 20px hsla(207, 24%, 35%, .1);*/
         /*top: -80px;*/
+        box-shadow: 0px 0px 4px grey;
     }
 
     .dark-theme .bg-header{
-        box-shadow: 0 6px 24px hsla(207, 24%, 8%, .6);
+        /*box-shadow: 0 6px 24px hsla(207, 24%, 8%, .6);*/
+        box-shadow: 0px 0px 4px black;
     }
 
     .container{
