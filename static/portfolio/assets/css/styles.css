@@ -281,6 +281,10 @@ body.dark-theme {
     box-shadow: 0px 0px 4px black;
 }
 
+.dark-theme .services__card{
+    box-shadow: 0px 0px 4px black;
+}
+
 /*=============== SCROLL BAR ===============*/
 .dark-theme::-webkit-scrollbar{
     width: .5rem;
@@ -1208,6 +1212,7 @@ input:-webkit-autofill:active{
     animation: popup infinite 1s;
 
     cursor: pointer;
+    box-shadow: 0px 0px 4px grey;
 }
 
 .services__card:hover{
@@ -1827,7 +1832,9 @@ input:-webkit-autofill:active{
     width: 250px;
     height: 150px;
     border-radius: .75rem;
-    margin-bottom: 1.25rem;
+    /*margin-bottom: 1.25rem;*/
+
+    margin: 1rem 0 1rem 0;
 }
 
 .projects__project{
