@@ -20,6 +20,35 @@ class MongoDataBase:
         self.client = None
         self.get_connection()
 
+    # def connect(self) -> bool:
+    #     """
+    #     Get connection to MongoDataBase
+    #     """
+    #     if self.client and self.check_connection():
+    #         return True
+    #
+    #     try:
+    #         uri = f"mongodb+srv://{quote_plus(self.__user)}:{quote_plus(self.__passwd)}@{self.__host}"
+    #         self.client = MongoClient(uri, server_api=ServerApi('1'), read_preference=ReadPreference.NEAREST,
+    #                                   serverSelectionTimeoutMS=3000)
+    #         self.client.admin.command('ping')
+    #
+    #         return self.client.is_primary
+    #
+    #     except Exception as e:
+    #         raise ConnectionError(f"Failed to connect to MongoDB: {e}")
+    #
+    # def check_connection(self) -> bool:
+    #     """
+    #     Check if the connection is active
+    #     """
+    #     try:
+    #         self.client.admin.command('ping')
+    #         return self.client.is_primary
+    #
+    #     except Exception as e:
+    #         return False
+
     def get_connection(self) -> bool:
         """
         **Get connection to MongoDataBase**

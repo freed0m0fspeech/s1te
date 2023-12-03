@@ -1304,6 +1304,8 @@ class ProfilePageView(TemplateView):
                     # context['candidate'] = document.get('candidates', {}).get(username, {})
                     user_telegram = user.get('telegram', {})
                     user_discord = user.get('discord', {})
+                    date_updated = ''
+
                     # xp = 0
                     # messages_count = 0
                     # members_count = 0
@@ -1344,6 +1346,7 @@ class ProfilePageView(TemplateView):
                                 telegram.get('chat_parameters', {}).get('members_count', 0))
                             context['telegram_date_updated'] = member_parameters.get('date', '')
                             context['telegram_member_status'] = True
+                            date_updated = member_parameters.get('date', '')
 
                             if not context['telegram_role']:
                                 candidate = document.get('candidates', {}).get(username, '')
@@ -1360,6 +1363,8 @@ class ProfilePageView(TemplateView):
                                     # context['joined_date'] = date.strftime('%b %e, %Y')
                                     # print(date.strftime('%Y-%m-%d %H:%M:%S'))
                                     context['telegram_joined_date'] = date.strftime('%Y-%m-%d %H:%M:%S')
+                        else:
+                            context['telegram_role'] = 'Незнакомец'
                     else:
                         context['telegram_link_status'] = False
                         context['telegram_role'] = 'Аноним'
@@ -1382,6 +1387,8 @@ class ProfilePageView(TemplateView):
                         context['discord_mfa_enabled'] = user_discord.get('mfa_enabled', '')
                         context['discord_locale'] = user_discord.get('locale', '')
                         context['discord_premium_type'] = user_discord.get('premium_type', '')
+
+                        date_updated = min(date_updated, member_parameters.get('date', ''))
 
                         # discord_photo_url = user_discord.get('photo_url', '')
                         # if is_url_image(telegram_photo_url):
@@ -1432,6 +1439,8 @@ class ProfilePageView(TemplateView):
                     context['lvl'] = lvl
                     context['xp_have'] = xp_have
                     context['xp_need'] = xp_need
+
+                    context['date_updated'] = date_updated
                 else:
                     return HttpResponse(status=404)
             else:

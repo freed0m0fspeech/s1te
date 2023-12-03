@@ -7,14 +7,15 @@ from math import sqrt
 def is_url_image(image_url):
     try:
         image_formats = ("image/png", "image/jpeg", "image/jpg")
-        r = requests.get(image_url, timeout=1)
+        response = requests.get(image_url, timeout=1)  # Adjust timeout as needed
         # timeout=(0.5, 1)
 
-        if r.headers["content-type"] in image_formats:
+        # Check if the request was successful (status code 2xx)
+        if response.status_code // 100 == 2 and response.headers["content-type"] in image_formats:
             return True
 
         return False
-    except Exception as e:
+    except requests.RequestException as e:
         print(e)
         return False
 
