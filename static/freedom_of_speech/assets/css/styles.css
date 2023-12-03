@@ -288,11 +288,10 @@ body.dark-theme {
 /*    box-shadow: 0px 0px 2px black;*/
 /*}*/
 
-img{
-    filter: drop-shadow(0px 0px 2px black);
+img, video{
+    filter: drop-shadow(0px 0px 1px black);
 }
 
-video,
 .government__card,
 .nav,
 .nav__menu,
@@ -411,9 +410,14 @@ video,
 }
 
 /*=============== REUSABLE CSS CLASSES ===============*/
+.dark-theme .invert{
+    filter: invert(1);
+}
+
 .container {
-    max-width: 1024px;
+    max-width: 1000px;
     margin-inline: 1.5rem;
+    /*padding: 0rem 1rem 0rem 1rem;*/
 }
 
 .grid {
@@ -939,6 +943,12 @@ input:-webkit-autofill:active{
     /*border-color: var(--text-color);*/
     /*border-width: 3px;*/
     /*clip-path: circle();*/
+}
+
+.profile__blob video{
+    border-radius: 50%;
+
+    width: inherit;
 }
 
 .profile__perfil{
@@ -2839,7 +2849,7 @@ video::-webkit-media-controls {
     }
 }
 
-@media screen and (min-width: 1200px){
+@media screen and (min-width: 1024px){
     .section__border{
         padding-bottom: 6rem;
     }
@@ -2874,6 +2884,11 @@ video::-webkit-media-controls {
         height: 320px;
 
         /*cursor: pointer;*/
+    }
+
+    .profile__blob video{
+        width: 320px;
+        height: 320px;
     }
 
     .home__perfil{

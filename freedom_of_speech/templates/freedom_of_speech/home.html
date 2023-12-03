@@ -28,7 +28,7 @@
 
       {% if date_updated %}
         <div class="date__updated">
-          <p {% if administrator %}id="date__updated_admin" class="date__updated_admin" {% else %}id="date__updated"{% endif %}>{{date_updated}} UTC</p>
+          <p {% if administrator %}id="date__updated_admin" class="date__updated_admin" {% else %}id="date__updated"{% endif %} data="{{date_updated}} UTC"></p>
         </div>
       {% endif %}
 <!--      <div class="home__blob grid">-->
@@ -130,12 +130,7 @@
           {% endif %}
         </h3>
 
-        <p class="home__info-number" id="home__info__years_value">
-          {% if end_vote %}
-            {{end_vote}} UTC
-          {% else %}
-            {{start_vote}} UTC
-          {% endif %}
+        <p class="home__info-number" id="home__info__years_value" data="{% if end_vote %} {{end_vote}} UTC {% else %} {{start_vote}} UTC {% endif %}">
 <!--          Feb 3, 2017-->
 <!--          2017-2023-->
           <div class="home__info-description" id="home__date_counter"></div>

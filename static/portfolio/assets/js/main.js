@@ -167,54 +167,34 @@ themeButton.classList.add(icons["".concat(localStorage.getItem('selected-theme')
 themeButton.addEventListener('click', () => {
     // System - Light - Dark
 
-    localStorage.setItem('selected-theme', themes["".concat(localStorage.getItem('selected-theme'))])
-    localStorage.setItem('selected-icon', icons["".concat(localStorage.getItem('selected-theme'))])
+    localStorage.setItem('selected-theme', themes[localStorage.getItem('selected-theme')]);
+    localStorage.setItem('selected-icon', icons[localStorage.getItem('selected-theme')]);
 
-    let selected_theme = localStorage.getItem('selected-theme')
-    let selected_icon = localStorage.getItem('selected-icon')
+    const selectedTheme = localStorage.getItem('selected-theme');
+    const selectedIcon = localStorage.getItem('selected-icon');
 
-    themeButton.className = ''
-    themeButton.classList.add('change-theme')
-    themeButton.classList.add(selected_icon)
-
-    if (selected_theme === 'dark-theme'){
-        document.body.className = ''
-        document.body.classList.add('dark-theme')
-    } else if (selected_theme === 'system-theme'){
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
-            document.body.className = ''
-            document.body.classList.add('dark-theme')
-        } else{
-            document.body.className = ''
-        }
-    } else {
-        document.body.className = ''
-    }
-})
+    themeButton.className = `change-theme ${selectedIcon}`;
+    document.body.classList.toggle('dark-theme', selectedTheme === 'dark-theme' || (selectedTheme === 'system-theme' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches));
+});
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-    let selected_theme = localStorage.getItem('selected-theme')
+    let selectedTheme = localStorage.getItem('selected-theme')
 
-    if (selected_theme === 'system-theme') {
-        if ((event.matches ? "dark" : "light") === "light") {
-            // Changed to light
-            document.body.className = ''
-        } else {
-            // Changed to dark
-            document.body.className = ''
-            document.body.classList.add('dark-theme')
-        }
+    if (selectedTheme === 'system-theme') {
+        document.body.className = event.matches ? '' : document.body.className;
+        document.body.classList.toggle('dark-theme', event.matches);
     }
 });
 
 /*=============== CHANGE BACKGROUND HEADER ===============*/
-const scrollHeader = () =>{
-    const header = document.getElementById('header')
-    // When the scroll is greater than 50 viewport height, add the scroll-header class to the header tag
-    this.scrollY >= 50 ? header.classList.add('bg-header')
-        : header.classList.remove('bg-header')
-}
-window.addEventListener('scroll', scrollHeader)
+const scrollHeader = () => {
+    const header = document.getElementById('header');
+
+    // When the scroll is greater than 0, add the bg-header class to the header tag
+    window.scrollY > 0 ? header.classList.add('bg-header') : header.classList.remove('bg-header');
+};
+
+window.addEventListener('scroll', scrollHeader);
 
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 const sr = ScrollReveal({

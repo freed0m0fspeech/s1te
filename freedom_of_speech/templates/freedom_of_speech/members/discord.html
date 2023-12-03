@@ -32,7 +32,7 @@
 <!--==================== HEADER ====================-->
 <header class="header" id="header">
   <nav class="nav container">
-    <a href="/freedom_of_speech" class="nav__logo">
+    <a href="/freedom_of_speech/" class="nav__logo">
       Freedom of speech
     </a>
 
@@ -121,19 +121,14 @@
   <i class="ri-arrow-up-circle-line"></i>
 </a>
 
-<!--=============== SCROLL REVEAL ===============-->
-<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
+<!--=============== SCRIPTS ===============-->
+<!-- Add 'async' or 'defer' attributes to control script execution -->
+<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous" defer></script>
+<script src="https://kit.fontawesome.com/95c0aa19f9.js" crossorigin="anonymous" defer></script>
 
-<!--=============== SWIPER JS ===============-->
-<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-
-<!--=============== FONT AWESOME ===============-->
-<script src="https://kit.fontawesome.com/95c0aa19f9.js" crossorigin="anonymous"></script>
-
-<!--=============== jQuery Core 3.6.3 ===============-->
-<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-
-<!--=============== MAIN JS ===============-->
-<script src="{% static 'freedom_of_speech/assets/js/main.js' %}"></script>
+<!-- Combine and minify your custom scripts -->
+<script src="{% static 'freedom_of_speech/assets/js/main.js' %}" defer></script>
 </body>
 </html>

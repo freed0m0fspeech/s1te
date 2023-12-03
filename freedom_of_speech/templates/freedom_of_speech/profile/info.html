@@ -12,11 +12,16 @@
         {% if discord_id and discord_avatar and telegram_photo_url %}
           <img src="https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}}?size=320" class="imgchange" change="{{telegram_photo_url}}">
         {% else %}
-          {% if telegram_photo_url %}
-            <img src="{{telegram_photo_url}}">
+          {% if discord_id and discord_avatar %}
+            <img src="https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}}?size=320">
           {% else %}
-            {% if discord_id and discord_avatar %}
-              <img src="https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}}?size=320">
+            {% if telegram_photo_url %}
+              <img src="{{telegram_photo_url}}">
+            {% else %}
+              <img class="invert" src="{% static 'freedom_of_speech/assets/img/question-mark-circled.png' %}">
+<!--              <video autoplay loop muted playsinline>-->
+<!--                <source src="{% static 'freedom_of_speech/assets/video/glitch.mp4' %}" type="video/mp4" />-->
+<!--              </video>-->
             {% endif %}
           {% endif %}
         {% endif %}
@@ -33,6 +38,11 @@
 <!--        <p id="date__updated">telegram_date_updated UTC</p>-->
 <!--      </div>-->
 <!--       endif -->
+      {% if date_updated %}
+        <div class="date__updated">
+          <p id="date__updated" data="{{date_updated}} UTC"></p>
+        </div>
+      {% endif %}
       {% if authorized %}
       <ul class="profile__community">
         <a href="#" target="_blank" class="profile__community-link profile__community-link__{{telegram_link_status}}" id="auth-telegram_button">
@@ -115,9 +125,7 @@
         </h3>
 
         <p class="profile__info-description">
-          {% if telegram_role %}
-            {{telegram_role}}
-          {% endif %}
+          {{telegram_role}}
         </p>
       </div>
     </div>
@@ -128,10 +136,7 @@
           СВОБОДА
         </h3>
 
-        <p class="profile__info-number" id="profile__info__years_value">
-          {% if telegram_joined_date %}
-            {{telegram_joined_date}} UTC
-          {% endif %}
+        <p class="profile__info-number" id="profile__info__years_value" data="{% if telegram_joined_date %} {{telegram_joined_date}} UTC {% endif %}">
             <!--          2017-2023-->
           <div class="profile__info-description" id="profile__date_counter"></div>
         </p>
