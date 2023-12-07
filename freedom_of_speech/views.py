@@ -1367,7 +1367,7 @@ class ProfilePageView(TemplateView):
                             context['telegram_role'] = 'Незнакомец'
                     else:
                         context['telegram_link_status'] = False
-                        context['telegram_role'] = 'Аноним'
+                        context['telegram_role'] = 'Незнакомец'
 
                     if user_discord:
                         context['discord_link_status'] = True

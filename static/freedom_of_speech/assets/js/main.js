@@ -289,9 +289,6 @@ window.onload = function() {
                 day: 'numeric',
                 year: 'numeric'
             });
-        } else {
-            // — ∽
-            document.getElementById('profile__info__years_value').textContent = '∽';
         }
         //.concat(' - ', new Date().toLocaleString('ru', {month: 'short', day: 'numeric', year: 'numeric'}))
     }

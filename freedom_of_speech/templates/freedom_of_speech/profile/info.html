@@ -70,7 +70,7 @@
           ИНФОРМАЦИЯ
         </h3>
 
-        <p class="profile__info-description">
+        <p class="profile__info-description" id="profile-information">
 
           {% if discord_global_name and telegram_first_name %}
             <a class="change" change="{{discord_global_name}}">{{telegram_first_name}} {{telegram_last_name}}</a>
@@ -78,7 +78,11 @@
             {% if telegram_first_name %}
               {{telegram_first_name}} {{telegram_last_name}}
             {% else %}
-              {{discord_global_name}}
+              {% if discord_global_name %}
+                {{discord_global_name}}
+              {% else %}
+                ~
+              {% endif %}
             {% endif %}
           {% endif %}
 
@@ -95,6 +99,10 @@
         </h3>
 
         <p class="profile__info-description">
+          {% if not telegram_username and not discord_id %}
+            ~
+          {% endif %}
+
           {% if telegram_username %}
             <a href="https://t.me/{{telegram_username}}" target="_blank" class="contact__button">
               Telegram <i class="ri-arrow-right-line"></i>
@@ -137,6 +145,7 @@
         </h3>
 
         <p class="profile__info-number" id="profile__info__years_value" data="{% if telegram_joined_date %} {{telegram_joined_date}} UTC {% endif %}">
+          ~
             <!--          2017-2023-->
           <div class="profile__info-description" id="profile__date_counter"></div>
         </p>
