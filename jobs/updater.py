@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -20,9 +21,9 @@ SYNC_JOB_ID = 'sync'
 
 def listener(event):
     if event.exception:
-        print(f'The job {event.job_id}() crashed :(')
+        logging.warning(f'The job {event.job_id}() crashed :(')
     else:
-        print(f'The job {event.job_id}() executed successfully :)')
+        logging.info(f'The job {event.job_id}() executed successfully :)')
 
 
 job_defaults = {
