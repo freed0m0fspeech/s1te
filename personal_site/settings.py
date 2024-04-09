@@ -190,8 +190,8 @@ STATIC_URL = '/static/'
 # MEDIA_URL = '/img/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'freedom_of_speech/static',
-    BASE_DIR / 'portfolio/static',
+    # BASE_DIR / 'freedom_of_speech/static',
+    # BASE_DIR / 'portfolio/static',
 ]
 
 # MEDIA_ROOT = BASE_DIR / 'static/assets/img'

@@ -59,7 +59,7 @@
 FROM python:3.9.6
 
 # set work directory
-WORKDIR /usr/src/
+WORKDIR /usr/src/app
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -67,8 +67,8 @@ ENV PYTHONUNBUFFERED 1
 ENV RAILS_SERVE_STATIC_FILES="true"
 
 # create the app directory - and switch to it
-# RUN mkdir -p /app
-# WORKDIR /app
+RUN mkdir -p /app
+WORKDIR /app
 
 # RUN apt-get update && apt-get install --no-install-recommends -y python3.9 python3-pip
 # RUN pip install --upgrade pip
@@ -83,7 +83,7 @@ RUN set -ex && \
 
 
 # copy project
-# COPY . /app/
+COPY . /app/
 # expose port 8000
 EXPOSE 8000
 #CMD ["gunicorn", "--timeout", "0", "--bind", ":8000", "--workers", "1", "personal_site.wsgi:application"]
