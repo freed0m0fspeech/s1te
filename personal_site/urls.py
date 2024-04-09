@@ -19,6 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('', include('portfolio.urls')),
-    path('', include('freedom_of_speech.urls')),
+    path('portfolio/', include('portfolio.urls')),
+    path('freedom_of_speech/', include('freedom_of_speech.urls')),
 ]

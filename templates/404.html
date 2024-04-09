@@ -6,7 +6,7 @@
     <meta name="description" content="@ Official website">
 
     <!--=============== FAVICON ===============-->
-    <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'portfolio/assets/img/favicon.png' %}" type="image/x-icon">
 
     <!--=============== CSS ===============-->
     <!--    <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}">-->
@@ -50,6 +50,7 @@
 
         div.text {
             height: 50vh;
+            margin: 2rem;
         }
 
         div.text a {
@@ -62,7 +63,7 @@
             text-decoration: underline;
         }
 
-        @media only screen and (max-width: 768px) {
+        @media only screen and (max-width: 975px) {
             section.notFound {
                 flex-direction: column;
                 justify-content: space-around;
@@ -84,13 +85,12 @@
         }
     </style>
 
-    <title>404 Not Found</title>
+    <title>Page not found</title>
 </head>
 <body>
 <section class="notFound">
     <div class="img">
-        <img src="https://assets.codepen.io/5647096/backToTheHomepage.png" alt="Back to the Homepage"/>
-        <img src="https://assets.codepen.io/5647096/Delorean.png" alt="El Delorean, El Doc y Marti McFly"/>
+        <img src="{% static 'freedom_of_speech/assets/img/delorean_end_bigpixels_martydoc.png' %}"/>
     </div>
     <div class="text">
         <h1>404</h1>
