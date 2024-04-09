@@ -137,6 +137,9 @@
             <div class="government__vote-default">
                 <div class="government__vote-selected" id="government__vote">
                     Референдум
+                    <div id="referendum__percent" telegram_members_count="{{telegram_members_count}}" referendum_votes_count="{{referendum_votes_count}}">
+                        {% widthratio referendum_votes_count telegram_members_count 100 %}%
+                    </div>
                     <i class="ri-arrow-down-circle-line"></i>
                 </div>
                 <!--                    <div class="government__caret"></div>-->

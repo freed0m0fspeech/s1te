@@ -1485,11 +1485,24 @@ $('#government__votes').on('click', function (e){
                 $('#government__votes').removeClass('government__votes-open')
                 $('#government__votes .government__votes-active').removeClass('government__votes-active')
                 $(government__votes).addClass('government__votes-active')
+                // Get values of referendum
+                referendum_votes_count = Number($('#referendum__percent').attr('referendum_votes_count'))
+                telegram_members_count = Number($('#referendum__percent').attr('telegram_members_count'))
 
-                if (data === 'True')
+                if (data === 'True') {
+                    // Change referendum percent to +1 vote
+                    $('#referendum__percent').attr('referendum_votes_count', referendum_votes_count+1)
+                    referendum_percent = parseInt((referendum_votes_count+1)/telegram_members_count*100)
+                    $('#referendum__percent').text(`${referendum_percent}%`)
                     alert('Вы изменили свой голос за Референдум')
-                else
+                }
+                else {
+                    // Change referendum percent to -1 vote
+                    $('#referendum__percent').attr('referendum_votes_count', referendum_votes_count-1)
+                    referendum_percent = parseInt((referendum_votes_count-1)/telegram_members_count*100)
+                    $('#referendum__percent').text(`${referendum_percent}%`)
                     alert('Вы изменили свой голос против Референдума')
+                }
             },
             error(xhr,status,error){
                 $('#government__votes').removeClass('government__votes-open')

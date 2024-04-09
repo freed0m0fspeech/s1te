@@ -49,3 +49,4 @@ Functionality:
     - Top members by different categories
     - Multiple DataBases support
     - Application cache
+    - Application logger

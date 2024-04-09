@@ -129,6 +129,7 @@ class HomePageView(TemplateView):
         context['constitution'] = constitution
         context['telegram_members_count'] = telegram_members_count
         context['discord_members_count'] = discord_members_count
+        context['referendum_votes_count'] = sum(document.get('referendum', {}).get('votes', {}).values())
         date_updated = min(telegram.get('chat_parameters', {}).get('date', ''),
                            discord.get('guild_parameters', {}).get('date', ''))
         context['date_updated'] = date_updated

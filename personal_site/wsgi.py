@@ -15,7 +15,9 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "personal_site.settings")
 
 if not os.getenv('DEBUG', '0').lower() in ['true', 't', '1']:
     start()
+    logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.WARNING)
+else:
+    logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
-logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.WARNING)
 
 application = get_wsgi_application()

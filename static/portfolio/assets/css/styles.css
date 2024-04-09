@@ -289,7 +289,7 @@ body.dark-theme {
 /*}*/
 
 img, video{
-    filter: drop-shadow(0px 0px 1px black);
+    filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 50%));
 }
 
 .government__card,
@@ -300,7 +300,7 @@ img, video{
 .skills__blob,
 .services__card,
 .scrollup{
-    box-shadow: 0px 0px 2px black;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 50%);
 }
 
 /*=============== SCROLL BAR ===============*/
@@ -1690,7 +1690,7 @@ input:-webkit-autofill:active{
     resize: none;
     border: none;
     /*outline: none;*/
-    /*cursor: default;*/
+    cursor: auto;
 }
 
 .constitution__content{
@@ -1791,7 +1791,7 @@ input:-webkit-autofill:active{
     resize: none;
     border: none;
     /*outline: none;*/
-    /*cursor: default;*/
+    cursor: auto;
 }
 
 .laws__content{
@@ -2836,7 +2836,7 @@ video::-webkit-media-controls {
     .bg-header{
         /*box-shadow: 0 4px 20px hsla(207, 24%, 35%, .1);*/
         /*top: -80px;*/
-        box-shadow: 0px 0px 2px black;
+        box-shadow: 0px 0px 2px rgba(0, 0, 0, 50%);
     }
 
     /*.dark-theme .bg-header{*/
