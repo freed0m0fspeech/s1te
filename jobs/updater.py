@@ -5,7 +5,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from pytz import utc
 from dotenv import load_dotenv
 from utils import dataBases, cache
-from jobs.jobs import start_voting, end_voting, telegram_synching, discord_synching, voting, sync
+from jobs.jobs import start_voting, end_voting, telegram_synching, discord_synching, voting, sync, notify_voting
 
 load_dotenv()
 mongoDataBase = dataBases.mongodb_client
@@ -14,6 +14,7 @@ mongoDataBase = dataBases.mongodb_client
 VOTING_JOB_ID = 'voting'
 START_VOTING_JOB_ID = 'start_voting'
 END_VOTING_JOB_ID = 'end_voting'
+NOTIFY_VOTING_JOB_ID = 'notify_voting'
 TELEGRAM_SYNCHING_JOB_ID = 'telegram_synching'
 DISCORD_SYNCHING_JOB_ID = 'discord_synching'
 SYNC_JOB_ID = 'sync'
@@ -61,6 +62,12 @@ def setup_jobs():
         if start_vote:
             add_scheduled_job(start_voting, 'date', run_date=start_vote, id=START_VOTING_JOB_ID,
                               misfire_grace_time=None, coalesce=True)
+
+            notify_vote = datetime.strptime(start_vote, '%Y-%m-%d %H:%M:%S') - timedelta(days=1)
+            notify_vote = notify_vote.strftime('%Y-%m-%d %H:%M:%S')
+
+            if notify_vote > datetime.now(tz=utc).strftime('%Y-%m-%d %H:%M:%S'):
+                add_scheduled_job(notify_voting, 'date', run_date=notify_vote, id=NOTIFY_VOTING_JOB_ID, misfire_grace_time=None, coalesce=True)
 
         if end_vote:
             add_scheduled_job(end_voting, 'date', run_date=end_vote, id=END_VOTING_JOB_ID, misfire_grace_time=None,

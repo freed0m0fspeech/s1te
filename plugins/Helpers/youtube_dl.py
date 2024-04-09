@@ -1,3 +1,4 @@
+import logging
 import os
 import subprocess
 import re
@@ -97,7 +98,7 @@ def get_info_media(title: str, ydl_opts=None, search_engine=None, result_count=1
             try:
                 info = ydl.extract_info(url, download=False)
             except DownloadError:
-                print('DownloadError')
+                logging.warning('DownloadError')
                 return False
         else:
             if search_engine:
@@ -109,7 +110,7 @@ def get_info_media(title: str, ydl_opts=None, search_engine=None, result_count=1
                     try:
                         info = ydl.extract_info(f"scsearch{result_count}:{title}", download=False)
                     except DownloadError:
-                        print('DownloadError')
+                        logging.warning('DownloadError')
                         return False
 
     if not info:
@@ -154,7 +155,7 @@ def get_best_info_media(title: str, ydl_opts=None, search_engine=None, result_co
             try:
                 info = ydl.extract_info(url, download=False)
             except DownloadError:
-                print('DownloadError')
+                logging.warning('DownloadError')
                 return False
                 # else:
                 #    print('Not supported url')
@@ -189,7 +190,7 @@ def get_best_info_media(title: str, ydl_opts=None, search_engine=None, result_co
                     try:
                         info = ydl.extract_info(f"scsearch{result_count}:{title}", download=False)
                     except DownloadError:
-                        print('DownloadError')
+                        logging.warning('DownloadError')
                         return False
     if not info:
         return False

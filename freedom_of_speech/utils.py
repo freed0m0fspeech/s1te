@@ -1,3 +1,5 @@
+import logging
+
 import requests
 import os
 
@@ -16,7 +18,7 @@ def is_url_image(image_url):
 
         return False
     except requests.RequestException as e:
-        print(e)
+        logging.warning(e)
         return False
 
 
@@ -47,7 +49,7 @@ def exchange_code(code: str, redirect_uri: str):
 
         return user
     except Exception as e:
-        print(e)
+        logging.warning(e)
         return None
 
 

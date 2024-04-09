@@ -1,3 +1,4 @@
+import logging
 import os
 
 import requests
@@ -48,6 +49,6 @@ def update_cached_data(mongoDataBase):
             site_document['projects_count'] = len(projects)
 
         except Exception as e:
-            print(e)
+            logging.warning(e)
 
     return site_document

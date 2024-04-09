@@ -1,4 +1,6 @@
 import json
+import locale
+import logging
 import os
 import random
 # import time
@@ -6,6 +8,7 @@ import requests
 
 from datetime import datetime, timedelta
 from apscheduler.jobstores.base import JobLookupError
+from dateutil import tz
 from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv
 from pytz import utc
@@ -91,6 +94,9 @@ def start_voting():
     start_vote = datetime.now(tz=utc) + relativedelta(months=3)
     start_vote = start_vote.strftime('%Y-%m-%d 00:00:00')
 
+    notify_vote = datetime.strptime(start_vote, '%Y-%m-%d %H:%M:%S') - timedelta(days=1)
+    notify_vote = notify_vote.strftime('%Y-%m-%d %H:%M:%S')
+
     query = {'end_vote': f'{end_vote}', 'start_vote': f'{start_vote}'}
 
     mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
@@ -113,7 +119,13 @@ def start_voting():
     else:
         sched.add_job(start_voting, 'date', run_date=start_vote, id='start_voting')
 
-    text = f"**В данный момент на [официальном сайте]({os.getenv('HOSTNAME', '')}freedom_of_speech) проходят [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
+    job = sched.get_job('notify_voting')
+    if job:
+        job.modify(next_run_time=notify_vote)
+    else:
+        sched.add_job(notify_voting, 'date', run_date=notify_vote, id='notify_voting')
+
+    text = f"**В данный момент на [официальной странице]({os.getenv('HOSTNAME', '')}freedom_of_speech) проходят [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
 
     chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
     origin = os.getenv('HOSTNAME', '')
@@ -152,7 +164,7 @@ def end_voting_later():
 
 def end_voting():
     if not mongoDataBase.check_connection():
-        return start_voting_later()
+        return end_voting_later()
 
     # query = {'_id': 0, 'users': 1, 'president': 1, 'parliament': 1, 'judge': 1, 'start_vote': 1, 'end_vote': 1,
     #          'votes': 1, 'candidates': 1, 'telegram': 1}
@@ -291,7 +303,7 @@ def end_voting():
                                   action='$set', query=query)
 
     if mongoUpdate is None:
-        print('New government not set in DataBase')
+        logging.warning('New government not set in DataBase')
     else:
         cache.freedom_of_speech = mongoUpdate
 
@@ -329,7 +341,7 @@ def end_voting():
                                   query=query)
 
     if mongoUpdate is None:
-        print('New referendum date not set in DataBase')
+        logging.warning('New referendum date not set in DataBase')
     else:
         cache.freedom_of_speech = mongoUpdate
 
@@ -539,6 +551,38 @@ def voting():
                               misfire_grace_time=None, coalesce=True)
 
     cache.freedom_of_speech = freedom_of_speech.utils.update_cached_data(mongoDataBase)
+
+
+def notify_voting():
+    document = cache.freedom_of_speech
+
+    if not document:
+        return
+
+    start_vote = document.get('start_vote', '')
+    if not start_vote:
+        return
+
+    start_vote = datetime.strptime(start_vote, '%Y-%m-%d %H:%M:%S')
+    start_vote = start_vote.replace(tzinfo=tz.gettz('UTC'))
+
+    locale.setlocale(locale.LC_ALL, 'ru_RU')
+    text = f"**{start_vote.astimezone(tz.gettz('Europe/Kiev')).strftime('%e %b. %Yг., в %H:%M:%S')} на [официальной странице]({os.getenv('HOSTNAME', '')}freedom_of_speech) будут проходить [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
+    locale.setlocale(locale.LC_ALL, '')
+
+    chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+    origin = os.getenv('HOSTNAME', '')
+
+    data = {
+        "text": text,
+        "pin": 'true',
+        'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+    }
+
+    data = json.dumps(data)
+
+    requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat_username}", data=data,
+                  headers={'Origin': origin, 'Host': origin})
 
 
 def sync():
