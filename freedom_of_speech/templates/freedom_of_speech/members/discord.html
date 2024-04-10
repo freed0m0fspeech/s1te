@@ -95,8 +95,8 @@
     <div class="members__container container">
       {% for username, position, parameters, discord_parameters in members %}
       <a {% if username %} href="/freedom_of_speech/profile/{{username}}/" {% endif %} position="{{position}}" lvl="{{parameters.lvl}}" messages_count="{{parameters.messages_count}}" voicetime="{{parameters.voicetime}}">
-        {% if discord_parameters.id and discord_parameters.avatar %}
-          <img src="https://cdn.discordapp.com/avatars/{{discord_parameters.id}}/{{discord_parameters.avatar}}?size=320">&nbsp;
+        {% if parameters.display_avatar %}
+          <img src="{{parameters.display_avatar}}">&nbsp;
         {% endif %}
 <!--        ({{position}})-->
         {% if parameters.name %} @{{parameters.name}} | {% endif %} {{parameters.display_name}}

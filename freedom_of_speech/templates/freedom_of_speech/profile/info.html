@@ -9,11 +9,11 @@
 
       <div class="profile__blob grid">
         <!--        <div class="profile__perfil">-->
-        {% if discord_id and discord_avatar and telegram_photo_url %}
-          <img src="https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}}?size=320" class="imgchange" change="{{telegram_photo_url}}">
+        {% if discord_display_avatar and telegram_photo_url %}
+          <img src="{{discord_display_avatar}}" class="imgchange" change="{{telegram_photo_url}}">
         {% else %}
-          {% if discord_id and discord_avatar %}
-            <img src="https://cdn.discordapp.com/avatars/{{discord_id}}/{{discord_avatar}}?size=320">
+          {% if discord_display_avatar %}
+            <img src="{{discord_display_avatar}}">
           {% else %}
             {% if telegram_photo_url %}
               <img src="{{telegram_photo_url}}">

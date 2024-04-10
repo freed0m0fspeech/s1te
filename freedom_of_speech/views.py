@@ -126,6 +126,7 @@ class HomePageView(TemplateView):
                 context['judge'] = judge_info.get('judge', '')
 
         context['referendum'] = document.get('referendum', {}).get('votes', {}).get(username, False)
+        context['referendum_valid'] = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(document.get('referendum', {}).get('date', ''),'%Y-%m-%d %H:%M:%S')).days >= 30
         context['president'] = president
         context['parliament'] = parliament
         context['constitution'] = constitution
@@ -1384,7 +1385,13 @@ class ProfilePageView(TemplateView):
                         context['discord_flags'] = user_discord.get('flags', '')
                         context['discord_banner'] = user_discord.get('banner', '')
                         context['discord_accent_color'] = user_discord.get('accent_color', '')
-                        context['discord_avatar'] = user_discord.get('avatar', '')
+
+                        try:
+                            # user_discord.get('avatar', '')
+                            context['discord_display_avatar'] = json.loads(document.get('discord', {}).get('members_parameters',{}).get(context['discord_id'], {}).get('display_avatar', ''))
+                        except Exception as e:
+                            pass
+
                         context['discord_avatar_decoration'] = user_discord.get('avatar_decoration', '')
                         context['discord_banner_color'] = user_discord.get('banner_color', '')
                         # Multi - Factor Authentication
@@ -2330,10 +2337,22 @@ class MembersPageView(TemplateView):
 
             discord_member_parameters = discord_members_parameters.get(user_parameters.get('discord', {}).get('id', ''),
                                                                        {})
-            if discord_members_parameters:
+
+            if discord_member_parameters:
                 xp += discord_member_parameters.get('xp', 0)
                 voicetime += round(discord_member_parameters.get('voicetime', 0) / 3600, 1)
                 messages_count += discord_member_parameters.get('messages_count', 0)
+
+                try:
+                    user_parameters['discord']['display_avatar'] = json.loads(discord_member_parameters.get('display_avatar', ''))
+                except Exception as e:
+                    pass
+
+                # try:
+                #     user_parameters['discord']['display_avatar'] = discord_member_parameters.get('display_avatar', '')
+                # except KeyError:
+                #     user_parameters['discord'] = {}
+                #     user_parameters['discord']['display_avatar'] = discord_member_parameters.get('display_avatar', '')
 
             lvl, xp_have, xp_need = calculate_lvl(xp, xp_factor)
 
@@ -2347,6 +2366,8 @@ class MembersPageView(TemplateView):
             # position = member_parameters.get('position', float('inf'))
             # if not is_url_image(user_parameters.get('telegram', {}).get('photo_url')):
             #     user_parameters['telegram']['photo_url'] = ''
+
+            # user_parameters.get('discord', {})
 
             member = (username, xp, parameters, user_parameters.get('telegram', {}), user_parameters.get('discord', {}))
             members.append(member)
@@ -2516,8 +2537,8 @@ class DiscordMembersPageView(TemplateView):
         for username, user_parameters in document.get('users', {}).items():
             try:
                 user_discord = user_parameters.get('discord', {})
-                discord_user_parameters[user_discord.get('id', '')] = {'id': user_discord.get('id', ''),
-                                                                       'avatar': user_discord.get('avatar', '')}
+                # discord_user_parameters[user_discord.get('id', '')] = {'id': user_discord.get('id', ''),
+                #                                                        'avatar': user_discord.get('avatar', '')}
                 if user_discord.get('id', ''):
                     usernames[user_discord.get('id', '')] = username
             except Exception as e:
@@ -2537,6 +2558,11 @@ class DiscordMembersPageView(TemplateView):
 
             try:
                 parameters['display_name'] = json.loads(discord_member_parameters.get('display_name', ''))
+            except Exception as e:
+                pass
+
+            try:
+                parameters['display_avatar'] = json.loads(discord_member_parameters.get('display_avatar', ''))
             except Exception as e:
                 pass
 
