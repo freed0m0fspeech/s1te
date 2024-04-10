@@ -1545,7 +1545,7 @@ $('.government__card').on('click', function stand(e){
 
         role = ''
     } else {
-        confirm_text = 'Баллотироваться на '.concat(role, '?')
+        confirm_text = 'Баллотироваться на "'.concat(role, '"?')
 
         role_text = role
 
@@ -1579,11 +1579,11 @@ $('.government__card').on('click', function stand(e){
             },
             error(xhr,status,error){
                 if (xhr.status === 409)
-                    alert(`В данный момент Вы не можете баллотироваться на ${role_text}`)
+                    alert(`В данный момент Вы не можете баллотироваться на "${role_text}"`)
                 else if(xhr.status === 401)
-                    alert(`Только участники Telegram группы "Freedom of speech" могут баллотироваться на ${role_text}`)
+                    alert(`Только участники Telegram группы "Freedom of speech" могут баллотироваться на "${role_text}"`)
                 else if(xhr.status === 422)
-                    alert(`Только авторизованные пользователи могут баллотироваться на ${role_text}`)
+                    alert(`Только авторизованные пользователи могут баллотироваться на "${role_text}"`)
                 else
                     if (error)
                         alert(error)

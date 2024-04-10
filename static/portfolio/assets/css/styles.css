@@ -1313,11 +1313,12 @@ input:-webkit-autofill:active{
 }
 
 .government__card > i{
-    display: grid;
-    height: 44px;
+    display: inline-block;
+    height: 50px;
+    width: 50px;
     font-size: 2rem;
     color: var(--title-color);
-    margin-bottom: .5rem;
+    /*margin-bottom: .5rem;*/
     transition: transform .8s;
 }
 
