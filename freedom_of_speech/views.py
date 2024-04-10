@@ -3,6 +3,8 @@ import json
 import os
 import random
 import secrets
+from collections import Counter
+
 # from math import sqrt
 
 import requests
@@ -145,6 +147,7 @@ class HomePageView(TemplateView):
         context['start_vote'] = start_vote
         context['end_vote'] = end_vote
         context['candidates'] = document.get('candidates', {})
+        context['candidates_counter'] = Counter(document.get('candidates', {}).values())
         context['candidate'] = document.get('candidates', {}).get(username, {})
         context['users'] = document.get('users', {}).keys()
         context['parliament_voted'] = document.get('votes', {}).get('parliament', {}).get(username, '')
@@ -2000,6 +2003,10 @@ class VoteCandidatePageView(TemplateView):
                                 cache.freedom_of_speech = mongoUpdate
                         else:
                             if role == 'judge':
+                                if username in (document.get('president', ''), document.get('parliament', ''), document.get('judge', {}).get('judge', '')):
+                                    # President, parliament, judge can't stand for judge
+                                    return HttpResponse(status=409)
+
                                 query = {f'candidates.{username}': 'judge'}
                                 mongoUpdate = mongoDataBase.update_field(database_name='site',
                                                                          collection_name='freedom_of_speech',

@@ -1324,14 +1324,14 @@ input:-webkit-autofill:active{
     display: block;
     font-size: 2rem;
     color: var(--title-color);
-    margin-bottom: .75rem;
+    margin-bottom: .5rem;
     transition: transform .8s;
 }
 
 .government__title{
     font-size: var(--h2-font-size);
     font-weight: var(--font-semi-bold);
-    margin-bottom: 1.5rem;
+    margin: 1.5rem 0 1.5rem 0;
 
     /*cursor: auto;*/
 }
@@ -1501,6 +1501,11 @@ input:-webkit-autofill:active{
     max-height: 0;
     /*width: 200px;*/
     justify-self: center;
+}
+
+.government__candidates{
+    color: var(--text-color-light);
+    font-size: var(--smaller-font-size);
 }
 
 .members__container{

@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 
 def update_cached_data(mongoDataBase):
-    query = {'_id': 0, 'testimonials': 1, 'skills': 1, 'social': 1}
+    query = {'_id': 0}
     site_document = mongoDataBase.get_document(database_name='site', collection_name='portfolio',
                                                query=query)
     skills_count = 0
