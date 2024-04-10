@@ -798,14 +798,6 @@ input:-webkit-autofill:active{
     /*transition: color .3s;*/
 }
 
-.home__community-link i{
-    display: grid;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    justify-items: center;
-}
-
 .home__community-link:hover{
     color: var(--title-color);
 }
@@ -1321,7 +1313,8 @@ input:-webkit-autofill:active{
 }
 
 .government__card > i{
-    display: block;
+    display: grid;
+    height: 44px;
     font-size: 2rem;
     color: var(--title-color);
     margin-bottom: .5rem;
@@ -2238,14 +2231,6 @@ input:-webkit-autofill:active{
     font-size: 1.25rem;
     color: var(--title-color);
     transition: transform .3s;
-}
-
-.footer__community-link i{
-    display: grid;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    justify-items: center;
 }
 
 .footer__community-link:hover{
