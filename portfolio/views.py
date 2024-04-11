@@ -1,3 +1,5 @@
+import json
+import os
 import random
 
 import requests
@@ -32,7 +34,21 @@ class HomePageView(TemplateView):
         testimonials = random.sample(testimonials, min(testimonials_count, max_testimonials))
 
         context['testimonials'] = testimonials
-        context['projects'] = document.get('projects', [])
+
+        if os.getenv('DEBUG', '0').lower() in ['true', 't', '1']:
+            # f = open("projects.txt", "a")
+            # f.write(json.dumps(document.get('projects', {})))
+            # f.close()
+
+            f = open("projects.txt", "r")
+            projects = json.loads(f.read())
+        else:
+            projects = document.get('projects', [])
+
+        projects_count = len(projects)
+        max_projects = 10
+        context['projects'] = projects[:min(projects_count, max_projects)]
+
         context['skills'] = document.get('skills', {})
         context['skills_count'] = document.get('skills_count', 0)
         context['projects_count'] = document.get('projects_count', 0)
