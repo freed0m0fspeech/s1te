@@ -980,14 +980,6 @@ input:-webkit-autofill:active{
     z-index: -1;
 }
 
-.profile__community-link i{
-    display: grid;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    justify-items: center;
-}
-
 .profile__community{
     display: grid;
     grid-template-columns: repeat(auto-fit, 1rem);
@@ -2965,7 +2957,7 @@ video::-webkit-media-controls {
     }
 
     .profile__data{
-        row-gap: 3rem;
+        row-gap: 2.5rem;
     }
 
     .profile__community{
