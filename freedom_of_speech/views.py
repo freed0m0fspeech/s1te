@@ -126,13 +126,29 @@ class HomePageView(TemplateView):
                 context['judge'] = judge_info.get('judge', '')
 
         context['referendum'] = document.get('referendum', {}).get('votes', {}).get(username, False)
-        context['referendum_valid'] = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(document.get('referendum', {}).get('date', ''),'%Y-%m-%d %H:%M:%S')).days >= 30
+        context['referendum_valid'] = (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(document.get('referendum', {}).get('date', '0001-01-01 0:0:0'),'%Y-%m-%d %H:%M:%S')).days >= 30
         context['president'] = president
         context['parliament'] = parliament
         context['constitution'] = constitution
         context['telegram_members_count'] = telegram_members_count
         context['discord_members_count'] = discord_members_count
-        context['referendum_votes_count'] = sum(document.get('referendum', {}).get('votes', {}).values())
+
+        judge = judge_info.get('judge', '')
+
+        # Count of government now
+        government = []
+
+        if president:
+            government.append(president)
+        if parliament:
+            government.append(parliament)
+        if judge:
+            government.append(judge)
+
+        referendum_members_count = max(telegram_members_count - len(government), 1)
+
+        context['referendum_percent'] = max(int(sum(document.get('referendum', {}).get('votes', {}).values()) / referendum_members_count * 100), 0)
+
         date_updated = min(telegram.get('chat_parameters', {}).get('date', ''),
                            discord.get('guild_parameters', {}).get('date', ''))
         context['date_updated'] = date_updated
