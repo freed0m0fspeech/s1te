@@ -1288,7 +1288,7 @@ $('#government__votes_president').on('click', function (e){
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
     let candidate = $(e.target).text();
 
-    if(confirm('Проголосовать за кандидата '.concat(candidate, '?'))){
+    if(confirm('Проголосовать за кандидата "'.concat(candidate, '"?'))){
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 xhr.setRequestHeader('X-CSRFToken', csrf_token);
@@ -1340,7 +1340,7 @@ $('#government__votes_parliament').on('click', function (e){
     const csrf_token = $('input[name=csrfmiddlewaretoken]').val();
     let candidate = $(e.target).text();
 
-    if(confirm('Проголосовать за кандидата '.concat(candidate, '?'))){
+    if(confirm('Проголосовать за кандидата "'.concat(candidate, '"?'))){
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 xhr.setRequestHeader('X-CSRFToken', csrf_token);
@@ -1399,7 +1399,7 @@ $('#government__votes_judge').on('click', function (e){
         candidate = ''
     }
     else
-        confirm_text = 'Проголосовать за кандидата '.concat(candidate, '?')
+        confirm_text = 'Проголосовать за кандидата "'.concat(candidate, '"?')
 
     if(confirm(confirm_text)){
         $.ajaxSetup({
@@ -1464,7 +1464,7 @@ $('#government__votes').on('click', function (e){
     let confirm_text;
     let government__votes = e.target;
 
-    confirm_text = 'Проголосовать '.concat(opinion.concat('?'));
+    confirm_text = 'Проголосовать "'.concat(opinion.concat('"?'));
 
     opinion = opinion === 'Поддерживаю';
 
