@@ -1568,6 +1568,7 @@ input:-webkit-autofill:active{
 .members__container a img{
     border-radius: 50%;
     max-width: 50px;
+    margin: 0.5rem;
 }
 
 .members__filters{
