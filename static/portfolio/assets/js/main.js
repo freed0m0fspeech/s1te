@@ -38,9 +38,9 @@ const swiperProjects = new Swiper('.projects__container', {
     grabCursor: true,
 
     autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
+        delay: 10000,
+        disableOnInteraction: true,
+        // pauseOnMouseEnter: true,
     },
 
     navigation: {
@@ -66,9 +66,9 @@ const swiperTestimonial = new Swiper('.testimonial__container', {
     loop: true,
 
     autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
+        delay: 10000,
+        disableOnInteraction: true,
+        // pauseOnMouseEnter: true,
     },
 
     navigation: {
