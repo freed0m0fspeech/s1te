@@ -66,8 +66,8 @@ def setup_jobs():
             notify_vote = datetime.strptime(start_vote, '%Y-%m-%d %H:%M:%S') - timedelta(days=1)
             notify_vote = notify_vote.strftime('%Y-%m-%d %H:%M:%S')
 
-            # if notify_vote > datetime.now(tz=utc).strftime('%Y-%m-%d %H:%M:%S'):
-            add_scheduled_job(notify_voting, 'date', run_date=notify_vote, id=NOTIFY_VOTING_JOB_ID, misfire_grace_time=None, coalesce=True)
+            if notify_vote > datetime.now(tz=utc).strftime('%Y-%m-%d %H:%M:%S'):
+                add_scheduled_job(notify_voting, 'date', run_date=notify_vote, id=NOTIFY_VOTING_JOB_ID, misfire_grace_time=None, coalesce=True)
 
         if end_vote:
             add_scheduled_job(end_voting, 'date', run_date=end_vote, id=END_VOTING_JOB_ID, misfire_grace_time=None,
