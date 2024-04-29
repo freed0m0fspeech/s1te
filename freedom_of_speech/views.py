@@ -321,6 +321,14 @@ class SignTelegramPageView(TemplateView):
             return HttpResponse(status=401)
 
         if sessionid:
+            data = dict(data)
+
+            for key, value in data.copy().items():
+                if isinstance(value, list):
+                    data[key] = value.pop(0)
+                else:
+                    data[key] = value
+
             query = {f'users.{username}.telegram': data}
             mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                      action='$set',
@@ -348,6 +356,14 @@ class SignTelegramPageView(TemplateView):
         else:
             # register new user
             tid = data.get('id', '')
+            data = dict(data)
+
+            for key, value in data.copy().items():
+                if isinstance(value, list):
+                    data[key] = value.pop(0)
+                else:
+                    data[key] = value
+
             username = f"telegram@{tid}"
 
             if not username:
