@@ -566,9 +566,9 @@ def notify_voting():
     start_vote = datetime.strptime(start_vote, '%Y-%m-%d %H:%M:%S')
     start_vote = start_vote.replace(tzinfo=tz.gettz('UTC'))
 
-    locale.setlocale(locale.LC_ALL, 'ru_RU')
-    text = f"**{start_vote.astimezone(tz.gettz('Europe/Kiev')).strftime('%e %b. %Yг., в %H:%M:%S')} на [официальной странице]({os.getenv('HOSTNAME', '')}freedom_of_speech) будут проходить [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
-    locale.setlocale(locale.LC_ALL, '')
+    # locale.setlocale(locale.LC_ALL, 'ru_RU')
+    text = f"**{start_vote.astimezone(tz.gettz('Europe/Kiev')).strftime('%e.%m.%Y в %H:%M:%S')} на [официальной странице]({os.getenv('HOSTNAME', '')}freedom_of_speech) будут проходить [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
+    # locale.setlocale(locale.LC_ALL, '')
 
     chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
     origin = os.getenv('HOSTNAME', '')
