@@ -1,9 +1,7 @@
 import json
-import locale
 import logging
 import os
 import random
-# import time
 import requests
 
 from datetime import datetime, timedelta

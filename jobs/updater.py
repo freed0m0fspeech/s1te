@@ -1,7 +1,4 @@
-import json
 import logging
-import os
-import requests
 
 from datetime import datetime, timedelta
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR

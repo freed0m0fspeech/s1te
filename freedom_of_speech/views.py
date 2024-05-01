@@ -1799,6 +1799,7 @@ class VoteJudgePageView(TemplateView):
                         data = json.dumps(data)
                         response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
                                       data=data, headers={'Origin': origin, 'Host': origin})
+
                         if not response.status_code == 200:
                             return HttpResponse(status=500)
                     else:
