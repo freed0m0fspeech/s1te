@@ -231,7 +231,7 @@ def end_voting():
 
     judge = document.get('judge', {}).get('judge', '')
     if president == judge or parliament == judge:
-        query = {'judge.judge': ''}
+        query = {'judge': ''}
         mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                       action='$unset', query=query)
 
