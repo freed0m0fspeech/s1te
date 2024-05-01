@@ -1,5 +1,6 @@
 import datetime
 import json
+import logging
 import os
 import random
 import secrets
@@ -1796,8 +1797,10 @@ class VoteJudgePageView(TemplateView):
                             'action': 'demote_chat_member',
                         }
                         data = json.dumps(data)
-                        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
+                        response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
                                       data=data, headers={'Origin': origin, 'Host': origin})
+                        if not response.status_code == 200:
+                            return HttpResponse(status=500)
                     else:
                         return HttpResponse(status=404)
                 else:
@@ -1805,19 +1808,6 @@ class VoteJudgePageView(TemplateView):
                     tjudge = users.get(judge, {}).get('telegram', {}).get('id', '')
                     if tjudge:
                         text = f"{text}Новый Судья: [{judge}](tg://user?id={tjudge})"
-
-                        # Promote new judge (tjudge)
-                        chat_username = json.loads(
-                            document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
-                        origin = os.getenv('HOSTNAME', '')
-                        data = {
-                            'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
-                            'action': 'promote_chat_member',
-                            'parameters': {'custom_title': 'Cудья'},
-                        }
-                        data = json.dumps(data)
-                        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
-                                      data=data, headers={'Origin': origin, 'Host': origin})
 
                         ojudge = judge_info.get('judge', '')
                         if ojudge:
@@ -1831,9 +1821,28 @@ class VoteJudgePageView(TemplateView):
                                 'action': 'demote_chat_member',
                             }
                             data = json.dumps(data)
-                            requests.post(
+                            response = requests.post(
                                 f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tojudge}",
                                 data=data, headers={'Origin': origin, 'Host': origin})
+
+                            if not response.status_code == 200:
+                                return HttpResponse(status=500)
+
+                        # Promote new judge (tjudge)
+                        chat_username = json.loads(
+                            document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                        origin = os.getenv('HOSTNAME', '')
+                        data = {
+                            'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+                            'action': 'promote_chat_member',
+                            'parameters': {'custom_title': 'Cудья'},
+                        }
+                        data = json.dumps(data)
+                        response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
+                                      data=data, headers={'Origin': origin, 'Host': origin})
+
+                        if not response.status_code == 200:
+                            return HttpResponse(status=500)
                     else:
                         return HttpResponse(status=404)
         else:
@@ -1860,9 +1869,12 @@ class VoteJudgePageView(TemplateView):
                                 'action': 'demote_chat_member',
                             }
                             data = json.dumps(data)
-                            requests.post(
+                            response = requests.post(
                                 f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
                                 data=data, headers={'Origin': origin, 'Host': origin})
+
+                            if not response.status_code == 200:
+                                return HttpResponse(status=500)
                         else:
                             return HttpResponse(status=404)
                     else:
@@ -1870,20 +1882,6 @@ class VoteJudgePageView(TemplateView):
                         tjudge = users.get(judge, {}).get('telegram', {}).get('id', '')
                         if tjudge:
                             text = f"{text}Новый Судья: [{judge}](t.me/{tjudge})"
-
-                            # Promote new judge (tjudge)
-                            chat_username = json.loads(
-                                document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
-                            origin = os.getenv('HOSTNAME', '')
-                            data = {
-                                'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
-                                'action': 'promote_chat_member',
-                                'parameters': {'custom_title': 'Cудья'},
-                            }
-                            data = json.dumps(data)
-                            requests.post(
-                                f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
-                                data=data, headers={'Origin': origin, 'Host': origin})
 
                             ojudge = judge_info.get('judge', '')
                             if ojudge:
@@ -1897,9 +1895,29 @@ class VoteJudgePageView(TemplateView):
                                     'action': 'demote_chat_member',
                                 }
                                 data = json.dumps(data)
-                                requests.post(
+                                response = requests.post(
                                     f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tojudge}",
                                     data=data, headers={'Origin': origin, 'Host': origin})
+
+                                if not response.status_code == 200:
+                                    return HttpResponse(status=500)
+
+                            # Promote new judge (tjudge)
+                            chat_username = json.loads(
+                                document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                            origin = os.getenv('HOSTNAME', '')
+                            data = {
+                                'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+                                'action': 'promote_chat_member',
+                                'parameters': {'custom_title': 'Cудья'},
+                            }
+                            data = json.dumps(data)
+                            response = requests.post(
+                                f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
+                                data=data, headers={'Origin': origin, 'Host': origin})
+
+                            if not response.status_code == 200:
+                                return HttpResponse(status=500)
                         else:
                             return HttpResponse(status=404)
             else:

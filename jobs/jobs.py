@@ -251,8 +251,12 @@ def end_voting():
         told_president = document.get('users', {}).get(old_president, {}).get('telegram', {}).get('id', '')
         tpresident = document.get('users', {}).get(president, {}).get('telegram', {}).get('id', '')
 
-        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{told_president}",
+        response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{told_president}",
                       data=data, headers={'Origin': origin, 'Host': origin})
+
+        if not response.status_code == 200:
+            logging.warning('Old president not demoted through Telegram API')
+
         # Promote new president
         data = {
             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -260,8 +264,11 @@ def end_voting():
             'parameters': {'custom_title': 'Президент'},
         }
         data = json.dumps(data)
-        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tpresident}",
+        response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tpresident}",
                       data=data, headers={'Origin': origin, 'Host': origin})
+
+        if not response.status_code == 200:
+            logging.warning('New president not promoted through Telegram API')
 
     if parliament != document.get('parliament', ''):
         # Demote old parliament
@@ -274,8 +281,12 @@ def end_voting():
         told_parliament = document.get('users', {}).get(old_parliament, {}).get('telegram', {}).get('id', '')
         tparliament = document.get('users', {}).get(parliament, {}).get('telegram', {}).get('id', '')
 
-        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{told_parliament}",
+        response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{told_parliament}",
                       data=data, headers={'Origin': origin, 'Host': origin})
+
+        if not response.status_code == 200:
+            logging.warning('Old parliament not demoted through Telegram API')
+
         # Promote new parliament
         data = {
             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -284,8 +295,11 @@ def end_voting():
         }
         data = json.dumps(data)
 
-        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tparliament}",
+        response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tparliament}",
                       data=data, headers={'Origin': origin, 'Host': origin})
+
+        if not response.status_code == 200:
+            logging.warning('New parliament not promoted through Telegram API')
 
     # Delete vote and votes information from database
     query = {'end_vote': '', 'votes': '', 'candidates': '', 'referendum.votes': ''}

@@ -1,4 +1,8 @@
+import json
 import logging
+import os
+import requests
+
 from datetime import datetime, timedelta
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -43,6 +47,48 @@ def add_scheduled_job(func, trigger_type, **kwargs):
     """
     sched.add_job(func, trigger_type, **kwargs)
 
+def tmp(document):
+    origin = os.getenv('HOSTNAME', '')
+    chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+    # Promote new president
+    data = {
+        'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+        'action': 'promote_chat_member',
+        'parameters': {'custom_title': 'Президент'},
+    }
+
+    president = document.get('president', {})
+    tpresident = document.get('users', {}).get(president, {}).get('telegram', {}).get('id', '')
+
+    data = json.dumps(data)
+    response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tpresident}",
+                             data=data, headers={'Origin': origin, 'Host': origin})
+
+    if not response.status_code == 200:
+        print('New president not promoted through Telegram API')
+    else:
+        print('New president promoted through Telegram API')
+
+    # Promote new parliament
+    data = {
+        'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
+        'action': 'promote_chat_member',
+        'parameters': {'custom_title': 'Парламент'},
+    }
+
+    parliament = document.get('parliament', {})
+    tparliament = document.get('users', {}).get(parliament, {}).get('telegram', {}).get('id', '')
+
+    data = json.dumps(data)
+
+    response = requests.post(
+        f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tparliament}",
+        data=data, headers={'Origin': origin, 'Host': origin})
+
+    if not response.status_code == 200:
+        print('New parliament not promoted through Telegram API')
+    else:
+        print('New parliament promoted through Telegram API')
 
 def setup_jobs():
     """
@@ -55,6 +101,8 @@ def setup_jobs():
         add_scheduled_job(voting, 'date', run_date=date, id=VOTING_JOB_ID, misfire_grace_time=None, coalesce=True)
     else:
         document = cache.freedom_of_speech
+
+        tmp(document)
 
         start_vote = document.get('start_vote', '')
         end_vote = document.get('end_vote', '')
