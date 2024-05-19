@@ -70,7 +70,7 @@ def start_voting():
 
         text = f"**Недостаточно кандидатов на выборы [Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech | Выборы были перенесены**"
 
-        chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+        chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
         origin = os.getenv('HOSTNAME', '')
 
         data = {
@@ -125,7 +125,7 @@ def start_voting():
 
     text = f"**В данный момент на [официальной странице]({os.getenv('HOSTNAME', '')}freedom_of_speech) проходят [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
 
-    chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+    chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
     origin = os.getenv('HOSTNAME', '')
 
     data = {
@@ -224,7 +224,7 @@ def end_voting():
         president = document.get('president', '')
         parliament = document.get('parliament', '')
 
-    chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+    chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
     origin = os.getenv('HOSTNAME', '')
 
     judge = document.get('judge', {}).get('judge', '')
@@ -385,7 +385,7 @@ def telegram_synching(start=0, stop=200, step=1):
     # # update only every 4 hours
     # if last_update_seconds >= 14400:
 
-    chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+    chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
     data = {
         'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
     }
@@ -582,7 +582,7 @@ def notify_voting():
     text = f"**{start_vote.astimezone(tz.gettz('Europe/Kiev')).strftime('%e.%m.%Y в %H:%M:%S')} на [официальной странице]({os.getenv('HOSTNAME', '')}freedom_of_speech) будут проходить [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
     # locale.setlocale(locale.LC_ALL, '')
 
-    chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+    chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
     origin = os.getenv('HOSTNAME', '')
 
     data = {

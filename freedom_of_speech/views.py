@@ -1790,7 +1790,7 @@ class VoteJudgePageView(TemplateView):
 
                         # Demote judge in chat
                         chat_username = json.loads(
-                            document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                            document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
                         origin = os.getenv('HOSTNAME', '')
                         data = {
                             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1815,7 +1815,7 @@ class VoteJudgePageView(TemplateView):
                             tojudge = users.get(ojudge, {}).get('telegram', {}).get('id', '')
                             # Demote old judge
                             chat_username = json.loads(
-                                document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                                document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
                             origin = os.getenv('HOSTNAME', '')
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1831,7 +1831,7 @@ class VoteJudgePageView(TemplateView):
 
                         # Promote new judge (tjudge)
                         chat_username = json.loads(
-                            document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                            document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
                         origin = os.getenv('HOSTNAME', '')
                         data = {
                             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1863,7 +1863,7 @@ class VoteJudgePageView(TemplateView):
                             text = f"{text}Судья [{judge_info.get('judge', '')}](tg://user?id={tjudge}) был(а) снят(а) со своего поста"
 
                             chat_username = json.loads(
-                                document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                                document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
                             origin = os.getenv('HOSTNAME', '')
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1889,7 +1889,7 @@ class VoteJudgePageView(TemplateView):
                                 tojudge = users.get(ojudge, {}).get('telegram', {}).get('id', '')
                                 # Demote old judge
                                 chat_username = json.loads(
-                                    document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                                    document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
                                 origin = os.getenv('HOSTNAME', '')
                                 data = {
                                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1905,7 +1905,7 @@ class VoteJudgePageView(TemplateView):
 
                             # Promote new judge (tjudge)
                             chat_username = json.loads(
-                                document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                                document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
                             origin = os.getenv('HOSTNAME', '')
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1943,7 +1943,7 @@ class VoteJudgePageView(TemplateView):
             if not query:
                 query = {f'judge.{role}': judge}
             else:
-                chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
                 origin = os.getenv('HOSTNAME', '')
                 data = {
                     "text": text,
@@ -2214,7 +2214,7 @@ class UpdateChatPageView(TemplateView):
             # update only every 30 minutes
             if (datetime.now(tz=utc).replace(tzinfo=None) - datetime.strptime(last_update_telegram,
                                                                               '%Y-%m-%d %H:%M:%S')).total_seconds() >= 1800:
-                chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('username', ''))
+                chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
                 data = {
                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                 }
@@ -2380,11 +2380,13 @@ class MembersPageView(TemplateView):
             xp = 0
             voicetime = 0
             messages_count = 0
+            reactions_count = 0
 
             if telegram_member_parameters:
                 xp += telegram_member_parameters.get('xp', 0)
                 voicetime += round(telegram_member_parameters.get('voicetime', 0) / 3600, 1)
                 messages_count += telegram_member_parameters.get('messages_count', 0)
+                reactions_count += sum(telegram_member_parameters.get('reactions_count', {}).values())
 
             discord_member_parameters = discord_members_parameters.get(user_parameters.get('discord', {}).get('id', ''),
                                                                        {})
@@ -2393,6 +2395,7 @@ class MembersPageView(TemplateView):
                 xp += discord_member_parameters.get('xp', 0)
                 voicetime += round(discord_member_parameters.get('voicetime', 0) / 3600, 1)
                 messages_count += discord_member_parameters.get('messages_count', 0)
+                reactions_count += discord_member_parameters.get('reactions_count', 0)
 
                 try:
                     user_parameters['discord']['display_avatar'] = json.loads(discord_member_parameters.get('display_avatar', ''))
@@ -2413,6 +2416,7 @@ class MembersPageView(TemplateView):
             parameters['xp_need'] = xp_need
             parameters['voicetime'] = round(voicetime, 1)
             parameters['messages_count'] = messages_count
+            parameters['reactions_count'] = reactions_count
 
             # position = member_parameters.get('position', float('inf'))
             # if not is_url_image(user_parameters.get('telegram', {}).get('photo_url')):
@@ -2538,6 +2542,7 @@ class TelegramMembersPageView(TemplateView):
             # parameters['role'] = role
 
             parameters['messages_count'] = telegram_member_parameters.get('messages_count', 0)
+            parameters['reactions_count'] = sum(telegram_member_parameters.get('reactions_count', {}).values())
 
             position = telegram_member_parameters.get('position', float('inf'))
             member = (
@@ -2633,6 +2638,7 @@ class DiscordMembersPageView(TemplateView):
             parameters['xp_need'] = xp_need
             parameters['voicetime'] = round(discord_member_parameters.get('voicetime', 0) / 3600, 1)
             parameters['messages_count'] = discord_member_parameters.get('messages_count', 0)
+            parameters['reactions_count'] = discord_member_parameters.get('reactions_count', 0)
 
             position = discord_member_parameters.get('position', float('inf'))
 

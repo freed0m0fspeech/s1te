@@ -94,7 +94,7 @@
 
     <div class="members__container container">
       {% for username, position, parameters, discord_parameters in members %}
-      <a {% if username %} href="/freedom_of_speech/profile/{{username}}/" {% endif %} position="{{position}}" lvl="{{parameters.lvl}}" messages_count="{{parameters.messages_count}}" voicetime="{{parameters.voicetime}}">
+      <a {% if username %} href="/freedom_of_speech/profile/{{username}}/" {% endif %} position="{{position}}" lvl="{{parameters.lvl}}" messages_count="{{parameters.messages_count}}" reactions_count="{{parameters.reactions_count}}" voicetime="{{parameters.voicetime}}">
         {% if parameters.display_avatar %}
           <img src="{{parameters.display_avatar}}">
         {% endif %}
@@ -103,6 +103,7 @@
         <!--            forloop.counter0-->
         Уровень: {{parameters.lvl}}
         Cообщений: {{parameters.messages_count}}
+        Реакций: {{parameters.reactions_count}}
         Время: {{parameters.voicetime}}ч
         <!--              @{{telegram_parameters.username}} ( {{telegram_parameters.first_name}} {{telegram_parameters.last_name}} )-->
         <!--              Опыт: {{member_parameters.xp_have}} | {{member_parameters.xp_need}}-->
