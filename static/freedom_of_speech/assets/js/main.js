@@ -1671,8 +1671,10 @@ function sortMembers(container, sortBy, reverse) {
 }
 
 $('#members-sort').on('click', function (event){
-    var iter_sort = {'lvl': 'messages_count', 'messages_count': 'reactions_count', 'reactions_count': 'voicetime', 'voicetime': 'lvl'};
-    var iter_sort_text = {'Уровень': 'Сообщений', 'Сообщений': 'Реакций', 'Реакций': 'Время', 'Время': 'Уровень'};
+    // 'reactions_count', 'reactions_count':
+    //  'Реакций', 'Реакций':
+    var iter_sort = {'lvl': 'messages_count', 'messages_count': 'voicetime', 'voicetime': 'lvl'};
+    var iter_sort_text = {'Уровень': 'Сообщений', 'Сообщений': 'Время', 'Время': 'Уровень'};
 
     var members = $('.members__container');
 
@@ -1684,8 +1686,8 @@ $('#members-sort').on('click', function (event){
         sort = iter_sort['lvl'];
     } else if (text === 'Сообщений'){
         sort = iter_sort['messages_count'];
-    } else if (text === 'Реакций'){
-        sort = iter_sort['reactions_count'];
+    // } else if (text === 'Реакций'){
+    //     sort = iter_sort['reactions_count'];
     } else if (text === 'Время'){
         sort = iter_sort['voicetime'];
     }

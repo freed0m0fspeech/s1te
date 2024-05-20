@@ -1348,7 +1348,7 @@ class ProfilePageView(TemplateView):
                     # messages_count = 0
                     # members_count = 0
                     # voicetime = 0
-                    telegram_xp = discord_xp = telegram_voicetime = discord_voicetime = telegram_messages_count = discord_messages_count = telegram_reactions_count = discord_reactions_count= 0
+                    telegram_xp = discord_xp = telegram_voicetime = discord_voicetime = telegram_messages_count = discord_messages_count = discord_reactions_count= 0
                     if user_telegram:
                         context['telegram_id'] = user_telegram.get('id', '')
                         context['telegram_username'] = user_telegram.get('username', '')
@@ -1365,7 +1365,7 @@ class ProfilePageView(TemplateView):
                                                                                        {})
                         if member_parameters:
                             telegram_messages_count = member_parameters.get('messages_count', 0)
-                            telegram_reactions_count = sum(member_parameters.get('reactions_count', {}).values())
+                            # telegram_reactions_count = sum(member_parameters.get('reactions_count', {}).values())
 
                             xp_factor = telegram.get('xp_factor', 100)  # threshold
                             telegram_xp = member_parameters.get('xp', 0)
@@ -1373,7 +1373,7 @@ class ProfilePageView(TemplateView):
                             lvl, xp_have, xp_need = calculate_lvl(telegram_xp, xp_factor)
 
                             context['telegram_messages_count'] = telegram_messages_count
-                            context['telegram_reactions_count'] = telegram_reactions_count
+                            # context['telegram_reactions_count'] = telegram_reactions_count
                             context['telegram_lvl'] = lvl
                             context['telegram_xp_have'] = xp_have
                             context['telegram_xp_need'] = xp_need
@@ -1480,7 +1480,7 @@ class ProfilePageView(TemplateView):
 
                     # context['members_count'] = members_count
                     context['messages_count'] = telegram_messages_count + discord_messages_count
-                    context['reactions_count'] = telegram_reactions_count + discord_reactions_count
+                    context['reactions_count'] = discord_reactions_count
                     context['voicetime'] = round(discord_voicetime + telegram_voicetime, 1)
                     xp_factor = document.get('xp', {}).get('xp_factor', 100)  # threshold
                     lvl, xp_have, xp_need = calculate_lvl(telegram_xp + discord_xp, xp_factor)
@@ -2391,7 +2391,7 @@ class MembersPageView(TemplateView):
                 xp += telegram_member_parameters.get('xp', 0)
                 voicetime += round(telegram_member_parameters.get('voicetime', 0) / 3600, 1)
                 messages_count += telegram_member_parameters.get('messages_count', 0)
-                reactions_count += sum(telegram_member_parameters.get('reactions_count', {}).values())
+                # reactions_count += sum(telegram_member_parameters.get('reactions_count', {}).values())
 
             discord_member_parameters = discord_members_parameters.get(user_parameters.get('discord', {}).get('id', ''),
                                                                        {})
@@ -2547,7 +2547,7 @@ class TelegramMembersPageView(TemplateView):
             # parameters['role'] = role
 
             parameters['messages_count'] = telegram_member_parameters.get('messages_count', 0)
-            parameters['reactions_count'] = sum(telegram_member_parameters.get('reactions_count', {}).values())
+            # parameters['reactions_count'] = sum(telegram_member_parameters.get('reactions_count', {}).values())
 
             position = telegram_member_parameters.get('position', float('inf'))
             member = (
