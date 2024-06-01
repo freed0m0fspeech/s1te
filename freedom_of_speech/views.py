@@ -2242,6 +2242,8 @@ class UpdateChatPageView(TemplateView):
 
                 chat = requests.get(f"{telegram_api_endpoint}/chat/{chat_username}", data=data)
 
+                print(chat.text)
+
                 if chat and chat.status_code == 200:
                     chat = chat.json()
 
