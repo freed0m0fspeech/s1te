@@ -889,8 +889,7 @@ class EditLawsPageView(TemplateView):
                 # origin = rsa.encrypt(origin, publicKeyReloaded)
                 telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-                tresponse = requests.post(f"{telegram_api_endpoint}/send/freed0m0fspeech",
-                                          data=data, headers={'Origin': origin, 'Host': origin})
+                tresponse = requests.post(f"{telegram_api_endpoint}/send/freed0m0fspeech", data=data)
 
             return response
         else:
@@ -1018,7 +1017,7 @@ class EditConstitutionPageView(TemplateView):
                 telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
                 tresponse = requests.post(f"{telegram_api_endpoint}/send/freed0m0fspeech",
-                                          data=data, headers={'Origin': origin, 'Host': origin})
+                                          data=data)
 
                 return response
 
@@ -1807,7 +1806,7 @@ class VoteJudgePageView(TemplateView):
                         telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
                         response = requests.post(f"{telegram_api_endpoint}/manage/{chat_username}/{tjudge}",
-                                      data=data, headers={'Origin': origin, 'Host': origin})
+                                      data=data)
 
                         if not response.status_code == 200:
                             return HttpResponse(status=500)
@@ -1835,7 +1834,7 @@ class VoteJudgePageView(TemplateView):
 
                             response = requests.post(
                                 f"{telegram_api_endpoint}/manage/{chat_username}/{tojudge}",
-                                data=data, headers={'Origin': origin, 'Host': origin})
+                                data=data)
 
                             if not response.status_code == 200:
                                 return HttpResponse(status=500)
@@ -1853,7 +1852,7 @@ class VoteJudgePageView(TemplateView):
                         telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
                         response = requests.post(f"{telegram_api_endpoint}/manage/{chat_username}/{tjudge}",
-                                      data=data, headers={'Origin': origin, 'Host': origin})
+                                      data=data)
 
                         if not response.status_code == 200:
                             return HttpResponse(status=500)
@@ -1887,7 +1886,7 @@ class VoteJudgePageView(TemplateView):
 
                             response = requests.post(
                                 f"{telegram_api_endpoint}/manage/{chat_username}/{tjudge}",
-                                data=data, headers={'Origin': origin, 'Host': origin})
+                                data=data)
 
                             if not response.status_code == 200:
                                 return HttpResponse(status=500)
@@ -1915,7 +1914,7 @@ class VoteJudgePageView(TemplateView):
 
                                 response = requests.post(
                                     f"{telegram_api_endpoint}/manage/{chat_username}/{tojudge}",
-                                    data=data, headers={'Origin': origin, 'Host': origin})
+                                    data=data)
 
                                 if not response.status_code == 200:
                                     return HttpResponse(status=500)
@@ -1934,7 +1933,7 @@ class VoteJudgePageView(TemplateView):
 
                             response = requests.post(
                                 f"{telegram_api_endpoint}/manage/{chat_username}/{tjudge}",
-                                data=data, headers={'Origin': origin, 'Host': origin})
+                                data=data)
 
                             if not response.status_code == 200:
                                 return HttpResponse(status=500)
@@ -1972,8 +1971,7 @@ class VoteJudgePageView(TemplateView):
                 data = json.dumps(data)
                 telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-                requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data,
-                              headers={'Origin': origin, 'Host': origin})
+                requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data)
 
             mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                      action='$set',
@@ -2242,8 +2240,7 @@ class UpdateChatPageView(TemplateView):
                 origin = os.getenv('HOSTNAME', '')
                 telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-                chat = requests.get(f"{telegram_api_endpoint}/chat/{chat_username}", data=data,
-                                    headers={'Origin': origin, 'Host': origin})
+                chat = requests.get(f"{telegram_api_endpoint}/chat/{chat_username}", data=data)
 
                 if chat and chat.status_code == 200:
                     chat = chat.json()
@@ -2270,8 +2267,7 @@ class UpdateChatPageView(TemplateView):
                 data = json.dumps(data)
                 origin = os.getenv('HOSTNAME', '')
                 discord_api_endpoint = os.getenv('DISCORD_API_ENDPOINT', '')
-                guild = requests.get(f"{discord_api_endpoint}/guild/{guild_id}", data=data,
-                                     headers={'Origin': origin, 'Host': origin})
+                guild = requests.get(f"{discord_api_endpoint}/guild/{guild_id}", data=data)
 
                 if guild and guild.status_code == 200:
                     guild = guild.json()
@@ -2341,7 +2337,7 @@ class UpdateChatPageView(TemplateView):
 #
 #         telegram_member = requests.get(
 #             f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{telegram_id}",
-#             data=data, headers={'Origin': origin, 'Host': origin})
+#             data=data)
 #
 #         if telegram_member and telegram_member.status_code == 200:
 #             telegram_member = telegram_member.json()

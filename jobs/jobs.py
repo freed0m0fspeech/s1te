@@ -82,8 +82,7 @@ def start_voting():
         data = json.dumps(data)
         telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-        requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data,
-                      headers={'Origin': origin, 'Host': origin})
+        requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data)
 
         return
 
@@ -138,8 +137,7 @@ def start_voting():
     data = json.dumps(data)
     telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-    requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data,
-                  headers={'Origin': origin, 'Host': origin})
+    requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data)
 
     cache.freedom_of_speech = freedom_of_speech.utils.update_cached_data(mongoDataBase)
 
@@ -253,7 +251,7 @@ def end_voting():
         telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
         response = requests.post(f"{telegram_api_endpoint}/manage/{chat_username}/{told_president}",
-                      data=data, headers={'Origin': origin, 'Host': origin})
+                      data=data)
 
         if not response.status_code == 200:
             logging.warning('Old president not demoted through Telegram API')
@@ -268,7 +266,7 @@ def end_voting():
         telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
         response = requests.post(f"{telegram_api_endpoint}/manage/{chat_username}/{tpresident}",
-                      data=data, headers={'Origin': origin, 'Host': origin})
+                      data=data)
 
         if not response.status_code == 200:
             logging.warning('New president not promoted through Telegram API')
@@ -286,7 +284,7 @@ def end_voting():
         telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
         response = requests.post(f"{telegram_api_endpoint}/manage/{chat_username}/{told_parliament}",
-                      data=data, headers={'Origin': origin, 'Host': origin})
+                      data=data)
 
         if not response.status_code == 200:
             logging.warning('Old parliament not demoted through Telegram API')
@@ -301,7 +299,7 @@ def end_voting():
         telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
         response = requests.post(f"{telegram_api_endpoint}/manage/{chat_username}/{tparliament}",
-                      data=data, headers={'Origin': origin, 'Host': origin})
+                      data=data)
 
         if not response.status_code == 200:
             logging.warning('New parliament not promoted through Telegram API')
@@ -350,8 +348,7 @@ def end_voting():
     data = json.dumps(data)
     telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-    requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data,
-                  headers={'Origin': origin, 'Host': origin})
+    requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data)
 
     referendum_date = datetime.now(tz=utc)
     referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
@@ -401,8 +398,7 @@ def telegram_synching(start=0, stop=200, step=1):
     origin = os.getenv('HOSTNAME', '')
     telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-    chat = requests.get(f"{telegram_api_endpoint}/chat/{chat_username}", data=data,
-                        headers={'Origin': origin, 'Host': origin})
+    chat = requests.get(f"{telegram_api_endpoint}/chat/{chat_username}", data=data)
 
     if chat and chat.status_code == 200:
         chat = chat.json()
@@ -508,8 +504,7 @@ def discord_synching(start=0, stop=200, step=1):
     data = json.dumps(data)
     origin = os.getenv('HOSTNAME', '')
     discord_api_endpoint = os.getenv('DISCORD_API_ENDPOINT', '')
-    guild = requests.get(f"{discord_api_endpoint}/guild/{guild_id}", data=data,
-                         headers={'Origin': origin, 'Host': origin})
+    guild = requests.get(f"{discord_api_endpoint}/guild/{guild_id}", data=data)
 
     if guild and guild.status_code == 200:
         guild = guild.json()
@@ -605,8 +600,7 @@ def notify_voting():
     data = json.dumps(data)
     telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-    requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data,
-                  headers={'Origin': origin, 'Host': origin})
+    requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data)
 
 
 def sync():
