@@ -80,8 +80,9 @@ def start_voting():
         }
 
         data = json.dumps(data)
+        telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-        requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat_username}", data=data,
+        requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data,
                       headers={'Origin': origin, 'Host': origin})
 
         return
@@ -135,8 +136,9 @@ def start_voting():
     }
 
     data = json.dumps(data)
+    telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-    requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat_username}", data=data,
+    requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data,
                   headers={'Origin': origin, 'Host': origin})
 
     cache.freedom_of_speech = freedom_of_speech.utils.update_cached_data(mongoDataBase)
@@ -248,8 +250,9 @@ def end_voting():
         old_president = document.get('president', '')
         told_president = document.get('users', {}).get(old_president, {}).get('telegram', {}).get('id', '')
         tpresident = document.get('users', {}).get(president, {}).get('telegram', {}).get('id', '')
+        telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-        response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{told_president}",
+        response = requests.post(f"{telegram_api_endpoint}/manage/{chat_username}/{told_president}",
                       data=data, headers={'Origin': origin, 'Host': origin})
 
         if not response.status_code == 200:
@@ -262,7 +265,9 @@ def end_voting():
             'parameters': {'custom_title': 'Президент'},
         }
         data = json.dumps(data)
-        response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tpresident}",
+        telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
+
+        response = requests.post(f"{telegram_api_endpoint}/manage/{chat_username}/{tpresident}",
                       data=data, headers={'Origin': origin, 'Host': origin})
 
         if not response.status_code == 200:
@@ -278,8 +283,9 @@ def end_voting():
         old_parliament = document.get('parliament', '')
         told_parliament = document.get('users', {}).get(old_parliament, {}).get('telegram', {}).get('id', '')
         tparliament = document.get('users', {}).get(parliament, {}).get('telegram', {}).get('id', '')
+        telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-        response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{told_parliament}",
+        response = requests.post(f"{telegram_api_endpoint}/manage/{chat_username}/{told_parliament}",
                       data=data, headers={'Origin': origin, 'Host': origin})
 
         if not response.status_code == 200:
@@ -292,8 +298,9 @@ def end_voting():
             'parameters': {'custom_title': 'Парламент'},
         }
         data = json.dumps(data)
+        telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-        response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tparliament}",
+        response = requests.post(f"{telegram_api_endpoint}/manage/{chat_username}/{tparliament}",
                       data=data, headers={'Origin': origin, 'Host': origin})
 
         if not response.status_code == 200:
@@ -341,8 +348,9 @@ def end_voting():
     }
 
     data = json.dumps(data)
+    telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-    requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat_username}", data=data,
+    requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data,
                   headers={'Origin': origin, 'Host': origin})
 
     referendum_date = datetime.now(tz=utc)
@@ -391,7 +399,9 @@ def telegram_synching(start=0, stop=200, step=1):
     }
     data = json.dumps(data)
     origin = os.getenv('HOSTNAME', '')
-    chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat_username}", data=data,
+    telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
+
+    chat = requests.get(f"{telegram_api_endpoint}/chat/{chat_username}", data=data,
                         headers={'Origin': origin, 'Host': origin})
 
     if chat and chat.status_code == 200:
@@ -497,7 +507,8 @@ def discord_synching(start=0, stop=200, step=1):
     }
     data = json.dumps(data)
     origin = os.getenv('HOSTNAME', '')
-    guild = requests.get(f"https://discord-bot-freed0m0fspeech.fly.dev/guild/{guild_id}", data=data,
+    discord_api_endpoint = os.getenv('DISCORD_API_ENDPOINT', '')
+    guild = requests.get(f"{discord_api_endpoint}/guild/{guild_id}", data=data,
                          headers={'Origin': origin, 'Host': origin})
 
     if guild and guild.status_code == 200:
@@ -592,8 +603,9 @@ def notify_voting():
     }
 
     data = json.dumps(data)
+    telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-    requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat_username}", data=data,
+    requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data,
                   headers={'Origin': origin, 'Host': origin})
 
 

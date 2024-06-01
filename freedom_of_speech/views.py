@@ -887,8 +887,9 @@ class EditLawsPageView(TemplateView):
 
                 origin = os.getenv('HOSTNAME', '')
                 # origin = rsa.encrypt(origin, publicKeyReloaded)
+                telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-                tresponse = requests.post("https://telegram-bot-freed0m0fspeech.fly.dev/send/freed0m0fspeech",
+                tresponse = requests.post(f"{telegram_api_endpoint}/send/freed0m0fspeech",
                                           data=data, headers={'Origin': origin, 'Host': origin})
 
             return response
@@ -1014,8 +1015,9 @@ class EditConstitutionPageView(TemplateView):
 
                 origin = os.getenv('HOSTNAME', '')
                 # origin = rsa.encrypt(origin, publicKeyReloaded)
+                telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-                tresponse = requests.post("https://telegram-bot-freed0m0fspeech.fly.dev/send/freed0m0fspeech",
+                tresponse = requests.post(f"{telegram_api_endpoint}/send/freed0m0fspeech",
                                           data=data, headers={'Origin': origin, 'Host': origin})
 
                 return response
@@ -1802,7 +1804,9 @@ class VoteJudgePageView(TemplateView):
                             'action': 'demote_chat_member',
                         }
                         data = json.dumps(data)
-                        response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
+                        telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
+
+                        response = requests.post(f"{telegram_api_endpoint}/manage/{chat_username}/{tjudge}",
                                       data=data, headers={'Origin': origin, 'Host': origin})
 
                         if not response.status_code == 200:
@@ -1827,8 +1831,10 @@ class VoteJudgePageView(TemplateView):
                                 'action': 'demote_chat_member',
                             }
                             data = json.dumps(data)
+                            telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
+
                             response = requests.post(
-                                f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tojudge}",
+                                f"{telegram_api_endpoint}/manage/{chat_username}/{tojudge}",
                                 data=data, headers={'Origin': origin, 'Host': origin})
 
                             if not response.status_code == 200:
@@ -1844,7 +1850,9 @@ class VoteJudgePageView(TemplateView):
                             'parameters': {'custom_title': 'Cудья'},
                         }
                         data = json.dumps(data)
-                        response = requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
+                        telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
+
+                        response = requests.post(f"{telegram_api_endpoint}/manage/{chat_username}/{tjudge}",
                                       data=data, headers={'Origin': origin, 'Host': origin})
 
                         if not response.status_code == 200:
@@ -1875,8 +1883,10 @@ class VoteJudgePageView(TemplateView):
                                 'action': 'demote_chat_member',
                             }
                             data = json.dumps(data)
+                            telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
+
                             response = requests.post(
-                                f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
+                                f"{telegram_api_endpoint}/manage/{chat_username}/{tjudge}",
                                 data=data, headers={'Origin': origin, 'Host': origin})
 
                             if not response.status_code == 200:
@@ -1901,8 +1911,10 @@ class VoteJudgePageView(TemplateView):
                                     'action': 'demote_chat_member',
                                 }
                                 data = json.dumps(data)
+                                telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
+
                                 response = requests.post(
-                                    f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tojudge}",
+                                    f"{telegram_api_endpoint}/manage/{chat_username}/{tojudge}",
                                     data=data, headers={'Origin': origin, 'Host': origin})
 
                                 if not response.status_code == 200:
@@ -1918,8 +1930,10 @@ class VoteJudgePageView(TemplateView):
                                 'parameters': {'custom_title': 'Cудья'},
                             }
                             data = json.dumps(data)
+                            telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
+
                             response = requests.post(
-                                f"https://telegram-bot-freed0m0fspeech.fly.dev/manage/{chat_username}/{tjudge}",
+                                f"{telegram_api_endpoint}/manage/{chat_username}/{tjudge}",
                                 data=data, headers={'Origin': origin, 'Host': origin})
 
                             if not response.status_code == 200:
@@ -1956,8 +1970,9 @@ class VoteJudgePageView(TemplateView):
                 }
 
                 data = json.dumps(data)
+                telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-                requests.post(f"https://telegram-bot-freed0m0fspeech.fly.dev/send/{chat_username}", data=data,
+                requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data,
                               headers={'Origin': origin, 'Host': origin})
 
             mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
@@ -2225,7 +2240,9 @@ class UpdateChatPageView(TemplateView):
                 }
                 data = json.dumps(data)
                 origin = os.getenv('HOSTNAME', '')
-                chat = requests.get(f"https://telegram-bot-freed0m0fspeech.fly.dev/chat/{chat_username}", data=data,
+                telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
+
+                chat = requests.get(f"{telegram_api_endpoint}/chat/{chat_username}", data=data,
                                     headers={'Origin': origin, 'Host': origin})
 
                 if chat and chat.status_code == 200:
@@ -2252,7 +2269,8 @@ class UpdateChatPageView(TemplateView):
                 }
                 data = json.dumps(data)
                 origin = os.getenv('HOSTNAME', '')
-                guild = requests.get(f"https://discord-bot-freed0m0fspeech.fly.dev/guild/{guild_id}", data=data,
+                discord_api_endpoint = os.getenv('DISCORD_API_ENDPOINT', '')
+                guild = requests.get(f"{discord_api_endpoint}/guild/{guild_id}", data=data,
                                      headers={'Origin': origin, 'Host': origin})
 
                 if guild and guild.status_code == 200:

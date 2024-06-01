@@ -3,7 +3,6 @@ from typing import Union
 import requests
 import urllib
 from bs4 import BeautifulSoup
-from requests_html import HTMLSession
 
 
 class LyricScraperException(Exception):
@@ -48,8 +47,8 @@ class ScraperFactory:
 
     def genius_scraper(self):
         lyrics = self._genius_scraper_method_1() or self._genius_scraper_method_2()
-
-        self._update_title(self.title[:-16])
+        title = self.title.replace(' Lyrics - Genius', '').replace(' Lyrics', '')
+        self._update_title(title)
 
         return lyrics
 
@@ -138,38 +137,27 @@ class Google:
 
     def __handle_search_request(self, title):
         title = urllib.parse.quote_plus(title)
-        url = f"https://www.google.com/search?q=site:https://genius.com/ {title} lyrics"
-        #url = "https://www.google.com/search"
-        params = {
-            'q': 'site:https://genius.com/ {} lyrics'.format(title),
-        }
+        url = f"https://www.googleapis.com/customsearch/v1?key={self.__api_key}&cx={self.__engine_id}&q={title}"
+        request_results = requests.get(url)
 
-        try:
-            session = HTMLSession()
-            response = session.get(url=url)
-        except requests.exceptions.RequestException:
-            return None
+        if request_results.status_code != 200:
+            return
 
-        css_identifier_result = ".tF2Cxc"
-        css_identifier_title = "h3"
-        css_identifier_link = ".yuRUbf a"
-        #css_identifier_text = ".IsZvec"
-
-        results = response.html.find(css_identifier_result)
+        request_results = request_results.json()
+        results = request_results.get('items', {})
 
         data = []
-
         for result in results:
-            item = {
-                'title': result.find(css_identifier_title, first=True).text,
-                'link': result.find(css_identifier_link, first=True).attrs['href'],
-                # 'text': result.find(css_identifier_text, first=True).text
-            }
+            try:
+                item = {
+                    'title': result.get('title', ''),
+                    'link': result.get('link', ''),
+                    # 'text': result.find(css_identifier_text, first=True).text
+                }
 
-            data.append(item)
-
-        if response.status_code != 200:
-            raise LyricScraperException(data)
+                data.append(item)
+            except Exception:
+                continue
 
         return data
 
@@ -209,6 +197,7 @@ class Google:
                 lyrics = self.__extract_lyrics(result_url, title)
             except Exception as err:
                 raise LyricScraperException(err)
+                # TODO exception
 
             if lyrics:
                 return {
@@ -219,4 +208,5 @@ class Google:
 
             return None
 
+        # TODO exception
         # raise LyricScraperException({"error": "No results found"})
