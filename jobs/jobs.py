@@ -71,7 +71,6 @@ def start_voting():
         text = f"**Недостаточно кандидатов на выборы [Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech | Выборы были перенесены**"
 
         chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
-        origin = os.getenv('HOSTNAME', '')
 
         data = {
             "text": text,
@@ -126,7 +125,6 @@ def start_voting():
     text = f"**В данный момент на [официальной странице]({os.getenv('HOSTNAME', '')}freedom_of_speech) проходят [выборы Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech**"
 
     chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
-    origin = os.getenv('HOSTNAME', '')
 
     data = {
         "text": text,
@@ -225,7 +223,6 @@ def end_voting():
         parliament = document.get('parliament', '')
 
     chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
-    origin = os.getenv('HOSTNAME', '')
 
     judge = document.get('judge', {}).get('judge', '')
     if president == judge or parliament == judge:
@@ -395,7 +392,6 @@ def telegram_synching(start=0, stop=200, step=1):
         'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
     }
     data = json.dumps(data)
-    origin = os.getenv('HOSTNAME', '')
     telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
     chat = requests.get(f"{telegram_api_endpoint}/chat/{chat_username}", data=data)
@@ -502,7 +498,6 @@ def discord_synching(start=0, stop=200, step=1):
         'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
     }
     data = json.dumps(data)
-    origin = os.getenv('HOSTNAME', '')
     discord_api_endpoint = os.getenv('DISCORD_API_ENDPOINT', '')
     guild = requests.get(f"{discord_api_endpoint}/guild/{guild_id}", data=data)
 
@@ -589,7 +584,6 @@ def notify_voting():
     # locale.setlocale(locale.LC_ALL, '')
 
     chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
-    origin = os.getenv('HOSTNAME', '')
 
     data = {
         "text": text,

@@ -884,8 +884,6 @@ class EditLawsPageView(TemplateView):
                 }
 
                 data = json.dumps(data)
-
-                origin = os.getenv('HOSTNAME', '')
                 # origin = rsa.encrypt(origin, publicKeyReloaded)
                 telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
@@ -1012,7 +1010,6 @@ class EditConstitutionPageView(TemplateView):
 
                 data = json.dumps(data)
 
-                origin = os.getenv('HOSTNAME', '')
                 # origin = rsa.encrypt(origin, publicKeyReloaded)
                 telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
@@ -1797,7 +1794,7 @@ class VoteJudgePageView(TemplateView):
                         # Demote judge in chat
                         chat_username = json.loads(
                             document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
-                        origin = os.getenv('HOSTNAME', '')
+
                         data = {
                             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                             'action': 'demote_chat_member',
@@ -1824,7 +1821,7 @@ class VoteJudgePageView(TemplateView):
                             # Demote old judge
                             chat_username = json.loads(
                                 document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
-                            origin = os.getenv('HOSTNAME', '')
+
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                                 'action': 'demote_chat_member',
@@ -1842,7 +1839,7 @@ class VoteJudgePageView(TemplateView):
                         # Promote new judge (tjudge)
                         chat_username = json.loads(
                             document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
-                        origin = os.getenv('HOSTNAME', '')
+
                         data = {
                             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                             'action': 'promote_chat_member',
@@ -1876,7 +1873,7 @@ class VoteJudgePageView(TemplateView):
 
                             chat_username = json.loads(
                                 document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
-                            origin = os.getenv('HOSTNAME', '')
+
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                                 'action': 'demote_chat_member',
@@ -1904,7 +1901,7 @@ class VoteJudgePageView(TemplateView):
                                 # Demote old judge
                                 chat_username = json.loads(
                                     document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
-                                origin = os.getenv('HOSTNAME', '')
+
                                 data = {
                                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                                     'action': 'demote_chat_member',
@@ -1922,7 +1919,7 @@ class VoteJudgePageView(TemplateView):
                             # Promote new judge (tjudge)
                             chat_username = json.loads(
                                 document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
-                            origin = os.getenv('HOSTNAME', '')
+
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                                 'action': 'promote_chat_member',
@@ -1962,7 +1959,7 @@ class VoteJudgePageView(TemplateView):
                 query = {f'judge.{role}': judge}
             else:
                 chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
-                origin = os.getenv('HOSTNAME', '')
+
                 data = {
                     "text": text,
                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -2237,14 +2234,10 @@ class UpdateChatPageView(TemplateView):
                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                 }
                 data = json.dumps(data)
-                origin = os.getenv('HOSTNAME', '')
+
                 telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
                 chat = requests.get(f"{telegram_api_endpoint}/chat/{chat_username}", data=data)
-
-                print(chat.status_code)
-                print(chat.text)
-
 
                 if chat and chat.status_code == 200:
                     chat = chat.json()
@@ -2269,7 +2262,7 @@ class UpdateChatPageView(TemplateView):
                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                 }
                 data = json.dumps(data)
-                origin = os.getenv('HOSTNAME', '')
+
                 discord_api_endpoint = os.getenv('DISCORD_API_ENDPOINT', '')
                 guild = requests.get(f"{discord_api_endpoint}/guild/{guild_id}", data=data)
 
@@ -2337,7 +2330,7 @@ class UpdateChatPageView(TemplateView):
 #             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
 #         }
 #         data = json.dumps(data)
-#         origin = os.getenv('HOSTNAME', '')
+#
 #
 #         telegram_member = requests.get(
 #             f"https://telegram-bot-freed0m0fspeech.fly.dev/member/{chat_username}/{telegram_id}",
