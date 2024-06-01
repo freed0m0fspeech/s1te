@@ -2245,6 +2245,7 @@ class UpdateChatPageView(TemplateView):
                 print(chat.status_code)
                 print(chat.text)
 
+
                 if chat and chat.status_code == 200:
                     chat = chat.json()
 
