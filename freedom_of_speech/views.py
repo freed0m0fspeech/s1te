@@ -877,7 +877,8 @@ class EditLawsPageView(TemplateView):
                 #     text = f"{text[0:4093]}.."
 
                 # publicKeyReloaded = rsa.PublicKey.load_pkcs1(os.getenv('RSA_PUBLIC_KEY', '').encode('utf8'))
-
+                chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
+                
                 data = {
                     "text": text,
                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -887,7 +888,7 @@ class EditLawsPageView(TemplateView):
                 # origin = rsa.encrypt(origin, publicKeyReloaded)
                 telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-                tresponse = requests.post(f"{telegram_api_endpoint}/send/freed0m0fspeech", data=data)
+                tresponse = requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data)
 
             return response
         else:
@@ -1002,7 +1003,8 @@ class EditConstitutionPageView(TemplateView):
                 #     text = f"{text[0:4093]}.."
 
                 # publicKeyReloaded = rsa.PublicKey.load_pkcs1(os.getenv('RSA_PUBLIC_KEY', '').encode('utf8'))
-
+                chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
+                
                 data = {
                     "text": text,
                     'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
@@ -1013,7 +1015,7 @@ class EditConstitutionPageView(TemplateView):
                 # origin = rsa.encrypt(origin, publicKeyReloaded)
                 telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
-                tresponse = requests.post(f"{telegram_api_endpoint}/send/freed0m0fspeech",
+                tresponse = requests.post(f"{telegram_api_endpoint}/send/{chat_username}",
                                           data=data)
 
                 return response
