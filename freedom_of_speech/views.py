@@ -1434,8 +1434,6 @@ class ProfilePageView(TemplateView):
                         context['discord_locale'] = user_discord.get('locale', '')
                         context['discord_premium_type'] = user_discord.get('premium_type', '')
 
-                        date_updated = min(date_updated, member_parameters.get('date', ''))
-
                         # discord_photo_url = user_discord.get('photo_url', '')
                         # if is_url_image(telegram_photo_url):
                         # context['discord_photo_url'] = discord_photo_url
@@ -1466,6 +1464,7 @@ class ProfilePageView(TemplateView):
                                 discord.get('guild_parameters', {}).get('member_count', 0))
                             context['discord_date_updated'] = member_parameters.get('date', '')
                             context['discord_member_status'] = True
+                            date_updated = min(date_updated, member_parameters.get('date', ''))
 
                             joined_date = member_parameters.get('joined_at', '')
                             if joined_date:
