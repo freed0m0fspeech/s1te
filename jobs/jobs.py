@@ -20,6 +20,20 @@ from utils import dataBases, cache
 
 mongoDataBase = dataBases.mongodb_client
 
+def update_referendum():
+    referendum_date = datetime.now(tz=utc)
+    referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
+    # Set new referendum be valid only after 30 days after vote
+    query = {"referendum.date": referendum_date}
+    mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
+                                  query=query)
+
+    if mongoUpdate is None:
+        logging.warning('New referendum date not set in DataBase')
+    else:
+        cache.freedom_of_speech = mongoUpdate
+
+    cache.freedom_of_speech = freedom_of_speech.utils.update_cached_data(mongoDataBase)
 
 def start_voting_later():
     from jobs.updater import sched
@@ -82,6 +96,8 @@ def start_voting():
         telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
 
         requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data)
+
+        update_referendum()
 
         return
 
@@ -347,19 +363,7 @@ def end_voting():
 
     requests.post(f"{telegram_api_endpoint}/send/{chat_username}", data=data)
 
-    referendum_date = datetime.now(tz=utc)
-    referendum_date = referendum_date.strftime('%Y-%m-%d %H:%M:%S')
-    # Set new referendum be valid only after 30 days after vote
-    query = {"referendum.date": referendum_date}
-    mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech', action='$set',
-                                  query=query)
-
-    if mongoUpdate is None:
-        logging.warning('New referendum date not set in DataBase')
-    else:
-        cache.freedom_of_speech = mongoUpdate
-
-    cache.freedom_of_speech = freedom_of_speech.utils.update_cached_data(mongoDataBase)
+    update_referendum()
 
 
 def telegram_synching(start=0, stop=200, step=1):
