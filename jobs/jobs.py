@@ -82,6 +82,16 @@ def start_voting():
         else:
             cache.freedom_of_speech = mongoUpdate
 
+        # Delete candidates and referendum votes from database
+        query = {'candidates': '', 'referendum.votes': ''}
+        mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                 action='$unset', query=query)
+
+        if mongoUpdate is None:
+            return start_voting_later()
+        else:
+            cache.freedom_of_speech = mongoUpdate
+
         text = f"**Недостаточно кандидатов на выборы [Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech | Выборы были перенесены**"
 
         chat_username = json.loads(document.get('telegram', {}).get('chat_parameters', {}).get('id', ''))
