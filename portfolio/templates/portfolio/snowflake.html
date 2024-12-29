@@ -65,113 +65,6 @@
         animation-name:snowflakes-fall;
         animation-timing-function:ease-out;
     }
-
-    .snowflake:nth-of-type(0) {
-        left:1%;
-        animation-delay:0s;
-        transform: rotate(10deg);
-    }
-
-    .snowflake:nth-of-type(0) .inner {
-        animation-delay:0s;
-    }
-
-    .snowflake:first-of-type {
-        left:10%;
-        animation-delay:1s;
-        transform: rotate(100deg);
-    }
-
-    .snowflake:first-of-type .inner,
-    .snowflake:nth-of-type(8) .inner {
-        animation-delay:1s;
-    }
-
-    .snowflake:nth-of-type(2) {
-        left:20%;
-        animation-delay:.5s;
-        transform: rotate(200deg);
-    }
-
-    .snowflake:nth-of-type(2) .inner,
-    .snowflake:nth-of-type(6) .inner {
-        animation-delay:6s;
-    }
-
-    .snowflake:nth-of-type(3) {
-        left:30%;
-        animation-delay:2s;
-        transform: rotate(300deg);
-    }
-
-    .snowflake:nth-of-type(11) .inner,
-    .snowflake:nth-of-type(3) .inner {
-        animation-delay:4s
-    }
-
-    .snowflake:nth-of-type(4) {
-        left:40%;
-        animation-delay:2s;
-        transform: rotate(-60deg);
-    }
-
-    .snowflake:nth-of-type(10) .inner,
-    .snowflake:nth-of-type(4) .inner {
-        animation-delay:2s;
-    }
-
-    .snowflake:nth-of-type(5) {
-        left:50%;
-        animation-delay:3s;
-        transform: rotate(-50deg);
-    }
-
-    .snowflake:nth-of-type(5) .inner {
-        animation-delay:8s;
-    }
-
-    .snowflake:nth-of-type(6){
-        left:60%;
-        animation-delay:2s;
-        transform: rotate(-40deg);
-    }
-
-    .snowflake:nth-of-type(7) {
-        left:70%;
-        animation-delay:1s;
-        transform: rotate(-30deg);
-    }
-
-    .snowflake:nth-of-type(7) .inner {
-        animation-delay:2.5s;
-    }
-
-    .snowflake:nth-of-type(8) {
-        left:80%;
-        animation-delay:0s;
-        transform: rotate(-20deg);
-    }
-
-    .snowflake:nth-of-type(9) {
-        left:90%;
-        animation-delay:1.5s;
-    }
-
-    .snowflake:nth-of-type(9) .inner {
-        animation-delay:3s;
-    }
-
-    .snowflake:nth-of-type(10) {
-        left:25%;
-        animation-delay:0s;
-        transform: rotate(250deg);
-    }
-
-    .snowflake:nth-of-type(11) {
-        left:65%;
-        animation-delay:2.5s;
-        transform: rotate(-35deg);
-    }
 </style>
 
 <div class="snowflakes" aria-hidden="true" id="snowflake" style="display: none;">
@@ -214,6 +107,14 @@
 </div>
 
 <script>
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+    }
+
+    function getRandomFloat(max, precision = 3, min = 0) {
+        return (Math.random() * (min - max) + max).toFixed(precision);
+    }
+
     // element.textContent = '❅';
     // element.textContent = '✿';
     // element.textContent = '☘';
@@ -250,6 +151,13 @@
 
         document.querySelectorAll('.snowflake > div').forEach((element) => {
             element.textContent = icon;
+            element.style.animationDelay = `${getRandomFloat(10)}s`;
+        });
+
+        document.querySelectorAll('.snowflake').forEach((element) => {
+            element.style.left = `${getRandomInt(100)}%`;
+            element.style.transform = `rotate: (${getRandomInt(360)}deg)`;
+            element.style.animationDelay = `${getRandomFloat(10)}s`;
         });
     }
 </script>
