@@ -16,6 +16,19 @@
         /*color: hsl(207, 4%, 56%);*/
     }
 
+    .snowflake .inner {
+        text-shadow: 0px 0px 2px hsl(328, 100%, 54%);
+    }
+
+    .dark-theme .snowflake .inner {
+        text-shadow: 0px 0px 2px hsl(171, 100%, 50%);
+    }
+
+    .snowflake .inner:hover,
+    .snowflake .inner:active {
+        animation-play-state: paused;
+    }
+
     .snowflake,
     .snowflake .inner {
         animation-iteration-count:infinite;
@@ -48,7 +61,7 @@
     }
 
     .snowflake {
-        pointer-events: none;
+        /*pointer-events: none;*/
         position:fixed;
         top:-10%;
         z-index:9999;
@@ -155,9 +168,9 @@
         });
 
         document.querySelectorAll('.snowflake').forEach((element) => {
-            element.style.left = `${getRandomInt(100)}%`;
-            element.style.transform = `rotate: (${getRandomInt(360)}deg)`;
-            element.style.animationDelay = `${getRandomFloat(10)}s`;
+           element.style.left = `${getRandomInt(100)}%`;
+           element.style.transform = `rotate: (${getRandomInt(360)}deg)`;
+           element.style.animationDelay = `${getRandomFloat(10)}s`;
         });
     }
 </script>
