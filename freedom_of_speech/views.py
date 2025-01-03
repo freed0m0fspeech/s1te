@@ -1464,7 +1464,11 @@ class ProfilePageView(TemplateView):
                                 discord.get('guild_parameters', {}).get('member_count', 0))
                             context['discord_date_updated'] = member_parameters.get('date', '')
                             context['discord_member_status'] = True
-                            date_updated = min(date_updated, member_parameters.get('date', ''))
+
+                            if date_updated:
+                                date_updated = min(date_updated, member_parameters.get('date', ''))
+                            else:
+                                date_updated = member_parameters.get('date', '')
 
                             joined_date = member_parameters.get('joined_at', '')
                             if joined_date:
