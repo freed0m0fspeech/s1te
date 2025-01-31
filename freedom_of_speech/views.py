@@ -2106,6 +2106,8 @@ class VoteCandidatePageView(TemplateView):
 
                     response = HttpResponse(role)
                     return response
+                else:
+                    return HttpResponse(status=409)
 
         return HttpResponse(status=409)
 
