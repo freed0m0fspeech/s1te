@@ -147,8 +147,9 @@ class HomePageView(TemplateView):
             government.append(judge)
 
         referendum_members_count = max(telegram_members_count - len(government), 1)
+        referendum_votes_count = sum(document.get('referendum', {}).get('votes', {}).values())
 
-        context['referendum_percent'] = max(int(sum(document.get('referendum', {}).get('votes', {}).values()) / referendum_members_count * 100), 0)
+        context['referendum_percent'] = max(int(referendum_votes_count / referendum_members_count * 100), 0)
 
         date_updated = min(telegram.get('chat_parameters', {}).get('date', ''),
                            discord.get('guild_parameters', {}).get('date', ''))
@@ -1252,7 +1253,7 @@ class AuthTelegramPageView(TemplateView):
                                         if any(char in "#/@" for char in username):
                                             return HttpResponse(status=409)
 
-                                query = {f'users.{username}.telegram': '', f'referendum.votes.{username}': ''}
+                                query = {f'users.{username}.telegram': '', f'referendum.votes.{username}': False}
 
                                 mongoUpdate = mongoDataBase.update_field(database_name='site',
                                                                          collection_name='freedom_of_speech',
@@ -1786,7 +1787,7 @@ class VoteJudgePageView(TemplateView):
 
             if judge_info.get('parliament', '') == judge:
                 # Set new judge
-                query = {'judge.judge': judge, f'judge.{role}': judge, f'referendum.votes.{username}': ''}
+                query = {'judge.judge': judge, f'judge.{role}': judge, f'referendum.votes.{judge}': False}
 
                 text = f"**Изменения [Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech:\n\n**"
 
@@ -1866,7 +1867,7 @@ class VoteJudgePageView(TemplateView):
 
                 if judge_info.get('president', '') == judge:
                     # Set new judge
-                    query = {'judge.judge': judge, f'judge.{role}': judge, f'referendum.votes.{username}': ''}
+                    query = {'judge.judge': judge, f'judge.{role}': judge, f'referendum.votes.{judge}': False}
 
                     text = f"**Изменения [Правительства]({os.getenv('HOSTNAME', '')}freedom_of_speech/#government) Freedom of speech:\n\n**"
 
