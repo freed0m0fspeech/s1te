@@ -147,7 +147,7 @@ class HomePageView(TemplateView):
             government.append(judge)
 
         referendum_members_count = max(telegram_members_count - len(government), 1)
-        referendum_votes_count = sum(document.get('referendum', {}).get('votes', {}).values())
+        referendum_votes_count = sum(list(filter(bool, document.get('referendum', {}).get('votes', {}).values())))
 
         context['referendum_percent'] = max(int(referendum_votes_count / referendum_members_count * 100), 0)
 
