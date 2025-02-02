@@ -449,13 +449,14 @@ def telegram_synching(start=0, stop=200, step=1):
                                         opinion and username not in government]
 
                 members_count = chat.get('chat_parameters', {}).get('members_count', '')
+                stuff_members = 1
 
                 if members_count:
                     members_count = int(members_count)
 
                     # Count of referendum_true values
                     if (100 * float(len(referendum_usernames)) / float(
-                            members_count - len(government))) >= document.get('referendum', {}).get('percent',
+                            members_count - len(government) - stuff_members)) >= document.get('referendum', {}).get('percent',
                                                                                                     75):
 
                         try:
