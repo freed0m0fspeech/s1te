@@ -1850,7 +1850,7 @@ class VoteJudgePageView(TemplateView):
                         data = {
                             'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                             'action': 'promote_chat_member',
-                            'parameters': {'custom_title': 'Cудья'},
+                            'parameters': {'custom_title': 'Судья'},
                         }
                         data = json.dumps(data)
                         telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
@@ -1930,7 +1930,7 @@ class VoteJudgePageView(TemplateView):
                             data = {
                                 'publicKey': os.getenv('RSA_PUBLIC_KEY', ''),
                                 'action': 'promote_chat_member',
-                                'parameters': {'custom_title': 'Cудья'},
+                                'parameters': {'custom_title': 'Судья'},
                             }
                             data = json.dumps(data)
                             telegram_api_endpoint = os.getenv('TELEGRAM_API_ENDPOINT', '')
