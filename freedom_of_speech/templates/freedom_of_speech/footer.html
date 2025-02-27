@@ -1,0 +1,64 @@
+<footer class="footer">
+    <div class="footer__container container">
+<!--        <h1 class="footer__title">@</h1>-->
+<!--        <p>Developer</p>-->
+
+        <ul class="footer__list">
+<!--            <li>-->
+<!--                <a href="members/" class="footer__link">Топ пользователей</a>-->
+<!--            </li>-->
+            <li>
+                <a href="#home" class="footer__link">Главная</a>
+            </li>
+            <li>
+                <a href="#government" class="footer__link">Правительство</a>
+            </li>
+            <li>
+                <a href="#constitution" class="footer__link">Конституция</a>
+            </li>
+            <li>
+                <a href="#laws" class="footer__link">Законы</a>
+            </li>
+            <li>
+                <a href="#testimonials" class="footer__link">Отзывы</a>
+            </li>
+            <li>
+                <a href="#contacts" class="footer__link">Контакты</a>
+            </li>
+        </ul>
+
+        <ul class="footer__community">
+            {% for community in social %}
+            <a href="{{community.href}}" target="_blank" class="footer__community-link">
+                <i class="{{community.class}}"></i>
+            </a>
+            {% endfor %}
+<!--            <a href="https://t.me/freed0m0fspeech" target="_blank" class="footer__community-link">-->
+<!--                <i class="ri-telegram-line"></i>-->
+<!--            </a>-->
+<!--            <a href="https://discord.com/invite/dwKpNwQ" target="_blank" class="footer__community-link">-->
+<!--                <i class="ri-discord-line"></i>-->
+<!--            </a>-->
+<!--            <a href="https://vk.me/join/AAAAAOUSazBFPCDP0CGaVjyh" target="_blank" class="footer__community-link">-->
+<!--                <i class="uil uil-vk-alt"></i>-->
+<!--            </a>-->
+<!--            <a href="https://ig.me/j/AbYGVQ6I8k2hQoUQ" target="_blank" class="footer__community-link">-->
+<!--                <i class="ri-instagram-line"></i>-->
+<!--            </a>-->
+<!--            <a href="https://facetime.apple.com/join#v=1&p=pe8BGv1tEe2evpLF+c6kJw&k=tm9NVJy3NmbPFXMAHM2S-v-wi64_l0WqeoVJ2qbhQDs&l=Freedom%20of%20speech" target="_blank" class="footer__community-link">-->
+<!--                <i class="uil uil-apple-alt"></i>-->
+<!--            </a>-->
+<!--            <a href="steam://connect/130.61.63.137:27015" target="_blank" class="footer__community-link">-->
+<!--                <i class="ri-steam-line"></i>-->
+<!--            </a>-->
+<!--            <a href="https://github.com/freed0m0fspeech" target="_blank" class="footer__community-link">-->
+<!--                <i class="ri-github-line"></i>-->
+<!--            </a>-->
+<!--            <a href="https://stats.uptimerobot.com/6G3WGsP8PY" target="_blank" class="footer__community-link">-->
+<!--                <i class="uil uil-cloud-wifi"></i>-->
+<!--            </a>-->
+        </ul>
+
+        <span class="footer__copy" id="footer__copy__years_value">2017<!--            &#169; Copyright 2017-2023, @. All rights reserved--></span>
+    </div>
+</footer>

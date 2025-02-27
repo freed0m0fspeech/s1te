@@ -1,0 +1,48 @@
+<footer class="footer">
+    <div class="footer__container container">
+<!--        <h1 class="footer__title">@</h1>-->
+<!--        <p>Developer</p>-->
+
+        <ul class="footer__list">
+            <li>
+                <a href="#home" class="footer__link">Home</a>
+            </li>
+
+            <li>
+                <a href="#skills" class="footer__link">Skills</a>
+            </li>
+
+            <li>
+                <a href="#qualification" class="footer__link">Qualification</a>
+            </li>
+
+            <li>
+                <a href="#services" class="footer__link">Services</a>
+            </li>
+
+            <li>
+                <a href="#projects" class="footer__link">Projects</a>
+            </li>
+
+            <li>
+                <a href="#testimonials" class="footer__link">Testimonials</a>
+            </li>
+
+            <li>
+                <a href="#contacts" class="footer__link">Contacts</a>
+            </li>
+        </ul>
+
+        <ul class="footer__community">
+            {% for community in social %}
+                <a href="{{community.href}}" target="_blank" class="footer__community-link">
+                    <i class="{{community.class}}"></i>
+                </a>
+            {% endfor %}
+        </ul>
+
+        <span class="footer__copy" id="footer__copy__years_value">
+<!--            &#169; Copyright 2017-2023, @. All rights reserved-->
+        </span>
+    </div>
+</footer>

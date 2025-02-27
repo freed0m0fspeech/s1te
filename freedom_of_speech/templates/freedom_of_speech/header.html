@@ -1,0 +1,73 @@
+<header class="header" id="header">
+    <nav class="nav container">
+        {% if username %}
+            <a href="/freedom_of_speech/profile/{{username}}/" class="nav__logo">
+                {{username}}
+            </a>
+        {% else %}
+            <a href="/freedom_of_speech/signin/" class="nav__logo">
+                Войти
+            </a>
+        {% endif %}
+
+        <div class="nav__menu" id="nav-menu">
+            <ul class="nav__list grid">
+                <li class="nav__item">
+                    <a href="members/" class="nav__link">
+                        <i class="ri-user-smile-line"></i> Топ пользователей
+                    </a>
+                </li>
+<!--                <li class="nav__item">-->
+<!--                    <a href="#home" class="nav__link">-->
+<!--                        <i class="ri-home-2-line"></i> Главная-->
+<!--                    </a>-->
+<!--                </li>-->
+
+<!--                <li class="nav__item">-->
+<!--                    <a href="#government" class="nav__link">-->
+<!--                        <i class="ri-government-line"></i> Правительство-->
+<!--                    </a>-->
+<!--                </li>-->
+
+<!--                <li class="nav__item">-->
+<!--                    <a href="#constitution" class="nav__link">-->
+<!--                        <i class="ri-book-mark-line"></i> Конституция-->
+<!--                    </a>-->
+<!--                </li>-->
+
+<!--                <li class="nav__item">-->
+<!--                    <a href="#laws" class="nav__link">-->
+<!--                        <i class="ri-pencil-line"></i> Законы-->
+<!--                    </a>-->
+<!--                </li>-->
+
+<!--                <li class="nav__item">-->
+<!--                    <a href="#testimonials" class="nav__link">-->
+<!--                        <i class="ri-at-line"></i> Отзывы-->
+<!--                    </a>-->
+<!--                </li>-->
+
+<!--                <li class="nav__item">-->
+<!--                    <a href="#contacts" class="nav__link">-->
+<!--                        <i class="ri-chat-3-line"></i> Контакты-->
+<!--                    </a>-->
+<!--                </li>-->
+            </ul>
+
+            <!--            Close button-->
+            <div class="nav__close" id="nav-close">
+                <i class="ri-close-circle-line"></i>
+            </div>
+        </div>
+
+        <div class="nav__buttons">
+            <!--            Theme change button-->
+            <i class="change-theme" id="theme-button"></i>
+
+            <!--            Toggle button-->
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="ri-menu-5-line"></i>
+            </div>
+        </div>
+    </nav>
+</header>

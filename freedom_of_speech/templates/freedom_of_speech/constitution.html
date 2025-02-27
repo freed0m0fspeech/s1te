@@ -1,0 +1,20 @@
+<section class="constitution section" id="constitution">
+    <h2 class="section__title">Конституция</h2>
+    <span class="section__subtitle">Действующая конституция Freedom of speech</span>
+
+    <div class="constitution__container container section__border">
+        <div class="constitution__content">
+<!--            <div contenteditable="{{administrator}}" id="constitution_text">-->
+            <textarea id="constitution_text" oninput="text_area_auto_change(this)" {% if not administrator %} readonly style="outline: none" {% endif %}>{{constitution}}</textarea>
+<!--            </div>-->
+
+            <p class="constitution__message" id="constitution-message"></p>
+
+            {% if administrator %}
+                <button class="constitution__button" id="constitution_button">
+                    Изменить <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+            {% endif %}
+        </div>
+    </div>
+</section>

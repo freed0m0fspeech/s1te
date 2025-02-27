@@ -1,0 +1,96 @@
+{% load static %}
+<section class="projects section" id="projects">
+
+    <!--==================== PROJECTS ====================-->
+    <h2 class="section__title">Projects</h2>
+    <span class="section__subtitle">Most recent work</span>
+
+    <div class="container section__border">
+        <div class="projects__container swiper">
+            <div class="swiper-wrapper">
+                {% for project, project_image in projects %}
+                    <div class="projects__content swiper-slide">
+                        <img src="{{project_image}}" alt="projects image" class="projects__img">
+
+                        <div class="projects__project">
+                            <span class="projects__subtitle">{{project.description}}</span>
+                            <h1 class="projects_pushed-at">{{project.pushed_at}}</h1>
+                            <h1 class="projects__title">{{project.name}}</h1>
+
+                            <a href="{{project.html_url}}" target="_blank" class="projects__button">
+                                View demo <i class="ri-arrow-right-circle-line"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+<!--                &lt;!&ndash;==================== PROJECT 1 ====================&ndash;&gt;-->
+<!--                <div class="projects__content swiper-slide">-->
+<!--                    <img src="{% static 'portfolio/assets/img/telegram-bot-project.jpg' %}" alt="projects image" class="projects__img">-->
+
+<!--                    <div>-->
+<!--                        <span class="projects__subtitle">Bot Development</span>-->
+<!--                            <h1 class="projects__title">Telegram bot</h1>-->
+
+<!--                            <a href="https://github.com/freed0m0fspeech/tbot" target="_blank" class="projects__button">-->
+<!--                                View demo <i class="ri-arrow-right-circle-line"></i>-->
+<!--                            </a>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash;==================== PROJECT 2 ====================&ndash;&gt;-->
+<!--                <div class="projects__content swiper-slide">-->
+<!--                    <img src="{% static 'portfolio/assets/img/discord-bot-project.png' %}" alt="projects image" class="projects__img">-->
+
+<!--                    <div>-->
+<!--                        <span class="projects__subtitle">Bot Development</span>-->
+<!--                            <h1 class="projects__title">Discord bot</h1>-->
+
+<!--                            <a href="https://github.com/freed0m0fspeech/dbot" target="_blank" class="projects__button">-->
+<!--                                View demo <i class="ri-arrow-right-circle-line"></i>-->
+<!--                            </a>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash;==================== PROJECT 3 ====================&ndash;&gt;-->
+<!--                <div class="projects__content swiper-slide">-->
+<!--                    <img src="{% static 'portfolio/assets/img/website-project.jpg' %}" alt="projects image" class="projects__img">-->
+
+<!--                    <div>-->
+<!--                        <span class="projects__subtitle">FullStack & Web Development</span>-->
+<!--                            <h1 class="projects__title">Website</h1>-->
+
+<!--                            <a href="https://github.com/freed0m0fspeech/s1te" target="_blank" class="projects__button">-->
+<!--                                View demo <i class="ri-arrow-right-circle-line"></i>-->
+<!--                            </a>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash;==================== PROJECT 4 ====================&ndash;&gt;-->
+<!--                <div class="projects__content swiper-slide">-->
+<!--                    <img src="{% static 'portfolio/assets/img/mongodb-project.png' %}" alt="projects image" class="projects__img">-->
+
+<!--                    <div>-->
+<!--                        <span class="projects__subtitle">DataBase Development</span>-->
+<!--                        <h1 class="projects__title">MongoDB</h1>-->
+
+<!--                        <a href="https://github.com/pr0stre1/mongodb" target="_blank" class="projects__button">-->
+<!--                            View demo <i class="ri-arrow-right-circle-line"></i>-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+            </div>
+
+            <!-- Swiper arrows -->
+            <div class="swiper-button-prev">
+                <i class="ri-arrow-left-s-line"></i>
+            </div>
+            <div class="swiper-button-next">
+                <i class="ri-arrow-right-s-line"></i>
+            </div>
+
+            <!-- Swiper pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,27 @@
+{% load static %}
+<section class="skills section" id="skills">
+    <h2 class="section__title">Skills</h2>
+    <span class="section__subtitle">My skills in different areas</span>
+
+    <div class="skills__container container grid section__border">
+        {% for skill_name, skills in skills.items %}
+            <div class="skills__content">
+                <h3 class="skills__title">
+                        <i class="ri-braces-line"></i> {{skill_name}}
+                </h3>
+                <div class="skills__info">
+                    {% for skill in skills %}
+                        <div class="skills__data">
+                            <div class="skills__blob">
+                                <img src="{{skill.blob}}" alt="skills image">
+                            </div>
+
+                            <h3 class="skills__name">{{skill.name}}</h3>
+                            <span class="skills__subtitle">{{skill.subtitle}}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>

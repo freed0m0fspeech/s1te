@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!--=============== FAVICON ===============-->
+  <link rel="shortcut icon" href="{% static 'freedom_of_speech/assets/img/favicon.jpg' %}" type="image/x-icon">
+
+  <!--=============== REMIXICONS ===============-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+
+  <!--=============== UNICONS ===============-->
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.0/css/line.css">
+
+  <!--=============== BOOTSTRAP ===============-->
+  <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">-->
+
+  <!--=============== CSS ===============-->
+  <link rel="stylesheet" href="{% static 'freedom_of_speech/assets/css/styles.css' %}">
+
+  <title>Голосование</title>
+</head>
+<body>
+{% csrf_token %}
+<!--==================== HEADER ====================-->
+<header class="header" id="header">
+  <nav class="nav container">
+    <a href="/freedom_of_speech" class="nav__logo">
+      Freedom of speech
+    </a>
+
+    {% if authorized %}
+      {% if username %}
+      <a href="/freedom_of_speech/profile/{{username}}/" class="nav__logo">
+        {{username}}
+      </a>
+      {% else %}
+      <a href="/freedom_of_speech/signin/" class="nav__logo">
+        Войти
+      </a>
+      {% endif %}
+
+      <div class="nav__menu" id="nav-menu">
+        <ul class="nav__list grid">
+          <li class="nav__item">
+<!--            <a href="#profile" class="nav__link">-->
+<!--              <i class="ri-user-line"></i> Профиль-->
+<!--            </a>-->
+          </li>
+
+        </ul>
+
+        <!--            Close button-->
+        <div class="nav__close" id="nav-close">
+          <i class="ri-close-circle-line"></i>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="nav__buttons">
+      <!--Theme change button-->
+      <i class="ri-moon-line change-theme" id="theme-button"></i>
+    </div>
+  </nav>
+</header>
+
+<!--==================== MAIN ====================-->
+<main class="main">
+
+</main>
+
+<!--==================== FOOTER ====================-->
+
+
+<!--========== SCROLL UP ==========-->
+<a href="#" class="scrollup" id="scroll-up">
+  <i class="ri-arrow-up-circle-line"></i>
+</a>
+
+<!--=============== SCROLL REVEAL ===============-->
+<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
+
+<!--=============== SWIPER JS ===============-->
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+<!--=============== EMAIL JS ===============-->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<!--=============== FONT AWESOME ===============-->
+<script src="https://kit.fontawesome.com/95c0aa19f9.js" crossorigin="anonymous"></script>
+
+<!--=============== jQuery Core 3.6.3 ===============-->
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+<!--=============== TELEGRAM JS ===============-->
+<script src="https://telegram.org/js/telegram-widget.js?"></script>
+
+<!--=============== MAIN JS ===============-->
+<script src="{% static 'freedom_of_speech/assets/js/main.js' %}"></script>
+</body>
+</html>

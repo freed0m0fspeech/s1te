@@ -1,0 +1,159 @@
+<style>
+    .snowflake {
+        /*opacity: .5;*/
+        /*color: hsl(207, 4%, 10%);*/
+        color: hsl(207, 4%, 56%);
+        font-size: 20px;
+        /*font-family: Arial, sans-serif;*/
+        /*text-shadow: 0 0 5px #000;*/
+        /*filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 50%));*/
+        /*text-shadow: 0px 0px 2px rgba(0, 0, 0, 50%);*/
+        /*box-shadow: 0px 0px 2px rgba(0, 0, 0, 50%);*/
+    }
+
+    .dark-theme .snowflake {
+        /*color: hsl(207, 4%, 99%);*/
+        /*color: hsl(207, 4%, 56%);*/
+    }
+
+    .snowflake .inner {
+        /*text-shadow: 0px 0px 2px hsl(328, 100%, 54%);*/
+        text-shadow: 0px 0px 2px hsl(171, 100%, 50%);
+    }
+
+    /*.dark-theme .snowflake .inner {*/
+    /*    text-shadow: 0px 0px 2px hsl(171, 100%, 50%);*/
+    /*}*/
+
+    /*.snowflake .inner:hover,*/
+    /*.snowflake .inner:active {*/
+    /*    animation-play-state: paused;*/
+    /*}*/
+
+    .snowflake,
+    .snowflake .inner {
+        animation-iteration-count:infinite;
+        animation-play-state:running;
+    }
+
+    @keyframes snowflakes-fall {
+        0%{
+            transform:translateY(0);
+        }
+        75%{
+            opacity: 1;
+        }
+        100%{
+            transform:translateY(110vh);
+            opacity: 0;
+        }
+    }
+
+    @keyframes snowflakes-shake {
+        0%{
+            transform:translateX(0) rotate(0deg);
+        }
+        50%{
+            transform:translateX(100px) rotate(-45deg);
+        }
+        100%{
+            transform: translateX(0) rotate(0deg);
+        }
+    }
+
+    .snowflake {
+        pointer-events: none;
+        position:fixed;
+        top:-10%;
+        z-index:9999;
+        -webkit-user-select:none;
+        user-select:none;
+        cursor:default;
+        animation-name:snowflakes-shake;
+        animation-duration:10s;
+        animation-timing-function:ease-in-out;
+    }
+
+    .snowflake .inner {
+        animation-duration:7.5s;
+        animation-name:snowflakes-fall;
+        animation-timing-function:ease-out;
+    }
+</style>
+
+<div class="snowflakes" aria-hidden="true" id="snowflake" style="display: none;">
+    <div class="snowflake">
+        <div class="inner"></div>
+    </div>
+    <div class="snowflake">
+        <div class="inner"></div>
+    </div>
+    <div class="snowflake">
+        <div class="inner"></div>
+    </div>
+    <div class="snowflake">
+        <div class="inner"></div>
+    </div>
+    <div class="snowflake">
+        <div class="inner"></div>
+    </div>
+    <div class="snowflake">
+        <div class="inner"></div>
+    </div>
+</div>
+
+<script>
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+    }
+
+    function getRandomFloat(max, precision = 3, min = 0) {
+        return (Math.random() * (min - max) + max).toFixed(precision);
+    }
+
+    // element.textContent = '❅';
+    // element.textContent = '✿';
+    // element.textContent = '☘';
+    // element.textContent = '❀';
+    // element.textContent = '🎃';
+    // element.textContent = '☘️';
+    // element.textContent = '🌸';
+    // element.textContent = '🍁';
+    // element.textContent = '❄️';
+
+    const month = new Date().getMonth();
+    if (month >= 0 && month < 2 || month > 10) {
+        const time_of_year = {
+            11: '❅',
+            0: '❅',
+            1: '❅',
+
+            2: '🌸',
+            3: '🌸',
+            4: '🌸',
+
+            5: '☘️',
+            6: '☘️',
+            7: '☘️',
+
+            8: '🍁',
+            9: '🍁',
+            10: '🍁',
+        };
+
+        const icon = time_of_year[month];
+
+        document.getElementById('snowflake').style.display = 'block';
+
+        document.querySelectorAll('.snowflake > div').forEach((element) => {
+            element.textContent = icon;
+            element.style.animationDelay = `${getRandomFloat(10)}s`;
+        });
+
+        document.querySelectorAll('.snowflake').forEach((element) => {
+           element.style.left = `${getRandomInt(100)}%`;
+           element.style.transform = `rotate: (${getRandomInt(360)}deg)`;
+           element.style.animationDelay = `${getRandomFloat(10)}s`;
+        });
+    }
+</script>

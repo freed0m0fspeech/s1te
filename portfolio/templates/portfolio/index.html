@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
+<!--    <meta name="theme-color" media="(prefers-color-scheme: light)" content="black" />-->
+    <meta name="description" content="Portfolio">
+
+    <!--=============== FAVICON ===============-->
+    <link rel="shortcut icon" href="{% static 'portfolio/assets/img/favicon.png' %}" type="image/x-icon">
+
+    <!--=============== REMIXICONS ===============-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+
+    <!--=============== SWIPER CSS ===============-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+
+    <!--FONT AWESOME-->
+<!--    <link rel="stylesheet" href="https://kit.fontawesome.com/95c0aa19f9.css" crossorigin="anonymous">-->
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'portfolio/assets/css/styles.css' %}">
+
+    <title>Portfolio</title>
+</head>
+<body>
+{% csrf_token %}
+<!--==================== THEME ====================-->
+<script src="{% static 'portfolio/assets/js/theme.js' %}"></script>
+<!--==================== HEADER ====================-->
+{% include 'portfolio/header.html' %}
+
+<!--==================== MAIN ====================-->
+<main class="main">
+    <!--==================== SNOW ====================-->
+    {% include 'portfolio/snowflake.html' %}
+
+    <!--==================== HOME ====================-->
+    {% include 'portfolio/home.html' %}
+
+    <!--==================== SKILLS ====================-->
+    {% include 'portfolio/skills.html' %}
+
+    <!--==================== QUALIFICATION ====================-->
+    {% include 'portfolio/qualification.html' %}
+
+    <!--==================== SERVICES ====================-->
+    {% include 'portfolio/services.html' %}
+
+    <!--==================== PROJECTS ====================-->
+    {% include 'portfolio/projects.html' %}
+
+    <!--==================== TESTIMONIAL ====================-->
+    {% include 'portfolio/testimonial.html' %}
+
+    <!--==================== CONTACT ====================-->
+    {% include 'portfolio/contacts.html' %}
+</main>
+
+<!--==================== FOOTER ====================-->
+{% include 'portfolio/footer.html' %}
+
+
+<!--========== SCROLL UP ==========-->
+<a href="#" class="scrollup" id="scroll-up">
+    <i class="ri-arrow-up-circle-line"></i>
+</a>
+
+<!--=============== SCRIPTS ===============-->
+<!-- Add 'async' or 'defer' attributes to control script execution -->
+<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous" defer></script>
+<script src="https://kit.fontawesome.com/95c0aa19f9.js" crossorigin="anonymous" defer></script>
+
+<!-- Combine and minify your custom scripts -->
+<script src="{% static 'portfolio/assets/js/main.js' %}" defer></script>
+
+</body>
+</html>

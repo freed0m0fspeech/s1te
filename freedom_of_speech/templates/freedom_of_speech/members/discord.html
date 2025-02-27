@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
+  <!--  <meta name="theme-color" media="(prefers-color-scheme: light)" content="black" />-->
+  <meta name="description" content="Freedom of speech official website">
+
+  <!--=============== FAVICON ===============-->
+  <link rel="shortcut icon" href="{% static 'freedom_of_speech/assets/img/favicon.jpg' %}" type="image/x-icon">
+
+  <!--=============== REMIXICONS ===============-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
+  <!--=============== UNICONS ===============-->
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.0/css/line.css">
+
+  <!--=============== BOOTSTRAP ===============-->
+  <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">-->
+
+  <!--=============== CSS ===============-->
+  <link rel="stylesheet" href="{% static 'freedom_of_speech/assets/css/styles.css' %}">
+
+  <title>Discord участники</title>
+</head>
+<body>
+{% csrf_token %}
+{% load filter %}
+<!--==================== THEME ====================-->
+<script src="{% static 'freedom_of_speech/assets/js/theme.js' %}"></script>
+<!--==================== HEADER ====================-->
+<header class="header" id="header">
+  <nav class="nav container">
+    <a href="/freedom_of_speech/" class="nav__logo">
+      Freedom of speech
+    </a>
+
+    <div class="nav__menu" id="nav-menu">
+      <ul class="nav__list grid">
+        <li class="nav__item">
+          <a href="/freedom_of_speech/members/" class="nav__link">
+            <i class="ri-user-smile-line"></i> Пользователи
+          </a>
+        </li>
+
+        <li class="nav__item">
+          <a href="/freedom_of_speech/members/telegram/" class="nav__link">
+            <i class="ri-telegram-line"></i> Telegram
+          </a>
+        </li>
+
+        <li class="nav__item">
+          <a href="/freedom_of_speech/members/discord/" class="nav__link active-link">
+            <i class="ri-discord-line"></i> Discord
+          </a>
+        </li>
+      </ul>
+
+      <!--            Close button-->
+      <div class="nav__close" id="nav-close">
+        <i class="ri-close-circle-line"></i>
+      </div>
+    </div>
+
+    <div class="nav__buttons">
+      <!--Theme change button-->
+      <i class="change-theme" id="theme-button"></i>
+
+      <!--            Toggle button-->
+      <div class="nav__toggle" id="nav-toggle">
+        <i class="ri-menu-5-line"></i>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!--==================== MAIN ====================-->
+<main class="main">
+  <!--==================== SNOW ====================-->
+  {% include 'freedom_of_speech/snowflake.html' %}
+
+  <section class="members section">
+    <h2 class="section__title">Discord</h2>
+    <span class="section__subtitle">Топ участников Freedom of speech</span>
+
+    <div class="members__filters">
+      <div id="search">
+        <i class="ri-search-2-line"></i>
+        <input type="text" id="members-search" placeholder="Поиск" maxlength="255">
+      </div>
+
+      <div id="members-sort">
+        <i class="ri-filter-3-line"></i> Уровень
+      </div>
+    </div>
+
+    <div class="members__container container">
+      {% for username, position, parameters, discord_parameters in members %}
+      <a {% if username %} href="/freedom_of_speech/profile/{{username}}/" {% endif %} position="{{position}}" lvl="{{parameters.lvl}}" messages_count="{{parameters.messages_count}}" reactions_count="{{parameters.reactions_count}}" voicetime="{{parameters.voicetime}}">
+        {% if parameters.display_avatar %}
+          <img src="{{parameters.display_avatar}}">
+        {% endif %}
+<!--        ({{position}})-->
+        {% if parameters.name %} @{{parameters.name}} | {% endif %} {{parameters.display_name}}
+        <!--            forloop.counter0-->
+        Уровень: {{parameters.lvl}}
+        Cообщений: {{parameters.messages_count}}
+        Реакций: {{parameters.reactions_count}}
+        Время: {{parameters.voicetime}}ч
+        <!--              @{{telegram_parameters.username}} ( {{telegram_parameters.first_name}} {{telegram_parameters.last_name}} )-->
+        <!--              Опыт: {{member_parameters.xp_have}} | {{member_parameters.xp_need}}-->
+      </a>
+      {% endfor %}
+    </div>
+
+  </section>
+</main>
+
+<!--==================== FOOTER ====================-->
+
+
+<!--========== SCROLL UP ==========-->
+<a href="#" class="scrollup" id="scroll-up">
+  <i class="ri-arrow-up-circle-line"></i>
+</a>
+
+<!--=============== SCRIPTS ===============-->
+<!-- Add 'async' or 'defer' attributes to control script execution -->
+<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous" defer></script>
+<script src="https://kit.fontawesome.com/95c0aa19f9.js" crossorigin="anonymous" defer></script>
+
+<!-- Combine and minify your custom scripts -->
+<script src="{% static 'freedom_of_speech/assets/js/main.js' %}" defer></script>
+</body>
+</html>

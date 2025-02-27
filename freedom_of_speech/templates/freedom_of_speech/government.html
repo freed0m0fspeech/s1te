@@ -1,0 +1,165 @@
+<section class="government section" id="government">
+    <h2 class="section__title">Правительство</h2>
+    <span class="section__subtitle">Действующее правительство Freedom of speech</span>
+
+    <div class="container section__border">
+        <div class="government__container container grid">
+            <div class="government__card" id="government__card_president" stand="{{end_vote}}">
+                <i class="ri-vip-crown-line"></i>
+
+                <div class="government__candidates">
+                        {{candidates_counter.president}} кандидат(ов)
+                </div>
+
+                <h2 class="government__title">
+                    Президент
+                </h2>
+
+                {% if end_vote %}
+                    {% if president_voted %}
+                        <div class="government__vote-default">
+                            <a href="/freedom_of_speech/profile/{{president_voted}}/">{{president_voted}}</a>
+                        </div>
+                    {% else %}
+                        <div class="government__president">
+                            <div class="government__vote-animation" id="government__vote_president">
+                                <div class="government__vote-selected" id="government__vote_president-selected">Проголосуй <i class="ri-arrow-down-circle-line"></i></div>
+            <!--                    <div class="government__caret"></div>-->
+                            </div>
+                            <ul class="government__votes" id="government__votes_president">
+                                {% for candidate, role in candidates.items %}
+                                    {% if role == 'president' %}
+                                        <li>{{candidate}}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <p class="government__description">
+                        <a href="/freedom_of_speech/profile/{{president}}/">{{president}}</a>
+                    </p>
+                {% endif %}
+
+                <div class="government__border {% if candidate == 'president' %} government__border-selected {% endif %}"></div>
+            </div>
+
+            <div class="government__card" id="government__card_parliament" stand="{{end_vote}}">
+                <i class="ri-vip-crown-2-line"></i>
+
+                <div class="government__candidates">
+                    {{candidates_counter.parliament}} кандидат(ов)
+                </div>
+
+                <h2 class="government__title">
+                    Парламент
+                </h2>
+
+                {% if end_vote %}
+                    {% if parliament_voted %}
+                        <div class="government__vote-default">
+                            <a href="/freedom_of_speech/profile/{{parliament_voted}}/">{{parliament_voted}}</a>
+                        </div>
+                    {% else %}
+                        <div class="government__parliament">
+                            <div class="government__vote-animation" id="government__vote_parliament">
+                                <div class="government__vote-selected" id="government__vote_parliament-selected">Проголосуй <i class="ri-arrow-down-circle-line"></i></div>
+                                <!--                    <div class="government__caret"></div>-->
+                            </div>
+                            <ul class="government__votes" id="government__votes_parliament">
+                                {% for candidate, role in candidates.items %}
+                                    {% if role == 'parliament' %}
+                                        <li>{{candidate}}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <p class="government__description">
+                        <a href="/freedom_of_speech/profile/{{parliament}}/">{{parliament}}</a>
+                    </p>
+                {% endif %}
+
+                <div class="government__border {% if candidate == 'parliament' %} government__border-selected {% endif %}"></div>
+            </div>
+
+            <div class="government__card" id="government__card_judge" stand="{{end_vote}}">
+                <i class="fa-solid fa-handcuffs"></i>
+
+                <div class="government__candidates">
+                    {{candidates_counter.judge}} кандидат(ов)
+                </div>
+
+                <h2 class="government__title">
+                    Судья
+                </h2>
+
+                {% if judge %}
+                    {% if is_president or is_parliament %}
+                        <div class="government__judge">
+                            <div class="government__vote-default" id="{% if is_parliament or is_president %}government__vote_judge{% endif %}">
+                                <div id="government__vote_judge-selected" class="government__vote-selected">{{judge}} <i class="ri-arrow-down-circle-line"></i></div>
+                            </div>
+                            <ul class="government__votes" id="government__votes_judge">
+                                <li>—</li>
+                                {% for candidate, role in candidates.items %}
+                                    {% if role == 'judge' %}
+                                        <li class="{% if candidate == judge %} government__votes-active {% endif %}">{{candidate}}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <p class="government__description">
+                            <a href="/freedom_of_speech/profile/{{judge}}/">{{judge}}</a>
+                        </p>
+                    {% endif %}
+                {% else %}
+                    {% if is_president or is_parliament %}
+                        <div class="government__judge">
+                            <div class="government__vote-animation" id="{% if is_parliament or is_president %}government__vote_judge{% endif %}">
+                                <div id="government__vote_judge-selected" class="government__vote-selected">Выбери <i class="ri-arrow-down-circle-line"></i></div>
+                                <!--                    <div class="government__caret"></div>-->
+                            </div>
+                            <ul class="government__votes" id="government__votes_judge">
+                                <li>—</li>
+                                {% for candidate, role in candidates.items %}
+                                    {% if role == 'judge' %}
+                                        <li>{{candidate}}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                <div class="government__border {% if candidate == 'judge' %} government__border-selected {% endif %}"></div>
+            </div>
+        </div>
+
+<!--        <div class="entry__form">-->
+<!--            <button class="entry__button" id="vote_button">-->
+<!--                Референдум <i class="ri-government-line"></i>-->
+<!--            </button>-->
+<!--        </div>-->
+
+
+        <div class="government__stand">
+            <div class="government__vote-default">
+                <div class="government__vote-selected referendum__valid__{{referendum_valid}}" id="government__vote">
+                    <div class="referendum__percent">
+                        Референдум {{referendum_percent}}%
+                    </div>
+                    <i class="ri-arrow-down-circle-line"></i>
+                </div>
+                <!--                    <div class="government__caret"></div>-->
+            </div>
+            <ul class="government__votes" id="government__votes">
+                <li class="{% if referendum %} government__votes-active {% endif %}">Поддерживаю</li>
+                <li class="{% if not referendum %} government__votes-active {% endif %}">Против</li>
+            </ul>
+        </div>
+
+    </div>
+</section>

@@ -1,0 +1,157 @@
+{% load static %}
+<section class="home section" id="home">
+  <div class="home__container container grid section__border">
+    <div class="home__data grid">
+      <h1 class="home__title">
+        Официальная страница <br>
+        Freedom of speech <br>
+      </h1>
+
+      {% if end_vote %}
+        <div class="home__blob grid voting">
+<!--          <img src="{% static 'freedom_of_speech/assets/img/freedom_of_speech-logo-light.gif' %}" alt="home perfil">-->
+          <video autoplay loop muted playsinline>
+            <!--            <source src="my-animation.webm" type="video/webm" />-->
+            <source src="{% static 'freedom_of_speech/assets/video/freedom_of_speech-logo-light.mp4' %}" type="video/mp4" />
+          </video>
+          <a href="#government"> Проголосуй <i class="ri-arrow-down-circle-line"></i></a>
+        </div>
+      {% else %}
+        <div class="home__blob grid">
+<!--          <img src="{% static 'freedom_of_speech/assets/img/freedom_of_speech-logo-light.gif' %}" alt="home perfil">-->
+          <video autoplay loop muted playsinline>
+            <!--            <source src="my-animation.webm" type="video/webm" />-->
+            <source src="{% static 'freedom_of_speech/assets/video/freedom_of_speech-logo-light.mp4' %}" type="video/mp4" />
+          </video>
+        </div>
+      {% endif %}
+
+      {% if date_updated %}
+        <div class="date__updated">
+          <p {% if administrator %}id="date__updated_admin" class="date__updated_admin" {% else %}id="date__updated"{% endif %} data="{{date_updated}} UTC"></p>
+        </div>
+      {% endif %}
+<!--      <div class="home__blob grid">-->
+<!--        <div class="home__perfil">-->
+<!--        <video src="{% static 'freedom_of_speech/assets/video/freedom_of_speech-logo.mp4' %}" autoplay loop muted></video>-->
+<!--        </div>-->
+
+<!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-waves.svg' %}" alt="home waves" class="home__shape-waves">-->
+<!--        <img src="{% static 'freedom_of_speech/assets/svg/shape-circle.svg' %}" alt="home circle" class="home__shape-circle">-->
+
+      <ul class="home__community">
+        {% for community in social %}
+          <a href="{{community.href}}" target="_blank" class="home__community-link">
+            <i class="{{community.class}}"></i>
+          </a>
+        {% endfor %}
+<!--        <a href="https://t.me/freed0m0fspeech" target="_blank" class="home__community-link">-->
+<!--          <i class="ri-telegram-line"></i>-->
+<!--        </a>-->
+<!--        <a href="https://discord.com/invite/dwKpNwQ" target="_blank" class="home__community-link">-->
+<!--          <i class="ri-discord-line"></i>-->
+<!--        </a>-->
+<!--        <a href="https://vk.me/join/AAAAAOUSazBFPCDP0CGaVjyh" target="_blank" class="home__community-link">-->
+<!--          <i class="uil uil-vk-alt"></i>-->
+<!--        </a>-->
+<!--        <a href="https://ig.me/j/AbYGVQ6I8k2hQoUQ" target="_blank" class="home__community-link">-->
+<!--          <i class="ri-instagram-line"></i>-->
+<!--        </a>-->
+<!--        <a href="https://facetime.apple.com/join#v=1&p=pe8BGv1tEe2evpLF+c6kJw&k=tm9NVJy3NmbPFXMAHM2S-v-wi64_l0WqeoVJ2qbhQDs&l=Freedom%20of%20speech" target="_blank" class="home__community-link">-->
+<!--          <i class="uil uil-apple-alt"></i>-->
+<!--        </a>-->
+<!--        <a href="steam://connect/130.61.63.137:27015" target="_blank" class="home__community-link">-->
+<!--          <i class="ri-steam-line"></i>-->
+<!--        </a>-->
+<!--        <a href="https://github.com/freed0m0fspeech" target="_blank" class="home__community-link">-->
+<!--          <i class="ri-github-line"></i>-->
+<!--        </a>-->
+<!--        <a href="https://stats.uptimerobot.com/6G3WGsP8PY" target="_blank" class="home__community-link">-->
+<!--          <i class="uil uil-cloud-wifi"></i>-->
+<!--        </a>-->
+      </ul>
+    </div>
+
+    <!--==================== HOME INFO 1 ====================-->
+    <div class="home__info">
+      <div>
+        <h3 class="home__info-title">
+          БИОГРАФИЯ
+        </h3>
+
+        <p class="home__info-description">
+          Freedom of speech - проект про настоящую свободу, правда немного в другом плане. История начинается 3 февраля, 2017 года
+        </p>
+      </div>
+
+      <div>
+        <h3 class="home__info-title">
+          ПОЛЬЗОВАТЕЛЕЙ
+        </h3>
+
+        <p class="home__info-number change" id="users_value">
+          <a href="members/">{{users_count}}</a>
+        </p>
+      </div>
+
+      <div>
+        <h3 class="home__info-title">
+          ФУНКЦИОНАЛ
+        </h3>
+
+        <p class="home__info-description">
+          <a href="https://discord.com/users/805497711264661565" target="_blank">
+            Дискорд бот <i class="ri-arrow-right-line"></i><br>
+          </a>
+
+          <a href="https://t.me/F0S_bot" target="_blank">
+            Телеграм бот <i class="ri-arrow-right-line"></i><br>
+          </a>
+
+          <a href="#">
+            Официальная страница <i class="ri-arrow-right-line"></i><br>
+          </a>
+
+        </p>
+      </div>
+    </div>
+    <!--==================== HOME INFO 2 ====================-->
+    <div class="home__info">
+      <div>
+        <h3 class="home__info-title">
+          {% if end_vote %}
+            ВЫБОРЫ до
+          {% else %}
+            СЛЕДУЮЩИЕ ВЫБОРЫ
+          {% endif %}
+        </h3>
+
+        <p class="home__info-number" id="home__info__years_value" data="{% if end_vote %} {{end_vote}} UTC {% else %} {{start_vote}} UTC {% endif %}">
+<!--          Feb 3, 2017-->
+<!--          2017-2023-->
+          <div class="home__info-description" id="home__date_counter"></div>
+        </p>
+      </div>
+
+      <div>
+        <h3 class="home__info-title" id="members_value_name" change="DISCORD УЧАСТНИКОВ">TELEGRAM УЧАСТНИКОВ</h3>
+
+        <p class="home__info-number">
+          <a id="members_value" change="{{discord_members_count}}" class="change">{{telegram_members_count}}</a>
+<!--          <div class="animated_number home__info-number"></div>-->
+        </p>
+      </div>
+
+      <div>
+        <h3 class="home__info-title">
+          ВЕСЕЛЬЕ
+        </h3>
+
+        <p class="home__info-number" id="fun_value">
+          100 %
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

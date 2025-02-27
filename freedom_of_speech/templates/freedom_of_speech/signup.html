@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--    <meta name="theme-color" media="(prefers-color-scheme: light)" content="black" />-->
+    <meta name="description" content="Freedom of speech official website">
+
+    <!--=============== FAVICON ===============-->
+    <link rel="shortcut icon" href="{% static 'freedom_of_speech/assets/img/favicon.jpg' %}" type="image/x-icon">
+
+    <!--=============== REMIXICONS ===============-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
+    <!--=============== UNICONS ===============-->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.0/css/line.css">
+
+    <!--=============== BOOTSTRAP ===============-->
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">-->
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'freedom_of_speech/assets/css/styles.css' %}">
+
+    <title>Регистрация</title>
+</head>
+<body class="body">
+{% csrf_token %}
+<!--==================== THEME ====================-->
+<script src="{% static 'freedom_of_speech/assets/js/theme.js' %}"></script>
+<!--==================== HEADER ====================-->
+<header class="header" id="header">
+    <nav class="nav container">
+        <a href="/freedom_of_speech/" class="nav__logo">
+            Freedom of speech
+        </a>
+
+        <div class="nav__buttons">
+            <!--Theme change button-->
+            <i class="change-theme" id="theme-button"></i>
+        </div>
+    </nav>
+</header>
+
+<!--==================== MAIN ====================-->
+<main class="main">
+    <!--==================== SNOW ====================-->
+    {% include 'freedom_of_speech/snowflake.html' %}
+
+    <section class="entry section" id="entry">
+        <h2 class="section__title">Регистрация</h2>
+        <span class="section__subtitle">Зарегистрировать персональный аккаунт</span>
+
+        <div class="entry__container container grid">
+            <div class="entry__content">
+                <form action="" class="entry__form" id="entry-form">
+                    <div class="entry__form-div">
+                        <label class="entry__form-tag">Никнейм</label>
+                        <input type="text" name="user_name" required placeholder="Напишите никнейм" class="entry__form-input" id="signup-username" autocomplete="username">
+                    </div>
+
+                    <div class="entry__form-div">
+                        <label class="entry__form-tag">Пароль</label>
+                        <input type="password" name="user_password" required placeholder="Напишите пароль" class="entry__form-input" id="signup-password" autocomplete="new-password">
+                    </div>
+                    <p class="entry__message" id="entry-message"></p>
+
+                    <div class="entry__form-div">
+                        <label class="entry__form-tag">Пароль (повторно)</label>
+                        <input type="password" name="user_password_repeat" required placeholder="Напишите пароль (повторно)" class="entry__form-input" id="signup-password_repeat" autocomplete="new-password">
+                    </div>
+
+                    <div class="entry__data">
+                        <a href="/freedom_of_speech/signin/" class="contact__button">
+                            Есть аккаунт? Авторизация <i class="ri-arrow-right-line"></i>
+                        </a>
+                    </div>
+
+                    <ul class="profile__community">
+                        <a href="#" target="_blank" class="profile__community-link" id="sign-telegram_button">
+                            <i class="ri-telegram-line"></i>
+                        </a>
+
+                        <a href="#" target="_blank" class="profile__community-link" id="sign-discord_button">
+                            <i class="ri-discord-line"></i>
+                        </a>
+                    </ul>
+
+                    <button class="entry__button" id="signup-button">
+                        Зарегистрироваться <i class="ri-login-circle-line"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!--=============== SCRIPTS ===============-->
+<!-- Add 'async' or 'defer' attributes to control script execution -->
+<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous" defer></script>
+<script src="https://kit.fontawesome.com/95c0aa19f9.js" crossorigin="anonymous" defer></script>
+<script src="https://telegram.org/js/telegram-widget.js?" defer></script>
+
+<!-- Combine and minify your custom scripts -->
+<script src="{% static 'freedom_of_speech/assets/js/main.js' %}" defer></script>
+</body>
+</html>

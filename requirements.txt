@@ -1,0 +1,11 @@
+APScheduler==3.10.1
+beautifulsoup4==4.12.3
+Django==4.2.11
+django-telegram-login==0.2.3
+pymongo[srv]==4.6.3
+python-dotenv==1.0.1
+python-dateutil==2.8.2
+Requests==2.32.0
+whitenoise==6.8.2
+yt_dlp
+lxml==5.3.0

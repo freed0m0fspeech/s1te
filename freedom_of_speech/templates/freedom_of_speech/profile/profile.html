@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
+<!--    <meta name="theme-color" media="(prefers-color-scheme: light)" content="black" />-->
+    <meta name="description" content="Freedom of speech official website">
+
+    <!--=============== FAVICON ===============-->
+    <link rel="shortcut icon" href="{% if discord_display_avatar %} {{discord_display_avatar}} {% else %} {% if telegram_photo_url %} {{telegram_photo_url}} {% endif %} {% endif %}" type="image/x-icon">
+
+    <!--=============== REMIXICONS ===============-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
+    <!--=============== UNICONS ===============-->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.0/css/line.css">
+
+    <!--=============== BOOTSTRAP ===============-->
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">-->
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{% static 'freedom_of_speech/assets/css/styles.css' %}">
+
+    <title>{{username}}</title>
+</head>
+<body>
+{% csrf_token %}
+{% load filter %}
+<!--==================== THEME ====================-->
+<script src="{% static 'freedom_of_speech/assets/js/theme.js' %}"></script>
+<!--==================== HEADER ====================-->
+<header class="header" id="header">
+    <nav class="nav container">
+        <a href="/freedom_of_speech/" class="nav__logo">
+            Freedom of speech
+        </a>
+
+        {% if authorized %}
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list grid">
+
+<!--                    <li class="nav__item">-->
+<!--                        <a href="#profile" class="nav__link">-->
+<!--                            <i class="ri-user-line"></i> Профиль-->
+<!--                        </a>-->
+<!--                    </li>-->
+
+<!--                    <li class="nav__item">-->
+<!--                        <a href="#username" class="nav__link">-->
+<!--                            <i class="ri-hashtag"></i> Никнейм-->
+<!--                        </a>-->
+<!--                    </li>-->
+
+<!--                    <li class="nav__item">-->
+<!--                        <a href="#password" class="nav__link">-->
+<!--                            <i class="ri-key-2-line"></i> Пароль-->
+<!--                        </a>-->
+<!--                    </li>-->
+
+                    <li class="nav__item">
+                        <a href="#signout" class="nav__link" id="signout-button">
+                            <i class="ri-logout-box-r-line"></i> Выйти
+                        </a>
+                    </li>
+                </ul>
+
+                <!--            Close button-->
+                <div class="nav__close" id="nav-close">
+                    <i class="ri-close-circle-line"></i>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="nav__buttons">
+            <!--Theme change button-->
+            <i class="change-theme" id="theme-button"></i>
+
+            {% if authorized %}
+                <!--            Toggle button-->
+                <div class="nav__toggle" id="nav-toggle">
+                    <i class="ri-menu-5-line"></i>
+                </div>
+            {% endif %}
+        </div>
+    </nav>
+</header>
+
+<!--==================== MAIN ====================-->
+<main class="main">
+    <!--==================== SNOW ====================-->
+    {% include 'freedom_of_speech/snowflake.html' %}
+
+    <!--    Telegram section-->
+    {% include 'freedom_of_speech/profile/info.html' %}
+
+    {% if authorized %}
+        <section class="entry section" id="username">
+            <h2 class="section__title">Никнейм</h2>
+            <span class="section__subtitle">Изменить никнейм</span>
+
+            <div class="entry__container container grid section__border">
+                <div class="entry__content">
+                    <form action='' class="entry__form" id="entry-form-username">
+                        <div class="entry__form-div">
+                            <label class="entry__form-tag">Никнейм</label>
+                            <input type="text" name="user_name" required placeholder="Напишите новый никнейм" class="entry__form-input" id="username-change_username" autocomplete="new-username">
+                        </div>
+
+<!--                        <div class="entry__form-div">-->
+<!--                            <label class="entry__form-tag">Текущий пароль</label>-->
+<!--                            <input type="password" name="user_password" required placeholder="Напишите текущий пароль" class="entry__form-input" id="username-change_password" autocomplete="current-password">-->
+<!--                        </div>-->
+
+                        <p class="entry__message" id="entry-message-username"></p>
+                        <button class="entry__button" id="username-change_button">
+                            Изменить <i class="ri-swap-line"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section class="entry section" id="password">
+            <h2 class="section__title">Пароль</h2>
+            <span class="section__subtitle">Изменить пароль</span>
+
+            <div class="entry__container container grid section__border">
+                <div class="entry__content">
+                    <form action='' class="entry__form" id="entry-form-password">
+                        <input hidden autocomplete="username" name="user_name" type="text" value="{{..}}"/>
+
+<!--                        <div class="entry__form-div">-->
+<!--                            <label class="entry__form-tag">Текущий пароль</label>-->
+<!--                            <input type="password" name="user_password_old" required placeholder="Напишите текущий пароль" class="entry__form-input" id="password-change_old_password" autocomplete="current-password">-->
+<!--                        </div>-->
+
+                        <div class="entry__form-div">
+                            <label class="entry__form-tag">Пароль</label>
+                            <input type="password" name="user_password_new" required placeholder="Напишите новый пароль" class="entry__form-input" id="password-change_new_password" autocomplete="new-password">
+                        </div>
+
+                        <p class="entry__message" id="entry-message-password"></p>
+                        <button class="entry__button" id="password-change_button">
+                            Изменить <i class="ri-swap-line"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section class="entry section" id="logout">
+            <div class="entry__container container grid section__border">
+                <div class="entry__content">
+                    <form action="" class="entry__form">
+                        <button class="entry__button" id="logout-button">
+                            Завершить все другие сеансы <i class="ri-logout-circle-r-line"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+</main>
+
+<!--========== SCROLL UP ==========-->
+<a href="#" class="scrollup" id="scroll-up">
+    <i class="ri-arrow-up-circle-line"></i>
+</a>
+
+<!--=============== SCRIPTS ===============-->
+<!-- Add 'async' or 'defer' attributes to control script execution -->
+<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous" defer></script>
+<script src="https://kit.fontawesome.com/95c0aa19f9.js" crossorigin="anonymous" defer></script>
+<script src="https://telegram.org/js/telegram-widget.js?" defer></script>
+
+<!-- Combine and minify your custom scripts -->
+<script src="{% static 'freedom_of_speech/assets/js/main.js' %}" defer></script>
+</body>
+</html>
