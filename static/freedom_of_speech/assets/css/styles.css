@@ -433,6 +433,7 @@ img, video{
     border-bottom: 1px solid var(--title-color);
     /*padding-bottom: 3.5rem;*/
     padding-bottom: 6rem;
+    margin-bottom: 1rem;
 }
 
 .section__title,
