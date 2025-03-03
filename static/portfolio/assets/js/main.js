@@ -118,27 +118,6 @@ const sendEmail = (e) =>{
 }
 // contactForm.addEventListener('submit', sendEmail)
 
-/*=============== SCROLL SECTIONS ACTIVE LINK ===============*/
-const sections = document.querySelectorAll('section[id]')
-
-const scrollActive = () =>{
-    const scrollY = window.pageYOffset
-
-    sections.forEach(current =>{
-        const sectionHeight = current.offsetHeight,
-            sectionTop = current.offsetTop - 58,
-            sectionId = current.getAttribute('id'),
-            sectionsClass = document.querySelector('.nav__menu a[href*=' + sectionId + ']')
-
-        if(scrollY > sectionTop && scrollY <= sectionTop + sectionHeight){
-            sectionsClass.classList.add('active-link')
-        }else{
-            sectionsClass.classList.remove('active-link')
-        }
-    })
-}
-window.addEventListener('scroll', scrollActive)
-
 /*=============== SHOW SCROLL UP ===============*/
 const scrollUp = () =>{
     const scrollUp = document.getElementById('scroll-up')
@@ -200,15 +179,39 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
     }
 });
 
+const header = document.getElementById('header');
+
 /*=============== CHANGE BACKGROUND HEADER ===============*/
 const scrollHeader = () => {
-    const header = document.getElementById('header');
+    // const header = document.getElementById('header');
 
     // When the scroll is greater than 0, add the bg-header class to the header tag
     window.scrollY > 0 ? header.classList.add('bg-header') : header.classList.remove('bg-header');
 };
 
 window.addEventListener('scroll', scrollHeader);
+
+/*=============== SCROLL SECTIONS ACTIVE LINK ===============*/
+const sections = document.querySelectorAll('section[id]')
+const headerHeight = parseFloat(window.getComputedStyle(header).getPropertyValue('height'))
+
+const scrollActive = () =>{
+    const scrollY = window.pageYOffset
+
+    sections.forEach(current =>{
+        const sectionHeight = current.offsetHeight,
+            sectionTop = current.offsetTop - headerHeight * 2,
+            sectionId = current.getAttribute('id'),
+            sectionsClass = document.querySelector('.nav__menu a[href*=' + sectionId + ']')
+
+        if(scrollY > sectionTop && scrollY <= sectionTop + sectionHeight){
+            sectionsClass.classList.add('active-link')
+        }else{
+            sectionsClass.classList.remove('active-link')
+        }
+    })
+}
+window.addEventListener('scroll', scrollActive)
 
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 const sr = ScrollReveal({
