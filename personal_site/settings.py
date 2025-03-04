@@ -62,7 +62,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+    # "whitenoise.middleware.WhiteNoiseMiddleware",
     # "django.middleware.gzip.GZipMiddleware",
 ]
 
@@ -187,12 +187,17 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = '/static/'
-# MEDIA_URL = '/img/'
 
 STATICFILES_DIRS = [
     # BASE_DIR / 'freedom_of_speech/static',
     # BASE_DIR / 'portfolio/static',
 ]
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
+VERIFICATION_ROOT = BASE_DIR / '.well-known'
+VERIFICATION_URL = '/.well-known/'
 
 # MEDIA_ROOT = BASE_DIR / 'static/assets/img'
 

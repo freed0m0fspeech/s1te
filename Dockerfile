@@ -64,7 +64,7 @@ WORKDIR /usr/src/app
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-ENV RAILS_SERVE_STATIC_FILES="true"
+#ENV RAILS_SERVE_STATIC_FILES="true"
 
 # create the app directory - and switch to it
 RUN mkdir -p /app
