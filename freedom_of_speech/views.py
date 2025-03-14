@@ -1773,6 +1773,10 @@ class VoteJudgePageView(TemplateView):
             if not tjudge:
                 return HttpResponse(status=404)
 
+            if not document.get('telegram', {}).get('members_parameters', {}).get(tjudge, {}):
+                # Candidate not member of group
+                return HttpResponse(status=404)
+
             if judge == document.get('president', ''):
                 # President can't be judge
                 return HttpResponse(status=404)

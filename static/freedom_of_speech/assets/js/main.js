@@ -1451,7 +1451,7 @@ $('#government__votes_judge').on('click', function (e){
                 else if (xhr.status === 409)
                     alert('Этот пользователь не может быть Судьей')
                 else if(xhr.status === 401)
-                    alert('Только участники Telegram группы "Freedom of speech" могут быть Судьей')
+                    alert('Только участники Telegram группы "Freedom of speech" могут выбирать Судью')
                 else
                     if (error)
                         alert(error)

@@ -421,7 +421,44 @@ def telegram_synching(start=0, stop=200, step=1):
         if mongoUpdate is None:
             return
         else:
-            cache.freedom_of_speech = mongoUpdate
+            document = cache.freedom_of_speech = mongoUpdate
+
+        # Check if government in group
+        president = document.get('president', '')
+        parliament = document.get('parliament', '')
+        judge = document.get('judge', {}).get('judge', '')
+
+        query = {}
+        if president:
+            president_telegram_id = document.get('users', {}).get(president, {}).get('telegram', {}).get('id', '')
+            president_in_group = document.get('telegram', {}).get('members_parameters', {}).get(president_telegram_id, {})
+
+            if not president_in_group:
+                query['president'] = ''
+
+        if parliament:
+            parliament_telegram_id = document.get('users', {}).get(parliament, {}).get('telegram', {}).get('id', '')
+            parliament_in_group = document.get('telegram', {}).get('members_parameters', {}).get(parliament_telegram_id, {})
+
+            if not parliament_in_group:
+                query['parliament'] = ''
+
+        if judge:
+            judge_telegram_id = document.get('users', {}).get(judge, {}).get('telegram', {}).get('id', '')
+            judge_in_group = document.get('telegram', {}).get('members_parameters', {}).get(judge_telegram_id, {})
+
+            if not judge_in_group:
+                query['judge'] = ''
+
+
+        if query:
+            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                     action='$unset', query=query)
+
+            if mongoUpdate is None:
+                return
+            else:
+                document = cache.freedom_of_speech = mongoUpdate
 
         # Check for referendum
         referendum_date = document.get('referendum', {}).get('date', '')
