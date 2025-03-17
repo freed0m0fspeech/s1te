@@ -404,6 +404,14 @@ class SignTelegramPageView(TemplateView):
             response.set_cookie(key='sessionid', value=sessionid, secure=True, samesite='Lax', expires=expires,
                                 httponly=True)
 
+            data = dict(data)
+
+            for key, value in data.copy().items():
+                if isinstance(value, list):
+                    data[key] = value.pop(0)
+                else:
+                    data[key] = value
+
             query = {f'users.{username}.sessionid': sessionid, f'users.{username}.telegram': data}
             mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
                                                      action='$set', query=query, upsert=False)
