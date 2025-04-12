@@ -10,6 +10,7 @@ from dateutil import tz
 from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv
 from pytz import utc
+from bson import json_util
 
 import freedom_of_speech.utils
 import portfolio.utils
@@ -17,6 +18,7 @@ import portfolio.utils
 load_dotenv()
 
 from utils import dataBases, cache
+
 
 mongoDataBase = dataBases.mongodb_client
 
@@ -422,6 +424,35 @@ def telegram_synching(start=0, stop=200, step=1):
             return
         else:
             document = cache.freedom_of_speech = mongoUpdate
+
+        query = {}
+        # Check if candidates in group
+        candidates = document.get('candidates', {})
+        for candidate_username, candidate_role in candidates.items():
+            user = document.get('users', {}).get(candidate_username, {})
+            user_telegram_id = user.get('telegram', {}).get('id', '')
+            candidate_in_group = document.get('telegram', {}).get('members_parameters', {}).get(user_telegram_id, {})
+
+            if not candidate_in_group:
+                query[f'candidates.{candidate_username}'] = ''
+            else:
+                joined_date = document.get('telegram', {}).get('members_parameters', {}).get(user_telegram_id, {}).get('joined_date', '')
+                if joined_date:
+                    date = json.loads(joined_date, object_hook=json_util.object_hook)
+                    if date:
+                        # timedelta in group
+                        freedom = datetime.now() - date
+                        if freedom.days < 30:
+                            query[f'candidates.{candidate_username}'] = ''
+
+        if query:
+            mongoUpdate = mongoDataBase.update_field(database_name='site', collection_name='freedom_of_speech',
+                                                     action='$unset', query=query)
+
+            if mongoUpdate is None:
+                return
+            else:
+                document = cache.freedom_of_speech = mongoUpdate
 
         # Check if government in group
         president = document.get('president', '')
