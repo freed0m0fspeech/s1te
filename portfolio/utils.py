@@ -18,7 +18,7 @@ def update_cached_data(mongoDataBase):
     if not os.getenv('DEBUG', '0').lower() in ['true', 't', '1']:
         try:
             projects = []
-            gusernames = ('pr0stre1', 'freed0m0fspeech')
+            gusernames = ('pr0stre1', 'freed0m0fspeech', 'Neura-Team')
             # gprojects = {}
 
             for gusername in gusernames:
