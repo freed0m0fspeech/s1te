@@ -244,7 +244,7 @@ body.dark-theme {
     /*box-shadow: 0px 0px 4px black;*/
 }
 
-.dark-theme .skills__blob .invert{
+.dark-theme .skills__blob img .invert{
     filter: invert(1);
 }
 
