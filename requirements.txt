@@ -9,3 +9,4 @@ requests
 whitenoise==6.8.2
 yt_dlp
 lxml==5.3.0
+gunicorn==23.0.0
