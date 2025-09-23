@@ -13,7 +13,7 @@
                     {% for skill in skills %}
                         <div class="skills__data">
                             <div class="skills__blob">
-                                <img src="{{skill.blob}}" alt="skills image">
+                                <img src="{{skill.blob}}" class="{% if skill.invert %}invert{% endif %}" alt="skills image">
                             </div>
 
                             <h3 class="skills__name">{{skill.name}}</h3>

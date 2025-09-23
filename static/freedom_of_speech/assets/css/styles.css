@@ -244,6 +244,10 @@ body.dark-theme {
     /*box-shadow: 0px 0px 4px black;*/
 }
 
+.dark-theme .skills__blob .invert{
+    filter: invert(1);
+}
+
 .dark-theme .home__shape-waves,
 .dark-theme .home__shape-circle,
 .dark-theme .qualification__img,
