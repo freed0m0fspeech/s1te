@@ -56,7 +56,7 @@
 # pull official base image
 #FROM ubuntu:latest
 #FROM ubuntu:20.10.12
-FROM python:3.9.6
+FROM python:3.9-slim
 
 # set work directory
 WORKDIR /usr/src/app
@@ -86,6 +86,6 @@ RUN set -ex && \
 COPY . /app/
 # expose port 8000
 EXPOSE 8000
-CMD ["gunicorn", "--timeout", "0", "--bind", ":8000", "--workers", "1", "personal_site.wsgi:application"]
+CMD ["gunicorn", "--timeout", "120", "--bind", ":8000", "--workers", "1", "personal_site.wsgi:application"]
 #CMD python3 main.py
 # CMD python manage.py runserver 0.0.0.0:8000
