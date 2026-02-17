@@ -76,9 +76,15 @@
 
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
-    overscroll-behavior: none;
+    /*overscroll-behavior: none;*/
 
     /*transition: background .5s; !* for dark mode animation *!*/
+}
+
+@media screen and (max-width: 768px){
+    * {
+        overscroll-behavior: none;
+    }
 }
 
 html {
