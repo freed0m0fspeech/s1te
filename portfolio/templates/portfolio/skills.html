@@ -6,8 +6,8 @@
     <div class="skills__container container grid section__border">
         {% for skill_name, skills in skills.items %}
             <div class="skills__content">
-                <h3 class="skills__title">
-                        <i class="ri-braces-line"></i> {{skill_name}}
+                <h3 class="skills__title" id="{{ skill_name }}">
+                    <i class="ri-braces-line"></i> {{skill_name}}
                 </h3>
                 <div class="skills__info">
                     {% for skill in skills %}

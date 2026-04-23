@@ -1267,6 +1267,7 @@ input:-webkit-autofill:active{
 }
 
 .services__description{
+    opacity: .5;
     /*cursor: auto;*/
 }
 
@@ -2155,6 +2156,7 @@ input:-webkit-autofill:active{
     /*overflow: hidden; !* not show scroll in text area*!*/
     overflow: scroll;
     overflow-x: hidden;
+    scrollbar-width: none;
 }
 
 .contact__form .contact__button{
